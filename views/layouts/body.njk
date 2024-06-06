@@ -1,0 +1,68 @@
+{% set navs = [
+    {
+        link: 'spaces',
+        title: 'Помещения'
+    },
+    {
+        link: '',
+        title: 'О компании'
+    }
+] %}
+
+{% set contacts = {
+    phone: {
+        link: 'tel:+79120557755',
+        title: '+7 (912) 055-77-55'
+    },
+    socials: [
+        {
+            link: '',
+            type: 'telegram',
+            icon: 'telegramIcon',
+            title: 'Telegram'
+        },
+        {
+            link: '',
+            type: 'whatsapp',
+            icon: 'whatsappIcon',
+            title: 'WhatsApp'
+        },
+        {
+            link: '',
+            type: 'viber',
+            icon: 'viberIcon',
+            title: 'Viber'
+        }
+    ],
+    channel: {
+        link: '',
+        type: 'telegram',
+        icon: 'telegramIcon',
+        title: 'Наш канал'
+    },
+    email: {
+        link: 'mailto:info@depoarenda.ru',
+        title: 'info@depoarenda.ru'
+    }
+} %}
+
+{% extends "layouts/default.njk" %}
+
+{% block bodyContent %}
+
+    <header class="page__header">
+        {% include "includes/header.njk" %}
+    </header>
+
+    <main class="page__main">
+        {% block mainContent %}{% endblock %}
+    </main>
+
+    <footer class="page__footer">
+        {% include "includes/footer.njk" %}
+    </footer>
+
+{% endblock %}
+
+{% block customJs %}
+{% endblock %}

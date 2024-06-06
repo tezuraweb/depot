@@ -1,0 +1,72 @@
+{% set projects = [
+    {
+        id: 'webdev',
+        link: '',
+        title: 'website design and development',
+        summary: 'A multi-page responsive website developed using Node.js, integrated with a Telegram bot for receiving and managing forms,',
+        cover: '/img/main/meditary.webp',
+        width: '611'
+    },
+    {
+        id: 'design',
+        link: '',
+        title: 'design',
+        summary: 'Responsive design with sliders and animations',
+        cover: '/img/main/school.webp',
+        width: '393'
+    },
+    {
+        id: 'interface',
+        link: '',
+        title: 'interface',
+        summary: 'A node.js web application and a Telegram bot for managing organization’s internal correspondence, integration with the internal CRM system',
+        cover: '/img/main/tgbot.webp',
+        width: '317'
+    },
+    {
+        id: 'smm',
+        link: '',
+        title: 'design & smm',
+        summary: 'Website design and social media styling, creation of a content plan, materials for publications, and preparation of an advertising campaign',
+        cover: '/img/main/food.webp',
+        width: '330'
+    }
+] %}
+
+<section class="section cards" id="cards">
+    <div class="container container__base">
+        <h2 class="section__title">
+            <span class="section__title--text">Latest works</span>
+        </h2>
+    </div>
+    <div class="container container__wide">
+        <ul class="cards__list">
+            {% for item in projects %}
+                <li class="cards__item cards__item--{{ item.id }}">
+                    <div class="cards__wrapper">
+                        <div class="cards__cover">
+                            <a href="{{ item.link }}" class="cards__cover--link" aria-label="Link to project">
+                                <picture class="cards__cover--picture">
+                                    <img class="cards__cover--img" src="{{ item.cover }}" data-src="{{ item.cover }}" width="{{ item.width }}" height="330" alt="{{ item.title }}">
+                                </picture>
+                            </a>
+                        </div>
+                        <div class="cards__text">
+                            <div class="cards__title">{{ item.title }}</div>
+                            <div class="cards__summary">{{ item.summary }}</div>
+                        </div>
+                        <a href="{{ item.link }}" class="cards__button button" aria-label="Link to project"></a>
+                    </div>
+                </li>
+            {% endfor %}
+            
+            <li class="cards__item cards__item--button">
+                <div class="cards__wrapper">
+                    <button class="cards__start">
+                        Start a project!
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>

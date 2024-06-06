@@ -1,0 +1,69 @@
+{% set practices = [
+    {
+        type: 'ego',
+        id: 'practice_ego',
+        icon: 'practiceEgo',
+        caption: 'Связь с Высшим Я, медитативное дыхание',
+        color: 'blue'
+    },
+    {
+        type: 'cure',
+        id: 'practice_cure',
+        icon: 'practiceCure',
+        caption: 'Исцеляющие медитации',
+        color: 'green'
+    },
+    {
+        type: 'female',
+        id: 'practice_female',
+        icon: 'practiceFemale',
+        caption: 'Женская энергия',
+        color: 'red'
+    },
+    {
+        type: 'wishes',
+        id: 'practice_wishes',
+        icon: 'practiceWishes',
+        caption: 'Исполнение желаний',
+        color: 'yellow'
+    },
+    {
+        type: 'integrity',
+        id: 'practice_integrity',
+        icon: 'practiceIntegrity',
+        caption: 'Обретение целостности',
+        color: 'darkblue'
+    }
+] %}
+
+<form id="lead-form" class="lead-form{% if color %} lead-form--{{ color }}{% endif %}{% if formIsNarrow %} lead-form--narrow{% endif %}" action="" method="post" {% if page %} data-page="{{ page }}"{% endif %}>
+    <label class="lead-form__label" for="form-name">Имя</label>
+    <input class="lead-form__input" id="form-name" name="name" type="text" required>
+    <label class="lead-form__label" for="form-phone">Телефон</label>
+    <input class="lead-form__input" id="form-phone" name="phone" type="tel" required>
+    <label class="lead-form__label" for="form-tg">Телеграм</label>
+    <input class="lead-form__input" id="form-tg" name="telegram" type="text" required>
+
+    {% if selectPractice %}
+        <div class="lead-form__practices">
+            {% for item in practices %}
+                <label class="lead-form__checkbox" for="{{ item.id }}">
+                    <input class="lead-form__checkbox--input" id="{{ item.id }}" name="practice" value="{{ item.type }}" type="checkbox" data-type="{{ item.type }}">
+                    <div class="lead-form__checkbox--button lead-form__checkbox--button--{{ item.color }}">
+                        <div class="lead-form__checkbox--img">
+                            {% set includeIcon = item.icon %}
+                            {% include "includes/svg.njk" %}
+                        </div>
+                    </div>
+                    <div class="lead-form__checkbox--caption lead-form__checkbox--caption--{{ item.color }} lead-form__checkbox--caption--{{ loop.index }}">{{ item.caption }}</div>
+                </label>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <button class="lead-form__button" type="submit">Записаться</button>
+
+    <div class="lead-form__popup lead-form__popup--positive">Спасибо за заявку!<br>Мы свяжемся с Вами в ближайшее время.</div>
+    <div class="lead-form__popup lead-form__popup--negative">Что-то пошло не так!<br>Попробуйте позже.</div>
+    <div class="lead-form__popup lead-form__popup--emptyfield">Пожалуйста отметьте одну или несколько практик!</div>
+</form>

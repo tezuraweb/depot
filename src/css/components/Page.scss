@@ -1,0 +1,11 @@
+.page {
+    &__header, &__footer {
+        background-color: $black;
+    }
+
+    &__footer{
+        background-image: url('../../assets/img/pictures/pattern.png');
+        background-repeat: repeat-x;
+        background-position-y: 80%;
+    }
+}

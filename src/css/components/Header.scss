@@ -1,0 +1,28 @@
+.header {
+    display: flex;
+    align-items: center;
+
+    &__logo {
+        display: block;
+        margin-right: 60px;
+    }
+
+    &__contacts {
+        margin-right: 60px;
+    }
+
+    &__phone {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    &__auth {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        &--icon {
+            margin-right: 10px;
+        }
+    }
+}
