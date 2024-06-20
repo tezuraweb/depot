@@ -4,14 +4,16 @@
     padding: 0;
     -webkit-appearance: none;
     -webkit-text-size-adjust: none;
+    -moz-appearance: none;
+    appearance: none;
 }
-  
+
 html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     background-color: $white;
 }
-  
+
 body {
     margin: 0;
     padding: 0;
@@ -33,7 +35,7 @@ body {
         height: 100%;
     }
 }
-  
+
 h1,
 h2,
 h3,
@@ -46,7 +48,7 @@ p {
     margin: 0;
     padding: 0;
 }
-  
+
 a {
     text-decoration: none;
     color: inherit;
@@ -61,7 +63,7 @@ h2 {
     font-size: 44px;
     font-weight: 700;
 }
-  
+
 ul {
     list-style-type: none;
 }
@@ -73,14 +75,79 @@ img {
     height: auto;
 }
 
+input,
+button,
+select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 .container {
     max-width: $containerMaxWidth;
     margin: 0 auto;
     padding: 0 75px;
+    position: relative;
 }
 
 .section {
+    position: relative;
     padding: 80px 0;
+
+    &#main-listing, &#partner-locations {
+        background-color: $black;
+    }
+
+    &#search-block {
+        background-color: $white;
+    }
+
+    &#contact-block {
+        background-image: url('../../assets/img/pictures/contacts_bg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &#contact-form {
+        background-image: url('../../assets/img/pictures/warehouse.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    &__shadow::before, &__shadow-2::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: $black;
+        opacity: 42%;
+    }
+
+    &__shadow::before {
+        opacity: 42%;
+    }
+
+    &__shadow-2::before {
+        opacity: 65%;
+    }
 
     // @media (max-width: $desktop-breakpoint) {
     // }
@@ -92,11 +159,53 @@ img {
 .button {
     background-color: $yellow;
     color: $black;
-    position: relative;
     display: block;
-    font-size: inherit;
-    line-height: inherit;
-    border: none;
-    cursor: pointer;
+    padding: 15px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+
+    &--large {
+        padding: 25px 30px;
+        font-size: 20px;
+    }
+
+    &--close {
+        position: relative;
+        padding: 20px;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            top: 9px;
+            left: 20px;
+            width: 1px;
+            height: 23px;
+            background-color: $black;
+        }
+
+        &::before {
+            transform: rotate(45deg);
+        }
+
+        &::after {
+            transform: rotate(-45deg);
+        }
+    }
 }
-  
+
+.map__building {
+    fill: $grey;
+    transition: fill .3s;
+    cursor: pointer;
+
+    &.active {
+        fill: $yellow;
+    }
+
+    &:hover {
+        fill: $red;
+    }
+}

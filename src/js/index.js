@@ -1,17 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { Provider } from 'react-redux';
-// import store from './redux/store';
-import App from './app';
+import MainFilter from './components/MainFilter';
+import ContactForm from './components/ContactForm';
+import PartnerCardList from './components/PartnerCardList';
+import SearchPage from './components/SearchPage';
+import PartnerLinks from './components/PartnerLinks';
 import ymaps from 'ymaps';
 
+const componentMapping = {
+    'mainFilter': MainFilter,
+    'contactForm': ContactForm,
+    'contactFormModal': ContactForm,
+    'partnerCardList': PartnerCardList,
+    'searchPage': SearchPage,
+    'partnerLinks': PartnerLinks,
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    ReactDOM.render(
-        // <Provider store={store}>
-        <App />,
-        // </Provider>,
-        document.getElementById('root')
-    );
+    const containers = document.querySelectorAll('[data-react-component]');
+    
+    containers.forEach(container => {
+        const componentName = container.getAttribute('data-react-component');
+        const Component = componentMapping[componentName];
+        
+        if (Component) {
+            if (componentName == 'contactFormModal') {
+                ReactDOM.render(
+                    <Component modal={true} />,
+                    container
+                );
+            } else {
+                ReactDOM.render(
+                    <Component />,
+                    container
+                );
+            }
+        }
+    });
 });
 
 ymaps
