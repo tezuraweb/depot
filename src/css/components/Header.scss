@@ -9,11 +9,16 @@
 
     &__contacts {
         margin-right: 60px;
+        padding-top: 30px;
     }
 
     &__phone {
         display: block;
         margin-bottom: 5px;
+    }
+
+    &__socials {
+        justify-content: flex-end;
     }
 
     &__auth {

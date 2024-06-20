@@ -1,0 +1,324 @@
+.form {
+    position: relative;
+
+    &__section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+
+        &--framed {
+            padding: 20px 40px;
+            border: 1px solid $black;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        align-items: center;
+        gap: 15px;
+    }
+
+    &__cell {
+        position: relative;
+
+        &--withLine {
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                width: 20px;
+                height: 2px;
+                background-color: $black;
+            }
+        }
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+
+        &--inline {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        &--spread {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        &--marginBottom {
+            margin-bottom: 15px;
+        }
+
+        &--marginRight {
+            margin-right: 20px;
+        }
+    }
+
+    &__label {
+        margin-bottom: 15px;
+
+        &--inline {
+            margin-bottom: 0;
+            margin-right: 15px;
+        }
+    }
+
+    &__input {
+        position: relative;
+        border: 2px solid $yellow;
+        border-radius: 0;
+        padding: 10px 20px;
+        background-color: transparent;
+        color: $white;
+        font-size: 18px;
+
+        &--select {
+            width: 160px;
+
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                width: 16px;
+                height: 16px;
+                border-right: 2px solid $white;
+                border-bottom: 2px solid $white;
+                transform: rotate(45deg);
+            }
+        }
+
+        &--number {
+            width: 120px;
+        }
+
+        &:focus,
+        &:active {
+            outline: none;
+            background-color: $white;
+            color: $black;
+        }
+    }
+
+    &__checkbox,
+    &__radio {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        display: block;
+
+        &+label {
+            position: relative;
+            display: block;
+            margin: 0;
+            padding: 4px 0 4px 45px;
+        }
+
+        &+label::before,
+        &+label::after {
+            content: '';
+            display: block;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        &+label::before {
+            width: 24px;
+            height: 24px;
+            left: 0;
+            top: 0;
+            border: 2px solid $yellow;
+        }
+
+        &+label::after {
+            visibility: hidden;
+        }
+
+        &:checked+label::after {
+            visibility: visible;
+        }
+    }
+
+    &__checkbox {
+        &+label::after {
+            left: 9px;
+            top: 3px;
+            width: 8px;
+            height: 15px;
+            border-right: 2px solid $white;
+            border-bottom: 2px solid $white;
+            transform: rotate(45deg);
+        }
+    }
+
+    &__radio {
+        &+label::after {
+            left: 9px;
+            top: 9px;
+            width: 10px;
+            height: 10px;
+            background-color: $white;
+        }
+    }
+
+    &__button {
+        &--price {
+            display: block;
+            background-color: transparent;
+            border: none;
+            padding: 0 5px;
+            font-family: inherit;
+            line-height: 1;
+            color: $white;
+        }
+
+        &--arrow {
+            font-size: 30px;
+            line-height: 0;
+
+            &.active {
+                color: $yellow;
+            }
+        }
+
+        &--center {
+            margin: 0 auto;
+        }
+    }
+
+    &__link {
+        position: absolute;
+        right: 0;
+        bottom: -44px;
+        padding: 12px 46px 12px 30px;
+        background-color: $yellow;
+        color: $black;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid $black;
+            border-bottom: 2px solid $black;
+            transform: translateY(-50%) rotate(-45deg);
+        }
+    }
+
+    &__close {
+        margin-bottom: 30px;
+        margin-left: auto;
+    }
+
+    // modifiers
+
+    &--main {
+        padding: 20px 40px;
+        background-color: $black;
+        display: flex;
+        justify-content: space-between;
+
+        .form__checkbox {
+            &+label {
+                padding: 0;
+            }
+
+            &+label::before {
+                top: 35px;
+                width: 42.5px;
+                height: 42.5px;
+            }
+
+            &+label::after {
+                left: 14.5px;
+                top: 38px;
+                width: 16px;
+                height: 28px;
+            }
+        }
+    }
+
+    &--search {
+        color: $black;
+        max-width: 600px;
+
+        .form__input {
+            color: $black;
+            width: 160px;
+        }
+
+        .form__button {
+            &--price {
+                width: 42px;
+                padding: 11px 0px;
+                border-radius: 10px;
+                background-color: $yellow;
+                color: $black;
+            }
+
+            &--arrow.active {
+                color: $red;
+            }
+        }
+
+        .form__checkbox {
+            &+label::after {
+                border-color: $red;
+            }
+        }
+
+        .form__radio {
+            &+label {
+                margin-right: 60px;
+            }
+
+            &+label::after {
+                background-color: $black;
+            }
+        }
+    }
+
+    &--modal {
+        .form__group {
+            margin-bottom: 30px;
+        }
+
+        .form__input {
+            width: 400px;
+        }
+
+        .form__button {
+            margin: 0 auto;
+        }
+    }
+
+    &--inline {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        max-width: 1100px;
+        margin: 0 auto;
+
+        .form__input {
+            padding: 20px;
+            max-width: 235px;
+        }
+
+        .form__button {
+            padding: 23px 61px;
+            font-size: 20px;
+        }
+    }
+}

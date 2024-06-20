@@ -5,8 +5,66 @@
 
 {% block mainContent %}
 
-    <section class="section container">
-        <div class="container">Hello world</div>
+    <section class="section main-links">
+        <div class="container">
+            <ul class="main-links__list">
+                <li class="main-links__item">
+                    <a class="main-links__link main-links__link--first" href="/">
+                        <span class="main-links__link--icon">
+                            {% set includeIcon = 'geoTag' %}
+                            {% include "includes/svg.njk" %}
+                        </span>
+                        <span class="main-links__link--text"> Ижевск, Буммашевская, 5</span>
+                    </a>
+                </li>
+                <li class="main-links__item">
+                    <a class="main-links__link" href="/">Торговый центр</a>
+                </li>
+                <li class="main-links__item">
+                    <a class="main-links__link" href="/">Light Industrial</a>
+                </li>
+                <li class="main-links__item">
+                    <a class="main-links__link" href="/">Объекты партнеров</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div data-react-component="mainFilter"></div>
+
+    <section class="section section__shadow" id="contact-block">
+        <div class="container">
+            <h2>Остались вопросы?</h2>
+            <div class="contact__summary">Позвоните нам на горячую линию!</div>
+
+            <div class="contact__phone">
+                <div class="contact__phone--icon">
+                    {% set includeIcon = 'phoneNoBackground' %}
+                    {% include "includes/svg.njk" %}
+                </div>
+                <div class="contact__phone--number">+7 (912) 055-77-55</div>
+            </div>
+            <div class="contact__form">
+                <div class="contact__form--text">или</div>
+                <div data-react-component="contactFormModal"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="partner-locations">
+        <div class="container">
+            <div data-react-component="partnerCardList"></div>
+        </div>
+    </section>
+
+    <section class="section section__shadow-2" id="contact-form">
+        <div class="container">
+            <h2>Поможем подобрать помещение</h2>
+
+            <div class="contact__content">
+                <div data-react-component="contactForm"></div>
+            </div>
+        </div>
     </section>
 
 {% endblock %}
