@@ -103,13 +103,13 @@ const Card = ({ card, onClick, isActive, isExternal=false, modifier='' }) => {
                         </div>
 
                         {!isExternal && (
-                            <a href={`/property/${card.id}`} className="card__button button">Подробнее</a>
+                            <a href={`/premises/${card.id}`} className="card__button button">Подробнее</a>
                         )}
                     </div>
                 </div>
 
                 {isExternal && (
-                    <a href={`/property/${card.id}`} className="card__link button">Перейти на сайт партнера</a>
+                    <a href={`saitprtnera`} className="card__link button">Перейти на сайт партнера</a>
                 )}
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 
 const Territory = forwardRef((props, ref) => (
-    <svg ref={ref} {...props} width="664" height="267" viewBox="0 0 664 267" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg ref={ref} {...props} className="icon" width="664" height="267" viewBox="0 0 664 267" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M570.003 175.565L570.24 57.4032L581.13 57.6154L580.892 175.777L570.003 175.565Z" fill="#BDBDBD" />
         <path d="M565 16.5H468.5V53H567L565 16.5Z" fill="#BDBDBD" />
         <path d="M544 209L315 211V240L544 239V209Z" fill="#BDBDBD" />

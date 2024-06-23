@@ -1,42 +1,45 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom';
-import MainFilter from './components/MainFilter';
-import ContactForm from './components/ContactForm';
-import PartnerCardList from './components/PartnerCardList';
-import SearchPage from './components/SearchPage';
-import PartnerLinks from './components/PartnerLinks';
-import Manager from './components/Manager';
 import ymaps from 'ymaps';
+import LoadingSpinner from './includes/LoadingSpinner';
 
-const componentMapping = {
-    'mainFilter': MainFilter,
-    'contactForm': ContactForm,
-    'contactFormModal': ContactForm,
-    'partnerCardList': PartnerCardList,
-    'searchPage': SearchPage,
-    'partnerLinks': PartnerLinks,
-    'manager': Manager,
+const loadComponent = (componentName) => {
+    switch (componentName) {
+        case 'mainFilter':
+            return lazy(() => import('./components/MainFilter'));
+        case 'contactForm':
+            return lazy(() => import('./components/ContactForm'));
+        case 'contactFormModal':
+            return lazy(() => import('./components/ContactForm'));
+        case 'partnerCardList':
+            return lazy(() => import('./components/PartnerCardList'));
+        case 'searchPage':
+            return lazy(() => import('./components/SearchPage'));
+        case 'partnerLinks':
+            return lazy(() => import('./components/PartnerLinks'));
+        case 'premises':
+            return lazy(() => import('./components/Premises'));
+        case 'manager':
+            return lazy(() => import('./components/Manager'));
+        default:
+            return null;
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-react-component]');
     
-    containers.forEach(container => {
+    containers.forEach((container) => {
         const componentName = container.getAttribute('data-react-component');
-        const Component = componentMapping[componentName];
+        const Component = loadComponent(componentName);
         
         if (Component) {
-            if (componentName == 'contactFormModal') {
-                ReactDOM.render(
-                    <Component modal={true} />,
-                    container
-                );
-            } else {
-                ReactDOM.render(
-                    <Component />,
-                    container
-                );
-            }
+            ReactDOM.render(
+                <Suspense fallback={<LoadingSpinner />}>
+                    <Component {...(componentName === 'contactFormModal' && { modal: true })} />
+                </Suspense>,
+                container
+            );
         }
     });
 });

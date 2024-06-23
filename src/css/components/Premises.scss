@@ -1,0 +1,140 @@
+.premises {
+    color: $black;
+
+    &__back {
+        display: block;
+        width: fit-content;
+        position: relative;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 20px;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 100%;
+            height: 5px;
+            background-color: $yellow;
+            transition: transform .3s;
+            transform: translateX(-50%) scaleX(0);
+        }
+
+        &:hover::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: 70px;
+    }
+
+    &__heading {
+        font-size: 24px;
+        font-weight: 700;
+        margin-right: 30px;
+
+        &--uppercase {
+            text-transform: uppercase;
+        }
+
+        &--large {
+            font-size: 44px;
+        }
+    }
+
+    &__buttons {
+        position: relative;
+        display: flex;
+        margin-left: auto;
+    }
+
+    &__button {
+        margin-right: 15px;
+    }
+
+    &__message {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        background-color: $yellow;
+        border-radius: 10px;
+    }
+
+    &__row {
+        display: flex;
+        margin-bottom: 120px;
+    }
+
+    &__column {
+        width: 50%;
+        flex-basis: 50%;
+    }
+
+    &__title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 70px;
+    }
+
+    &__grid {
+        display: grid;
+        gap: 10px 20px;
+        margin-bottom: 30px;
+
+        &--two {
+            grid-template-columns: 20px 1fr;
+        }
+
+        &--three {
+            grid-template-columns: 20px 175px 1fr;
+        }
+    }
+
+    &__cell {
+        &--bold {
+            font-weight: 700;
+        }
+    }
+
+    &__label {
+        margin-bottom: 15px;
+    }
+
+    &__location {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__scheme {
+        margin-bottom: 75px;
+    }
+
+    &__text {
+        font-size: 24px;
+        margin-bottom: 70px;
+    }
+
+    &__points {
+        display: flex;
+    }
+
+    &__point {
+        display: flex;
+        align-items: center;
+        margin-right: 50px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &--text {
+            font-size: 14px;
+            margin-left: 20px;
+        }
+    }
+}
