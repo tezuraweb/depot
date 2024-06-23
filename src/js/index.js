@@ -5,6 +5,7 @@ import ContactForm from './components/ContactForm';
 import PartnerCardList from './components/PartnerCardList';
 import SearchPage from './components/SearchPage';
 import PartnerLinks from './components/PartnerLinks';
+import Manager from './components/Manager';
 import ymaps from 'ymaps';
 
 const componentMapping = {
@@ -14,6 +15,7 @@ const componentMapping = {
     'partnerCardList': PartnerCardList,
     'searchPage': SearchPage,
     'partnerLinks': PartnerLinks,
+    'manager': Manager,
 };
 
 document.addEventListener('DOMContentLoaded', () => {

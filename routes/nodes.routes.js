@@ -42,5 +42,11 @@ router
         res.render('nodes/index', { language: 'ru' });
     });
 
+router
+    .route('/about')
+    .get((req, res) => {
+        res.render('nodes/company');
+    });
+
 
 module.exports = router;

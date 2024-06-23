@@ -1,0 +1,212 @@
+.about {
+
+    &--black {
+        color: $black;
+    }
+
+    &__section {
+        background-color: $white;
+
+        &--black {
+            background-color: $black;
+        }
+    }
+
+    &__container {
+
+        &--left {
+            flex-basis: 50%;
+            flex-direction: column;
+        }
+
+        &--right {
+            position: relative;
+            flex-basis: 50%;
+            flex-direction: column;
+        }
+    }
+
+    &__title {
+        font-weight: bold;
+
+        &--main {
+            max-width: 658px;
+            font-size: 60px;
+            line-height: 110%;
+            padding-top: 90px;
+            margin-bottom: 15px;
+        }
+
+        &--logistics {
+            margin-bottom: 80px;
+        }
+    }
+
+    &__subtitle {
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 183px;
+
+        &--custom {
+            max-width: 400px;
+            margin-bottom: 0;
+        }
+
+        &--styling {
+            padding: 30px 30px 30px 75px;
+            background-color: $yellow;
+            width: 50%;
+            margin-bottom: 50px;
+        }
+    }
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+
+        &--number {
+            color: $yellow;
+            font-size: 128px;
+            font-weight: bold;
+            line-height: 100%;
+        }
+
+        &--text {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        &--lg {
+            max-width: 362px;
+        }
+
+        &--md {
+            max-width: 174px;
+        }
+
+        &--address {
+            max-width: fit-content;
+            margin: 0 auto;
+            padding-top: 124px;
+        }
+    }
+
+    &__item {
+        max-width: 550px;
+        background-color: $black;
+        padding: 30px 30px 30px 75px;
+        margin: 40px 0;
+    }
+
+    &__list {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__icon {
+        position: absolute;
+
+        &--docs {
+            left: 30%;
+        }
+
+        &--attorney {
+            top: 20%;
+            left: 10%;
+        }
+
+        &--goods {
+            top: 52%;
+            left: 1%;
+        }
+
+        &--gifts {
+            top: 84%;
+        }
+    }
+
+    &__logistics {
+
+        &--image {
+            position: absolute;
+            left: 30%;
+            bottom: -82px;
+            width: 430px;
+            height: 100%;
+            background-image: url('/assets/img/pictures/logistics.png');
+            background-repeat: no-repeat;
+        }
+
+        &--location {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+        }
+
+        &--call {
+            position: absolute;
+            left: 66%;
+            top: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .icon {
+            width: 114px;
+            height: 114px;
+        }
+    }
+
+    &__advantages {
+        flex-wrap: wrap;
+        text-align: center;
+
+        &--title {
+            margin-bottom: 100px;
+        }
+
+        &--subtitle {
+            display: inline-block;
+            padding-top: 20px;
+            font-weight: 500;
+            line-height: 110%;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        &--item {
+            padding-top: 40px;
+            width: 676px;
+            height: 262px;
+            background-color: $black;
+        }
+
+        &--text {
+            display: inline-block;
+            max-width: 406px;
+        }
+
+        &--loc {
+            max-width: 400px;
+        }
+
+        &--bus {
+            max-width: 408px;
+        }
+
+        &--parking {
+            max-width: 380px;
+        }
+    }
+
+    &__manager {
+
+        &--title {
+            margin-bottom: 50px;
+        }
+    }
+}

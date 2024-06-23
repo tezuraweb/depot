@@ -103,6 +103,11 @@ input[type=number] {
     margin: 0 auto;
     padding: 0 75px;
     position: relative;
+
+    &--md {
+        width: 1290px;
+        padding: 0;
+    }
 }
 
 .section {
@@ -130,6 +135,19 @@ input[type=number] {
         background-position: center;
     }
 
+    &#about-block {
+        background-image: url('../../assets/img/pictures/about_bg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &#about-logistics {
+        background-image: url('../../assets/img/pictures/logistics_bg.webp');
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-size: 100%;
+    }
+
     &__shadow::before, &__shadow-2::before {
         content: '';
         position: absolute;
@@ -154,6 +172,18 @@ input[type=number] {
 
     // @media (max-width: $laptop-breakpoint-2) {
     // }
+}
+
+.flex {
+    display: flex;
+
+    &--sb {
+        justify-content: space-between;
+    }
+
+    &--center {
+        align-items: center;
+    }
 }
 
 .button {

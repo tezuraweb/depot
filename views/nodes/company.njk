@@ -1,0 +1,140 @@
+{% set pageTitle = 'Акционерное общество «ДЕПО»' %}
+{% set pageDescription = 'О компании «ДЕПО»' %}
+
+{% set logistics = [
+    {
+        id: 'docs',
+        title: 'Отправка посылок и документов',
+        iconId: 'docs'
+    },
+    {
+        id: 'attorney',
+        title: 'Получение грузов по доверенности',
+        iconId: 'attorney'
+    },
+    {
+        id: 'goods',
+        title: 'Выкуп товаров в магазинах',
+        iconId: 'goods'
+    },
+    {
+        id: 'gifts',
+        title: 'Доставка подарков',
+        iconId: 'gifts'
+    }
+] %}
+
+{% set advantages = [
+    {
+        id: 'loc',
+        title: 'Удобная локация в центральной части города',
+        iconId: 'locIcon'
+    },
+    {
+        id: 'transport',
+        title: 'Отличная транспортная развязка',
+        text: 'ул. Удмуртская, ул. Воткинское Шоссе, ул. Буммашевская',
+        iconId: 'transportIcon'
+    },
+    {
+        id: 'bus',
+        title: 'Остановки общественного транспорта поблизости',
+        iconId: 'busIcon'
+    },
+    {
+        id: 'parking',
+        title: 'Благоустроенная территория с парковкой и доступом 24/7',
+        iconId: 'parkingIcon'
+    }
+] %}
+
+{% extends "layouts/body.njk" %}
+
+{% block mainContent %}
+
+    <section class="section about__section about--black" id="about-block">
+        <div class="container">
+            <h1 class="about__title about__title--main">Акционерное общество «ДЕПО»</h1>
+            <div class="about__subtitle">сдан в эксплуатацию в 2021 году</div>
+            <ul class="about__info">
+                <li class="about__info--list"><span class="about__info--number">157</span><span class="about__info--text">офисов</span></li>
+                <li class="about__info--list"><span class="about__info--number">117</span><span class="about__info--text about__info--lg">производственно-складских помещений</span></li>
+                <li class="about__info--list"><span class="about__info--number">10</span><span class="about__info--text about__info--md">земельных участков</span></li>
+            </ul>
+            <div class="about__info--address">Ижевск, Буммашевская, 5</div>
+        </div>
+    </section>
+
+    <section class="section about__section" id="about-logistics">
+        <div class="container container--md flex flex--sb flex--center about__title--logistics">
+            <h2 class="about--black about__title">Особое предложение</h2>
+            <span>
+                {% set includeIcon = 'depoLogistics' %}
+                {% include "includes/svg.njk" %}
+            </span>
+        </div>
+        <div class="about__subtitle--styling flex flex--center">
+            <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
+            <span>
+                {% set includeIcon = 'carIcon' %}
+                {% include "includes/svg.njk" %}
+            </span>
+        </div>
+        <div class="about__container flex">
+            <div class="about__container--left"> 
+                <ul>
+                    {% for item in advantages %}
+                        <li class="about__item">{{ item.title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="about__container--right">
+                <div class="about__logistics">
+                    <span class="about__logistics--location">
+                        {% set includeIcon = 'locImg' %}
+                        {% include "includes/svg.njk" %}
+                    </span>
+                    <a href="tel:+79092776242" class="about__logistics--call">
+                        {% set includeIcon = 'phoneIcon' %}
+                        {% include "includes/svg.njk" %}
+                    </a>
+                    <div class="about__logistics--image"></div>
+                </div>
+                <ul class="about__list">
+                    {% for item in logistics %}
+                        <li class="about__icon about__icon--{{ item.id }}">
+                            {% set includeIcon = item.iconId %}
+                            {% include "includes/svg.njk" %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about__section--black">
+        <div class="container">
+            <h2 class="about__title about__advantages--title">Превосходная инфраструктура</h2>
+        </div>
+            <ul class="about__advantages flex flex--sb">
+                {% for item in advantages %}
+                    <li class="about__advantages--item">
+                        <div>
+                            {% set includeIcon = item.iconId %}
+                            {% include "includes/svg.njk" %}
+                        </div>
+                        <p class="about__advantages--subtitle about__advantages--{{ item.id }}">{{ item.title }}</p>
+                        <p class="about__advantages--text">{{ item.text }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+    </section>
+
+    <section class="section about__section">
+        <div class="container">
+            <h2 class="about--black about__title about__manager--title">Управляющий ТСК "Депо"</h2>
+            <div data-react-component="manager"></div>
+        </div>
+    </section>
+
+{% endblock %}

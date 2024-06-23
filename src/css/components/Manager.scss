@@ -1,0 +1,22 @@
+.manager {
+    color: $black;
+    font-size: 24px;
+
+    &__name {
+        margin-bottom: 55px;
+    }
+
+    &__text {
+        display: inline-block;
+        max-width: 698px;
+        padding-left: 40px;
+    }
+
+    &__photo {
+        display: inline-block;
+        width: 370px;
+        height: 370px;
+        object-fit: cover;
+        border: 5px solid $yellow;
+    }
+}
