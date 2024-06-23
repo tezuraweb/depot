@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchForm from './SearchForm';
 import CardList from './CardList';
-import BuildingScheme from './BuildingScheme';
+import Scheme from './ModalScheme';
 
 const SearchPage = () => {
     const [pages, setPages] = useState([]);
@@ -22,189 +22,29 @@ const SearchPage = () => {
         promotions: false,
     });
 
-    const cards = [
-        {
-            id: 1,
-            promotion: true,
-            location: "Центр города",
-            article: "A123",
-            area: 100,
-            floor: 3,
-            price: "50000 руб.",
-            images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-            type: "office"
-        },
-        {
-            id: 2,
-            promotion: false,
-            location: "Промышленная зона",
-            article: "B456",
-            area: 500,
-            floor: 1,
-            price: "150000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "industrial"
-        },
-        {
-            id: 3,
-            promotion: true,
-            location: "Торговый центр",
-            article: "C789",
-            area: 200,
-            floor: 2,
-            price: "80000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "commercial"
-        },
-        {
-            id: 4,
-            promotion: false,
-            location: "Пригород",
-            article: "D012",
-            area: 1000,
-            floor: 0,
-            price: "100000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "land"
-        },
-        {
-            id: 5,
-            promotion: true,
-            location: "Центр города",
-            article: "E345",
-            area: 120,
-            floor: 4,
-            price: "60000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "office"
-        },
-        {
-            id: 6,
-            promotion: false,
-            location: "Индустриальный парк",
-            article: "F678",
-            area: 800,
-            floor: 1,
-            price: "200000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "industrial"
-        },
-        {
-            id: 7,
-            promotion: true,
-            location: "Жопа",
-            article: "A123",
-            area: 100,
-            floor: 3,
-            price: "50000 руб.",
-            images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-            type: "office"
-        },
-        {
-            id: 8,
-            promotion: false,
-            location: "Жопа",
-            article: "B456",
-            area: 500,
-            floor: 1,
-            price: "150000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "industrial"
-        },
-        {
-            id: 9,
-            promotion: true,
-            location: "Пизда",
-            article: "C789",
-            area: 200,
-            floor: 2,
-            price: "80000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "commercial"
-        },
-        {
-            id: 10,
-            promotion: false,
-            location: "Дно",
-            article: "D012",
-            area: 1000,
-            floor: 0,
-            price: "100000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "land"
-        },
-        {
-            id: 11,
-            promotion: true,
-            location: "Дыра",
-            article: "E345",
-            area: 120,
-            floor: 4,
-            price: "60000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "office"
-        },
-        {
-            id: 12,
-            promotion: false,
-            location: "Хрущобы",
-            article: "F678",
-            area: 800,
-            floor: 1,
-            price: "200000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "industrial"
-        },
-        {
-            id: 9,
-            promotion: true,
-            location: "Пизда",
-            article: "C789",
-            area: 200,
-            floor: 2,
-            price: "80000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "commercial"
-        },
-        {
-            id: 10,
-            promotion: false,
-            location: "Дно",
-            article: "D012",
-            area: 1000,
-            floor: 0,
-            price: "100000 руб.",
-            images: ['/img/pics/ft.png'],
-            type: "land"
-        },
-    ];
-
     useEffect(() => {
-        const fetchTotalCards = async () => {
-            try {
-                // const response = await axios.get('/api/search/count', { params: formData });
-                // setTotalCards(response.data.total);
-                // setTotalPages(Math.ceil(response.data.total / 6));
-
-                //tmp
-                setTotalCards(cards.length);
-                setTotalPages(Math.ceil(cards.length / 6));
-            } catch (error) {
-                console.error('Error fetching total cards:', error);
-            }
-        };
-
         fetchTotalCards();
-    }, [formData]);
-
-    useEffect(() => {
         fetchCards(formData, 1);
     }, []);
+
+    useEffect(() => {
+        fetchTotalCards();
+    }, [formData]);
 
     const handleFormSubmit = async (formData) => {
         setFormData(formData);
         setPages([]);
         fetchCards(formData, 1);
+    };
+
+    const fetchTotalCards = async () => {
+        try {
+            const response = await axios.get('/api/search/count', { params: formData });
+            setTotalCards(response.data.total);
+            setTotalPages(Math.ceil(response.data.total / 6));
+        } catch (error) {
+            console.error('Error fetching total cards:', error);
+        }
     };
 
     const fetchCards = async (formData, page) => {
@@ -213,26 +53,20 @@ const SearchPage = () => {
             return;
         }
         try {
-            // const response = await axios.get('/api/search', {
-            //     params: { ...formData, page }
-            // });
-            // if (response.data.length === 0) {
-            //     setPages([]);
-            //     setTotalPages(1);
-            //     setCurrentPage(1);
-            // } else {
-            //     const newPages = [...pages];
-            //     newPages[page - 1] = response.data;
-            //     setPages(newPages);
-            //     setCurrentPage(page);
-            //     setTotalPages(Math.ceil(totalCards / 6));
-            // }
+            const requestData = { ...formData, page };
+            const response = await axios.post('/api/search', requestData);
 
-            //tmp
-            const newPages = [...pages];
-            newPages[page - 1] = cards.slice((page - 1) * 6, page * 6);
-            setPages(newPages);
-            setCurrentPage(page);
+            if (response.data.length === 0) {
+                setPages([]);
+                setTotalPages(1);
+                setCurrentPage(1);
+            } else {
+                const newPages = [...pages];
+                newPages[page - 1] = response.data;
+                setPages(newPages);
+                setCurrentPage(page);
+                setTotalPages(Math.ceil(totalCards / 6));
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -243,11 +77,40 @@ const SearchPage = () => {
     };
 
     return (
-        <div>
+        <>
             <section className="section" id="search-block">
-                <div className="container">
-                    <SearchForm onSubmit={handleFormSubmit} />
-                    <BuildingScheme activeElements={['depot-building-1', 'depot-building-12', 'depot-building-5', 'depot-building-2']}/>
+                <div className="search container">
+                    <div className="search__row">
+                        <div className="search__column">
+                            <SearchForm onSubmit={handleFormSubmit} />
+                        </div>
+                        <div className="search__column search__column--flex">
+                            <div className="search__map">
+                                <Scheme
+                                    activeElements={['depot-building-1', 'depot-building-12', 'depot-building-5', 'depot-building-2']}
+                                    isModal={true}
+                                />
+                            </div>
+                            <div className="search__info">
+                                <div className="search__colors">
+                                    <div className="search__title">Карта обозначений</div>
+                                    <div className="search__color">
+                                        <div className="search__palette search__palette--yellow"></div>
+                                        <div className="search__desc">Доступный объект</div>
+                                    </div>
+                                    <div className="search__color">
+                                        <div className="search__palette search__palette--grey"></div>
+                                        <div className="search__desc">Недоступный объект</div>
+                                    </div>
+                                    <div className="search__color">
+                                        <div className="search__palette search__palette--red"></div>
+                                        <div className="search__desc">Выбранный объект</div>
+                                    </div>
+                                </div>
+                                <div className="search__facilities"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -263,7 +126,7 @@ const SearchPage = () => {
                     />
                 </div>
             </section>
-        </div>
+        </>
     );
 };
 

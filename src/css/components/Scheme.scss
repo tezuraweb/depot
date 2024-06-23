@@ -1,0 +1,28 @@
+.scheme {
+    &__row {
+        display: flex;
+        align-items: center;
+    }
+
+    &__column {
+        width: 50%;
+        flex-basis: 50%;
+
+        &:first-child {
+            margin-right: 50px;
+        }
+    }
+
+    &__popup {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $white;
+    }
+
+    .icon {
+        max-width: 100%;
+    }
+}

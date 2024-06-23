@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const ContactForm = ({ modal }) => {
+import IconSprite from '../includes/IconSprite';
+
+const ContactForm = ({ modal, buttonView }) => {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -37,7 +39,16 @@ const ContactForm = ({ modal }) => {
 
     return (
         <div>
-            {modal && <button className="button button--large" onClick={() => setModalVisible(true)}>Закажите звонок</button>}
+            {modal && (
+                <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'}`} onClick={() => setModalVisible(true)}>{
+                    buttonView == 'icon' ?
+                        <IconSprite
+                            selector="PhoneSimple"
+                            width="26"
+                            height="26"
+                        /> : 'Закажите звонок'
+                }</button>
+            )}
 
             {(!modal || modalVisible) && (
                 <div className={modal ? 'modal' : ''} onClick={modal ? (e) => popupClick(e) : null}>

@@ -31,6 +31,13 @@ router
     });
 
 router
+    .route('/premises/:id')
+    .get((req, res) => {
+        const id = req.params.id;
+        res.render('nodes/premises', { id });
+    });
+
+router
     .route('/en')
     .get((req, res) => {
         res.render('nodes/index', { language: 'en' });
@@ -47,6 +54,5 @@ router
     .get((req, res) => {
         res.render('nodes/company');
     });
-
 
 module.exports = router;
