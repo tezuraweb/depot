@@ -55,4 +55,10 @@ router
         res.render('nodes/company');
     });
 
+router
+    .route('/lightindustrial')
+    .get((req, res) => {
+        res.render('nodes/lightindustrial');
+    });
+
 module.exports = router;

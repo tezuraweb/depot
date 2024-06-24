@@ -20,6 +20,7 @@ const PartnerLinks = () => {
                                 selector="ExternalLinkIcon"
                                 width="30"
                                 height="30"
+                                fill="#F9BC07"
                             />
                         </div>
                     </a>
@@ -38,6 +39,7 @@ const PartnerLinks = () => {
                                 selector="ExternalLinkIcon"
                                 width="30"
                                 height="30"
+                                fill="#F9BC07"
                             />
                         </div>
                     </a>

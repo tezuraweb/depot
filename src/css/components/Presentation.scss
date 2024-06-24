@@ -1,0 +1,49 @@
+/* src/Presentation.css */
+.presentation-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.presentation-block {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: background-image 0.5s ease-in-out;
+}
+
+.presentation-text {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 20px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.presentation-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.presentation-controls button {
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.presentation-controls button:disabled {
+    background: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+}
+
+.presentation-controls button:not(:disabled):hover {
+    background: rgba(255, 255, 255, 1);
+}

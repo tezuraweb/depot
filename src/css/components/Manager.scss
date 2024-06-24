@@ -8,15 +8,52 @@
 
     &__text {
         display: inline-block;
-        max-width: 698px;
-        padding-left: 40px;
+        max-width: 690px;
+        padding-left: 50px;
     }
 
     &__photo {
         display: inline-block;
-        width: 370px;
-        height: 370px;
+        margin-right: 112px;
+        width: 224px;
+        height: 224px;
         object-fit: cover;
         border: 5px solid $yellow;
+        
+    }
+
+    &__quot {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+
+        &--top {
+            padding-top: 10px;
+            align-self: flex-start;
+
+            &::before {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 100%;
+                background-image: url('../../assets/img/pictures/quot_top.webp');
+                background-repeat: no-repeat;
+            }
+        }
+
+        &--bottom {
+            padding-bottom: 10px;
+            align-self: flex-end;
+
+            &::before {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 100%;
+                background-image: url('../../assets/img/pictures/quot_bottom.webp');
+                background-repeat: no-repeat;
+            }
+        }
     }
 }

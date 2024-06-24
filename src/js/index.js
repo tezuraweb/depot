@@ -21,7 +21,14 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/Premises'));
         case 'manager':
             return lazy(() => import('./components/Manager'));
+        case 'tenants':
+            return lazy(() => import('./components/Tenants'));
+        case 'gallery':
+            return lazy(() => import('./components/Gallery'));
+        case 'presentation':
+            return lazy(() => import('./components/Presentation'));
         default:
+            
             return null;
     }
 };

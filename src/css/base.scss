@@ -103,11 +103,6 @@ input[type=number] {
     margin: 0 auto;
     padding: 0 75px;
     position: relative;
-
-    &--md {
-        width: 1290px;
-        padding: 0;
-    }
 }
 
 .section {
@@ -157,10 +152,35 @@ input[type=number] {
     }
 
     &#about-logistics {
+        position: relative;
         background-image: url('../../assets/img/pictures/logistics_bg.webp');
         background-repeat: no-repeat;
         background-position: bottom;
         background-size: 100%;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 425px;
+            height: 524px;
+            bottom: 0;
+            right: 202px;
+            background-image: url('../../assets/img/pictures/deliveryperson.webp');
+            background-repeat: no-repeat;
+        }
+    }
+
+    &#lightindustrial-block {
+        background-image: url('../../assets/img/pictures/li_bg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+    }
+
+    &#lightindustrial-form {
+        background-image: url('../../assets/img/pictures/li_form_bg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     &__shadow::before, &__shadow-2::before {
@@ -198,6 +218,10 @@ input[type=number] {
 
     &--center {
         align-items: center;
+    }
+
+    &--col {
+        flex-direction: column;
     }
 }
 
@@ -237,6 +261,24 @@ input[type=number] {
 
         &::after {
             transform: rotate(-45deg);
+        }
+    }
+
+    &--droplist {
+        position: relative;
+        padding: 20px;
+
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 11px;
+            width: 16px;
+            height: 16px;
+            border-bottom: 2px solid $black;
+            border-right: 2px solid $black;
+            transform: rotate(45deg);
         }
     }
 

@@ -29,10 +29,12 @@ const Manager = () => {
     }, []);
 
     return (
-        <div>
-            <p className="manager manager__name">{data.name}</p>
-            <p className="manager manager__text">{data.text}</p>
+        <div className="flex">
             <img src={data.photo} alt={data.name} className="manager__photo" />
+            <div className="flex flex--col">
+                <p className="manager manager__name">{data.name}</p>
+                <span className="manager__quot manager__quot--top"></span><p className="manager manager__text">{data.text}</p><span className="manager__quot manager__quot--bottom"></span>
+            </div>
         </div>
     );
 };

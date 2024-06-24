@@ -48,13 +48,19 @@
         text-transform: uppercase;
         margin-bottom: 183px;
 
+        &--form {
+            padding-top: 44px;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
         &--custom {
-            max-width: 400px;
+            max-width: 350px;
             margin-bottom: 0;
         }
 
         &--styling {
-            padding: 30px 30px 30px 75px;
+            padding: 40px 75px;
             background-color: $yellow;
             width: 50%;
             margin-bottom: 50px;
@@ -98,7 +104,12 @@
         max-width: 550px;
         background-color: $black;
         padding: 30px 30px 30px 75px;
-        margin: 40px 0;
+        margin: 35px 0;
+        transition: transform 0.3s ease;
+        
+        &:hover {
+            transform: translateX(75px);
+        }
     }
 
     &__list {
@@ -109,57 +120,74 @@
 
     &__icon {
         position: absolute;
+        transition: transform 0.3s ease;
 
         &--docs {
-            left: 30%;
+            left: 24%;
+            bottom: 89%;
         }
 
         &--attorney {
             top: 20%;
-            left: 10%;
+            left: 3%;
         }
 
         &--goods {
-            top: 52%;
-            left: 1%;
+            top: 50%;
+            right: 97%;
         }
 
         &--gifts {
-            top: 84%;
+            top: 83%;
+            right: 95%;
+        }
+
+        &:hover {
+            transform: scale(1.2) rotate(360deg);
         }
     }
 
     &__logistics {
-
-        &--image {
-            position: absolute;
-            left: 30%;
-            bottom: -82px;
-            width: 430px;
-            height: 100%;
-            background-image: url('/assets/img/pictures/logistics.png');
-            background-repeat: no-repeat;
-        }
+        position: absolute;
+        top: 75px;
+        left: 57%;
+        width: 255px;
+        height: 342px;
 
         &--location {
             position: absolute;
-            top: -50px;
-            left: 50%;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
 
         &--call {
             position: absolute;
-            left: 66%;
-            top: 20px;
+            top: 82px;
+            right: 83px;
             cursor: pointer;
             z-index: 1000;
+            animation: pulseRotate 2s infinite;
         }
 
         .icon {
-            width: 114px;
-            height: 114px;
+            width: 88px;
+            height: 88px;
         }
     }
+
+    @keyframes pulseRotate {
+        0%, 100% {
+            transform: scale(1) rotate(0deg);
+        }
+        50% {
+            transform: scale(1.1) rotate(10deg);
+        }
+        75% {
+            transform: scale(1) rotate(-10deg);
+        }
+    } 
 
     &__advantages {
         flex-wrap: wrap;
@@ -176,6 +204,7 @@
             line-height: 110%;
             margin-bottom: 5px;
             text-transform: uppercase;
+            transition: color 0.3s ease;
         }
 
         &--item {
@@ -183,11 +212,37 @@
             width: 676px;
             height: 262px;
             background-color: $black;
+            transition: background-color 0.3s ease, color 0.3s ease;
+
+            .icon {
+                fill: $yellow;
+                transition: fill 0.3s ease;
+            }
+
+            &:hover {
+                background-color: $yellow;
+                color: $black;
+                
+                .about__advantages--subtitle, .about__advantages--text {
+                    color: $black;
+                }
+
+                .icon {
+                    fill: $black;
+                }
+            }
         }
 
         &--text {
             display: inline-block;
             max-width: 406px;
+            transition: color 0.3s ease;
+        }
+
+        &--button {
+            display: block;
+            width: fit-content;
+            margin: 70px auto 0 auto;
         }
 
         &--loc {
@@ -207,6 +262,57 @@
 
         &--title {
             margin-bottom: 50px;
+        }
+    }
+
+    &__accordion {
+        color: $black;
+
+        &--toggle {
+            display: block;
+            border: 2px solid $black;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+
+            &.active {
+                transform: rotate(-180deg);
+            }
+        }
+
+        &--header {
+            padding: 10px 30px;
+            border-bottom: 2px solid $black;
+        }
+
+        &--title {
+            padding-left: 75px;
+            font-size: 24px;
+        }
+
+        &--subtitle {
+            font-size: 24px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            margin-right: 50px;
+        }
+
+        &--wrapper {
+            transition: max-height .3s;
+            max-height: 0;
+            overflow: hidden;
+
+            &.active {
+                max-height: 270px;
+            }
+        }
+
+        &--content {
+            padding: 30px;
+            background-color: $yellow;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            margin-bottom: 10px;
         }
     }
 }
