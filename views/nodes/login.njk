@@ -1,0 +1,27 @@
+{% set pageTitle = 'Войти - Депо' %}
+{% set pageDescription = 'Торгово-складской комплекс Депо: Личный кабинет' %}
+
+{% extends "layouts/backoffice.njk" %}
+
+{% block mainContent %}
+
+    <section class="section" id="login">
+        <div class="container">
+            <div class="page__login">
+                <h1 class="page__login--title">Авторизация</h1>
+                <form class="form form--login">
+                    <div class="form__group form__group">
+                        <label class="form__label">Ваш ИНН</label>
+                        <input type="text" name="username" class="form__input" placeholder="ИНН" required/>
+                    </div>
+                    <div class="form__group form__group">
+                        <label class="form__label">Пароль</label>
+                        <input type="password" name="password" class="form__input" placeholder="Введите пароль" required/>
+                    </div>
+                    <button type="submit" class="form__button button button--large">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

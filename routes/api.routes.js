@@ -87,7 +87,7 @@ const recs = [
     {
         id: 7,
         promotion: true,
-        location: "Жопа",
+        location: "Элитный квартал",
         article: "A123",
         area: 100,
         floor: 3,
@@ -98,7 +98,7 @@ const recs = [
     {
         id: 8,
         promotion: false,
-        location: "Жопа",
+        location: "Элитный квартал",
         article: "B456",
         area: 500,
         floor: 1,
@@ -178,7 +178,7 @@ const cards = [
     {
         id: 7,
         promotion: true,
-        location: "Жопа",
+        location: "Элитный квартал",
         article: "A123",
         area: 100,
         floor: 3,
@@ -189,7 +189,7 @@ const cards = [
     {
         id: 8,
         promotion: false,
-        location: "Жопа",
+        location: "Элитный квартал",
         article: "B456",
         area: 500,
         floor: 1,
@@ -200,7 +200,7 @@ const cards = [
     {
         id: 9,
         promotion: true,
-        location: "Пизда",
+        location: "Зеленая зона",
         article: "C789",
         area: 200,
         floor: 2,
@@ -211,7 +211,7 @@ const cards = [
     {
         id: 10,
         promotion: false,
-        location: "Дно",
+        location: "Возвышенность",
         article: "D012",
         area: 1000,
         floor: 0,
@@ -222,7 +222,7 @@ const cards = [
     {
         id: 11,
         promotion: true,
-        location: "Дыра",
+        location: "Технопарк",
         article: "E345",
         area: 120,
         floor: 4,
@@ -233,7 +233,7 @@ const cards = [
     {
         id: 12,
         promotion: false,
-        location: "Хрущобы",
+        location: "Спальный район",
         article: "F678",
         area: 800,
         floor: 1,
@@ -244,7 +244,7 @@ const cards = [
     {
         id: 9,
         promotion: true,
-        location: "Пизда",
+        location: "Зеленая зона",
         article: "C789",
         area: 200,
         floor: 2,
@@ -255,7 +255,7 @@ const cards = [
     {
         id: 10,
         promotion: false,
-        location: "Дно",
+        location: "Возвышенность",
         article: "D012",
         area: 1000,
         floor: 0,
@@ -296,6 +296,45 @@ const tenants = [
     },
 ];
 
+const rented = [
+    {
+        id: 1,
+        promotion: true,
+        location: "Центр города",
+        article: "A123",
+        area: 100,
+        floor: 3,
+        price: "50000 руб.",
+        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
+        type: "office",
+        rentedUntil: '08.10.2027',
+    },
+    {
+        id: 2,
+        promotion: false,
+        location: "Промышленная зона",
+        article: "B456",
+        area: 500,
+        floor: 1,
+        price: "150000 руб.",
+        images: ['/img/pics/ft.png'],
+        type: "industrial",
+        rentedUntil: '08.09.2027',
+    },
+    {
+        id: 3,
+        promotion: true,
+        location: "Торговый центр",
+        article: "C789",
+        area: 200,
+        floor: 2,
+        price: "80000 руб.",
+        images: ['/img/pics/ft.png'],
+        type: "commercial",
+        rentedUntil: '08.09.2025',
+    }
+];
+
 router
     .route('/search/count')
     .get(async (req, res) => {
@@ -330,6 +369,16 @@ router
         const premisesData = premises[id];
         if (premisesData) {
             res.json(premisesData);
+        } else {
+            res.status(404).json({ error: 'Premises not found' });
+        }
+    });
+
+router
+    .route('/rented')
+    .get(async (req, res) => {
+        if (cards) {
+            res.json(rented);
         } else {
             res.status(404).json({ error: 'Premises not found' });
         }

@@ -228,7 +228,7 @@ const PartnerCardList = () => {
     };
 
     return (
-        <div className="listing">
+        <div className="listing listing--external">
             <h2 className="listing__title listing__title--marginBottom">Объекты партнеров</h2>
 
             <div className="listing__content">
@@ -238,7 +238,7 @@ const PartnerCardList = () => {
                             <Card
                                 key={index}
                                 card={card}
-                                isExternal={true}
+                                modifier="external"
                             />
                         ))}
                     </div>

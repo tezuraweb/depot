@@ -1,0 +1,39 @@
+.menu {
+    height: 100vh;
+    background: $grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    &__link {
+        display: block;
+        font-size: 24px;
+        padding: 35px 75px;
+        border: 2px solid transparent;
+
+        &.active {
+            background-color: $white;
+            border-right-color: $yellow;
+            border-bottom-color: $yellow;
+            font-weight: 700;
+        }
+
+        &:not(:first-child).active {
+            border-top-color: $yellow;
+        }
+    }
+
+    &__bot {
+        position: sticky;
+        bottom: 50px;
+        margin-top: auto;
+        
+        &--text {
+            font-size: 24px;
+            font-weight: 700;
+            color: $tgBlue;
+            margin-top: 10px;
+        }
+    }
+}

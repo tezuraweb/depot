@@ -14,18 +14,28 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
     ];
 
     const handleCardClick = (card, index) => {
-        if (modifier == 'recommend') return;
-
+        if (modifier === 'recommend' || modifier === 'rented') return;
         setActiveCardIndex(index);
     };
 
+    const titleMap = {
+        main: 'Свободные помещения',
+        search: 'Найдено для вас',
+        recommend: 'Мы подобрали помещения, которые максимально похожи по стоимости аренды и площади',
+        rented: 'Помещения в аренде'
+    };
+
+    const title = titleMap[modifier];
+    const showTabs = modifier === 'main';
+    const showPagination = modifier !== 'recommend' && modifier !== 'rented';
+    const showShareMain = modifier === 'main';
+    const showShareSearch = modifier === 'search';
+    
     return (
         <div className={`listing ${modifier ? 'listing--' + modifier : ''}`}>
-            {modifier == 'main' && <h2 className="listing__title">Свободные помещения</h2>}
-            {modifier == 'search' && <h2 className="listing__title">Найдено для вас</h2>}
-            {modifier == 'recommend' && <h2 className="listing__title">Мы подобрали помещения, которые максимально похожи по стоимости аренды и площади</h2>}
-
-            {modifier == 'main' && (
+            {title && <h2 className="listing__title">{title}</h2>}
+    
+            {showTabs && (
                 <div className="listing__tabs">
                     {tabs.map(tab => (
                         <button
@@ -37,7 +47,7 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                     ))}
                 </div>
             )}
-
+    
             <div className="listing__content">
                 <div className="listing__column listing__column--left">
                     <div className="listing__cards">
@@ -52,10 +62,9 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                         ))}
                     </div>
                 </div>
-
-                {modifier != 'recommend' && (
+    
+                {showPagination && (
                     <div className="listing__column listing__column--right">
-
                         <div className="listing__pagination">
                             <div className="listing__pagination--line">
                                 <button
@@ -83,20 +92,19 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                                     />
                                 </button>
                             </div>
-
                             <div className="listing__pagination--info">
                                 Стр. {currentPage}/{totalPages}
                             </div>
                         </div>
-
-                        {modifier == 'main' && (
+    
+                        {showShareMain && (
                             <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneSmall' />
                         )}
                     </div>
                 )}
             </div>
-
-            {modifier == 'search' && (
+    
+            {showShareSearch && (
                 <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneLarge' />
             )}
         </div>
@@ -104,4 +112,3 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
 };
 
 export default CardList;
-

@@ -37,7 +37,6 @@ const Scheme = ({ activeElement, floor }) => {
     useEffect(() => {
         const loadFloor = async () => {
             const floors = await loadFloors(activeElement);
-            console.log(activeElement, floors);
             setFloors(floors);
         };
 

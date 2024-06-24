@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="header">
+    <div class="header {% if hideLogin %} header--backoffice{% endif %}">
         <a href="/" class="header__logo">
             {% set includeIcon = 'mainLogo' %}
             {% include "includes/svg.njk" %}
@@ -42,9 +42,9 @@
         {% endif %}
 
         {% if user %}
-            <a class="header__auth" href="{{ item.link }}">Выйти</a>
+            <a class="header__auth" href="/logout">Выйти</a>
         {% elif not hideLogin %}
-            <a class="header__auth" href="{{ item.link }}" aria-label="Войти в кабинет арендатора">
+            <a class="header__auth" href="/login" aria-label="Войти в кабинет арендатора">
                 <div class="header__auth--icon">
                     {% set includeIcon = 'authIcon' %}
                     {% include "includes/svg.njk" %}

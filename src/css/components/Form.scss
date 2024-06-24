@@ -325,4 +325,22 @@
             font-size: 20px;
         }
     }
+
+    &--login {
+        color: $black;
+
+        .form__group {
+            margin-bottom: 35px;
+        }
+        
+        .form__input {
+            padding: 20px;
+            color: $black;
+        }
+
+        .form__button {
+            width: 100%;
+            margin-top: 75px;
+        }
+    }
 }

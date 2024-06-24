@@ -99,9 +99,12 @@ const Scheme = ({ activeElements = [] }) => {
             <Territory ref={svgRef} />
             {showModal && selectedBuilding && (
                 <div className="scheme__popup">
-                    <button className="scheme__close button button--close" onClick={closeModal}></button>
+                    <div className="flex flex--sb flex--center">
+                        <div className="scheme__title">Литер <span className="scheme__title--large">Б</span></div>
+                        <button className="scheme__close button button--close" onClick={closeModal}></button>
+                    </div>
                     <Suspense fallback={<LoadingSpinner />}>
-                        <FloorMap floors={floors} />
+                        <FloorMap floors={floors} controls={true} />
                     </Suspense>
                 </div>
             )}

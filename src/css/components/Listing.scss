@@ -122,7 +122,7 @@
 
     // modifiers
 
-    &--main {
+    &--main, &--external {
         .listing__pagination {
             padding-top: 20px;
         }
@@ -151,12 +151,16 @@
         }
     }
 
-    &--recommend {
+    &--recommend, &--rented {
         .listing__title {
             font-size: 24px;
             max-width: 680px;
             margin-bottom: 30px;
             color: $black;
+        }
+
+        .listing__column--left {
+            margin-right: 0;
         }
     }
 }

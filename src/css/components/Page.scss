@@ -3,9 +3,43 @@
         background-color: $black;
     }
 
-    &__footer{
+    &__footer {
         background-image: url('../../assets/img/pictures/pattern.png');
         background-repeat: repeat-x;
         background-position-y: 80%;
+    }
+
+    &__login {
+        color: $black;
+        max-width: 320px;
+        margin: 0 auto;
+
+        &--title {
+            font-size: 44px;
+            margin-bottom: 75px;
+        }
+    }
+
+    &__backoffice {
+        color: $black;
+        display: flex;
+
+        &--second {
+            flex-grow: 1;
+        }
+
+        &--sticky {
+            position: sticky;
+            top: 0;
+        }
+
+        &--content {
+            padding: 35px 80px;
+        }
+
+        &--greeting {
+            font-size: 24px;
+            margin-bottom: 70px;
+        }
     }
 }

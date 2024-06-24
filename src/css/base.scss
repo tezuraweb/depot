@@ -103,17 +103,25 @@ input[type=number] {
     margin: 0 auto;
     padding: 0 75px;
     position: relative;
+
+    &--nopadding {
+        padding: 0;
+    }
 }
 
 .section {
     position: relative;
     padding: 80px 0;
 
+    &--nopadding {
+        padding: 0;
+    }
+
     &#main-listing, &#partner-locations {
         background-color: $black;
     }
 
-    &#search-block, &#premises-data, &#premises-maps {
+    &#search-block, &#premises-data, &#premises-maps, &#login, &#profile {
         background-color: $white;
     }
 
@@ -234,6 +242,10 @@ input[type=number] {
     font-size: 14px;
     line-height: 1;
     font-weight: 500;
+
+    &--grey {
+        background-color: $grey;
+    }
 
     &--large {
         padding: 25px 30px;

@@ -100,6 +100,10 @@
         margin-top: auto;
     }
 
+    &__subtitle {
+        margin-bottom: 15px;
+    }
+
     &__detail {
         display: flex;
         align-items: center;
@@ -142,6 +146,10 @@
         text-align: center;
     }
 
+    &__rented {
+        margin-top: 25px;
+    }
+
     // modifiers
 
     &--main {
@@ -153,6 +161,12 @@
     &--search, &--recommend {
         .card__wrapper {
             border-color: $grey;
+        }
+    }
+
+    &--rented {
+        .card__wrapper {
+            border: 2px solid $darkGrey;
         }
     }
 

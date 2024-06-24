@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
 
-const FloorMap = ({ floors = [], floor = null }) => {
+const FloorMap = ({ floors = [], floor = null, controls = false }) => {
     const [activeFloor, setActiveFloor] = useState(0);
 
     useEffect(() => {
@@ -18,10 +18,10 @@ const FloorMap = ({ floors = [], floor = null }) => {
 
     return (
         <div className="floor-map">
-            {floor === null && (
+            {controls && (
                 <div className="floor-map__controls">
                     {floors.map((FloorComponent, index) => (
-                        <button key={index} onClick={() => handleClick(index)}>
+                        <button className={`floor-map__button button ${activeFloor != index ? 'button--grey' : ''}`} key={index} onClick={() => handleClick(index)}>
                             Этаж {index + 1}
                         </button>
                     ))}

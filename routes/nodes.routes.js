@@ -38,18 +38,6 @@ router
     });
 
 router
-    .route('/en')
-    .get((req, res) => {
-        res.render('nodes/index', { language: 'en' });
-    });
-
-router
-    .route('/ru')
-    .get((req, res) => {
-        res.render('nodes/index', { language: 'ru' });
-    });
-
-router
     .route('/about')
     .get((req, res) => {
         res.render('nodes/company');
@@ -59,6 +47,18 @@ router
     .route('/lightindustrial')
     .get((req, res) => {
         res.render('nodes/lightindustrial');
+    });
+
+router
+    .route('/login')
+    .get((req, res) => {
+        res.render('nodes/login', { user: null });
+    });
+    
+router
+    .route('/profile')
+    .get((req, res) => {
+        res.render('nodes/profile', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'profile' });
     });
 
 module.exports = router;
