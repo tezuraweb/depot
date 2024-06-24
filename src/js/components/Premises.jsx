@@ -3,9 +3,10 @@ import axios from 'axios';
 
 import Scheme from './StaticScheme';
 import CardList from './CardList';
+import ContactForm from './ContactForm';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
-import ContactForm from '../components/ContactForm';
+import LoadingSpinner from '../includes/LoadingSpinner';
 
 const Premises = () => {
     const [premisesId, setPremisesId] = useState(null);
@@ -84,7 +85,7 @@ const Premises = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (error) {

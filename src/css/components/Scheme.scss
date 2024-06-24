@@ -20,6 +20,18 @@
         right: 0;
         bottom: 0;
         background-color: $white;
+        padding: 0 75px;
+    }
+
+    &__title {
+        font-weight: 700;
+        font-size: 24px;
+        color: $black;
+        text-transform: uppercase;
+
+        &--large {
+            font-size: 44px;
+        }
     }
 
     .icon {
