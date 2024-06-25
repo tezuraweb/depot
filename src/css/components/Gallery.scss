@@ -5,7 +5,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: rgba(0, 0, 0, 0.65);
+        background: rgba(28, 29, 32, 0.8);
     }
     
     &__frame {
@@ -40,8 +40,44 @@
                 fill: $darkGrey;
             }
         }
-    }
+
+        &--prev {
+            &:hover {
+                transition: transform 0.3s ease;
+                animation: pulsePrev 1.5s infinite;
     
+                @keyframes pulsePrev {
+                    0%, 100% {
+                        transform: translateX(0);
+                    }
+                    50% {
+                        transform: translateX(-10px);
+                    }
+                }
+            }
+    
+            &:disabled {
+                animation: none;
+            }
+        }
+    
+        &--next {
+            &:hover {
+                transition: transform 0.3s ease;
+                animation: pulseNext 1.5s infinite;
+    
+                @keyframes pulseNext {
+                    0%, 100% {
+                        transform: translateX(0);
+                    }
+                    50% {
+                        transform: translateX(10px);
+                    }
+                }
+            }
+        }
+
+    }
     &__description {
         padding-top: 20px;
         max-width: 580px;

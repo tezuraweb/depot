@@ -1,49 +1,85 @@
-/* src/Presentation.css */
-.presentation-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
+.presentation {
 
-.presentation-block {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    transition: background-image 0.5s ease-in-out;
-}
+    &__container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
 
-.presentation-text {
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 20px;
-    font-size: 1.2em;
-    text-align: center;
-}
+    &__block {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        justify-content: flex-end;
+        transition: background-image 0.3s ease-in-out;
+    }
 
-.presentation-controls {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-}
+    &__info {
+        width: 100%;
+        height: 190px;
+        padding: 0 75px;
+        margin-top: auto;
+        margin-bottom: 130px;
+        background: rgba(28, 29, 32, 0.8);
+    }
 
-.presentation-controls button {
-    background: rgba(255, 255, 255, 0.7);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
+    &__text {
+        font-size: 24px;
+        line-height: 110%;
+        text-transform: uppercase;
 
-.presentation-controls button:disabled {
-    background: rgba(255, 255, 255, 0.3);
-    cursor: not-allowed;
-}
+        &--page1 {
+            max-width: 555px;
+        }
 
-.presentation-controls button:not(:disabled):hover {
-    background: rgba(255, 255, 255, 1);
+        &--page2 {
+            max-width: 1044px;
+        }
+
+        &--page3 {
+            max-width: 860px;
+        }
+
+        &--page4 {
+            max-width: 1023px;
+        }
+
+        &--page5 {
+            max-width: 1180px;
+        }
+    }
+
+    &__controls {
+        padding: 20px;
+        padding-right: 0;
+
+        & > button {
+            padding: 10px;
+            transition: transform 0.3s ease;
+            animation: pulse 1.5s infinite;
+
+            @keyframes pulse {
+                0%, 100% {
+                    transform: translateX(0);
+                }
+                50% {
+                    transform: translateX(10px);
+                }
+            }
+
+        }
+
+        & > button.reversed {
+            transform: rotate(180deg);
+            animation: none;
+        }
+
+        & > button:hover {
+            animation: none;
+        }
+
+        
+    }
 }

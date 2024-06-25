@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
+import IconSprite from '../includes/IconSprite';
+
 const blocks = [
     {
         id: 1,
-        image: '/img/pics/showroom0.webp',
+        image: '/img/pics/presentation1.webp',
         text: 'Блоки в LIGHT INDUSTRIAL небольшие и начинаются от 100 м², а в среднем составляют 300-1000 м².'
     },
     {
         id: 2,
-        image: '/img/pics/showroom1.webp',
+        image: '/img/pics/presentation2.webp',
         text: 'LIGHT INDUSTRIAL – это качественные производственно-складские помещения для малого и среднего бизнеса с отдельным входом, воротами, выделенной складской зоной и небольшим административным блоком. Высота потолка достигает 6-10 метров.'
     },
     {
         id: 3,
-        image: '/img/pics/showroom2.webp',
-        text: 'Это единое пространство для размещения легких производств, организации хранения, офиса и шоурума.'
+        image: '/img/pics/presentation3.webp',
+        text: 'Вам предоставляются площади с отдельным боксом и возможностью организовать офисное пространство.'
     },
     {
         id: 4,
-        image: '/img/pics/showroom3.webp',
-        text: 'Заключительный блок с информацией и описанием вашего проекта.'
+        image: '/img/pics/presentation4.webp',
+        text: 'Light industrial – Это формат недвижимости, который отличается высоким качеством, функциональностью и удобством использования.'
     }
 ];
 
@@ -27,53 +29,39 @@ const Presentation = () => {
     const [currentBlock, setCurrentBlock] = useState(0);
     const [direction, setDirection] = useState('forward');
 
-    useEffect(() => {
-        const handleScroll = (event) => {
-            if (event.deltaY > 0) {
-                nextBlock();
-            } else {
-                previousBlock();
-            }
-        };
-        window.addEventListener('wheel', handleScroll);
-        return () => {
-            window.removeEventListener('wheel', handleScroll);
-        };
-    }, [currentBlock]);
-
     const nextBlock = () => {
-        if (direction === 'forward' && currentBlock < blocks.length - 1) {
-            setCurrentBlock(currentBlock + 1);
-        } else if (direction === 'backward' && currentBlock > 0) {
-            setCurrentBlock(currentBlock - 1);
+        if (direction === 'forward') {
+            if (currentBlock < blocks.length - 1) {
+                setCurrentBlock(currentBlock + 1);
+            } else {
+                setDirection('backward');
+                setCurrentBlock(currentBlock - 1);
+            }
+        } else {
+            if (currentBlock > 0) {
+                setCurrentBlock(currentBlock - 1);
+            } else {
+                setDirection('forward');
+                setCurrentBlock(currentBlock + 1);
+            }
         }
     };
-
-    const previousBlock = () => {
-        if (direction === 'forward' && currentBlock > 0) {
-            setCurrentBlock(currentBlock - 1);
-        } else if (direction === 'backward' && currentBlock < blocks.length - 1) {
-            setCurrentBlock(currentBlock + 1);
-        }
-    };
-
-    useEffect(() => {
-        if (currentBlock === blocks.length - 1) {
-            setDirection('backward');
-        } else if (currentBlock === 0) {
-            setDirection('forward');
-        }
-    }, [currentBlock]);
 
     return (
-        <div className="presentation-container">
-            <div className="presentation-block" style={{ backgroundImage: `url(${blocks[currentBlock].image})` }}>
-                <div className="presentation-text">
-                    {blocks[currentBlock].text}
-                </div>
-                <div className="presentation-controls">
-                    <button onClick={previousBlock} disabled={currentBlock === 0}>&lt;</button>
-                    <button onClick={nextBlock} disabled={currentBlock === blocks.length - 1}>&gt;</button>
+        <div className="presentation__container">
+            <div className="presentation__block flex" style={{ backgroundImage: `url(${blocks[currentBlock].image})` }}>
+                <div className="presentation__info flex flex--sb flex--center">
+                    <div className="presentation__text">{blocks[currentBlock].text}</div>
+                    <div className="presentation__controls">
+                        <button onClick={nextBlock} className={direction === 'backward' ? 'reversed' : ''}>
+                            <IconSprite
+                                selector="NextIcon"
+                                width="40"
+                                height="40"
+                                fill="#F9BC07"
+                            />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

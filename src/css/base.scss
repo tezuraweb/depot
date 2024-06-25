@@ -188,7 +188,7 @@ input[type=number] {
     &#lightindustrial-form {
         background-image: url('../../assets/img/pictures/li_form_bg.webp');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-position: center;
     }
 
     &__shadow::before, &__shadow-2::before {
@@ -222,6 +222,10 @@ input[type=number] {
 
     &--sb {
         justify-content: space-between;
+    }
+
+    &--se {
+        justify-content: space-evenly;
     }
 
     &--center {
