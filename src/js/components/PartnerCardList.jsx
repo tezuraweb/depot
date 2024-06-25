@@ -80,7 +80,7 @@ const PartnerCardList = () => {
                             <button
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="listing__pagination--button"
+                                className="listing__pagination--button animate--prev"
                                 aria-label="Предыдущая страница"
                             >
                                 <IconSprite
@@ -93,7 +93,7 @@ const PartnerCardList = () => {
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === totalPages}
-                                className="listing__pagination--button"
+                                className="listing__pagination--button animate--next"
                                 aria-label="Следующая страница"
                             >
                                 <IconSprite

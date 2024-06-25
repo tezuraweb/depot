@@ -334,3 +334,62 @@ input[type=number] {
         fill: $red;
     }
 }
+
+.animate {
+
+    &--pulse { 
+        &:hover {
+            animation: pulseGlobal 2s infinite;
+        }
+
+        @keyframes pulseGlobal {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            75% {
+                transform: scale(1);
+            }  
+        }   
+    }
+
+    &--prev {
+        &:hover {
+            animation: pulsePrevGlobal 1.5s infinite;
+
+            @keyframes pulsePrevGlobal {
+                0%, 100% {
+                    transform: translateX(0);
+                }
+                50% {
+                    transform: translateX(-10px);
+                }
+            }
+        }
+
+        &:disabled {
+            animation: none;
+        }
+    }
+
+    &--next {
+        &:hover {
+            animation: pulseNextGlobal 1.5s infinite;
+
+            @keyframes pulseNextGlobal {
+                0%, 100% {
+                    transform: translateX(0);
+                }
+                50% {
+                    transform: translateX(10px);
+                }
+            }
+        }
+
+        &:disabled {
+            animation: none;
+        }
+    }
+}

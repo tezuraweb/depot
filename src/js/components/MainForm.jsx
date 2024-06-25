@@ -78,7 +78,7 @@ const MainForm = ({ onSubmit }) => {
                 <input type="checkbox" name="promotions" id="promotionCheckbox" checked={formData.promotions} onChange={handleChange} className="form__checkbox" />
                 <label className="form__label" htmlFor="promotionCheckbox">Акции</label>
             </div>
-            <button type="submit" className="form__button button button--large">Показать</button>
+            <button type="submit" className="form__button button button--large animate--pulse">Показать</button>
             <a 
                 href={`/search?${generateQueryParams()}`} 
                 className="form__link"

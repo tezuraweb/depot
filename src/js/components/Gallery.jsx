@@ -38,7 +38,7 @@ const Gallery = () => {
                 <img src={images[currentImage]} alt={`showroom ${currentImage}`} className={`gallery__frame--image ${isZoomed ? 'zoomed' : ''}`} onClick={handleZoom} />
                 <div className="flex flex--col">
                     <div className="gallery__controls">
-                        <button className="gallery__controls--button gallery__controls--prev" onClick={handlePrevious} disabled={!canNavigate.prev}>
+                        <button className="gallery__controls--button animate--prev" onClick={handlePrevious} disabled={!canNavigate.prev}>
                         <IconSprite
                                     selector="PrevIcon"
                                     width="40"
@@ -46,7 +46,7 @@ const Gallery = () => {
                                     fill="#F9BC07"
                                 />
                         </button>
-                        <button className="gallery__controls--button gallery__controls--next" onClick={handleNext} disabled={!canNavigate.next}>
+                        <button className="gallery__controls--button animate--next" onClick={handleNext} disabled={!canNavigate.next}>
                         <IconSprite
                                     selector="NextIcon"
                                     width="40"

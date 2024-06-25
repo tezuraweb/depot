@@ -111,7 +111,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                         </div>
 
                         {showDetailsButton && (
-                            <a href={`/premises/${card.id}`} className="card__button button">Подробнее</a>
+                            <a href={`/premises/${card.id}`} className="card__button button animate--pulse">Подробнее</a>
                         )}
                     </div>
 

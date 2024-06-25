@@ -125,11 +125,21 @@
         &--docs {
             left: 24%;
             bottom: 89%;
+
+            @media (min-width: 1497px) {
+                left: 23%;
+                bottom: 95%;
+            }
         }
 
         &--attorney {
             top: 20%;
             left: 3%;
+
+            @media (min-width: 1497px) {
+                top: 18%;
+                left: 3%;
+            }
         }
 
         &--goods {

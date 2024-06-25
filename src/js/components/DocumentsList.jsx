@@ -91,7 +91,7 @@ const DocumentsList = () => {
 
                         {!doc.signed && (
                             <div className="docs__line">
-                                <button className="button" onClick={() => handleSign(doc)}>Подписать</button>
+                                <button className="button animate--pulse" onClick={() => handleSign(doc)}>Подписать</button>
                             </div>
                         )}
                     </div>
@@ -145,7 +145,7 @@ const DocumentsList = () => {
                     <div className="form__label">Другой запрос</div>
                     <input className="form__input" type="text" name="otherRequest" placeholder="Введите название необходимого документа" />
                 </div>
-                <button className="button" type="submit">Запросить</button>
+                <button className="button animate--pulse" type="submit">Запросить</button>
             </form>
             {successMessage && <div className="docs__message docs__message--green">Запрос успешно отправлен</div>}
             {failMessage && <div className="docs__message docs__message--red">Ошибка отправки запроса</div>}

@@ -40,7 +40,7 @@ const ContactForm = ({ modal, buttonView }) => {
     return (
         <div>
             {modal && (
-                <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'}`} onClick={() => setModalVisible(true)}>{
+                <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
                     buttonView == 'icon' ?
                         <IconSprite
                             selector="PhoneSimple"
@@ -91,7 +91,7 @@ const ContactForm = ({ modal, buttonView }) => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="form__button button">Отправить</button>
+                        <button type="submit" className="form__button button animate--pulse">Отправить</button>
                     </form>
                 </div>
             )}

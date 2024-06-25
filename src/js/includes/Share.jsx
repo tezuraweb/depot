@@ -89,7 +89,7 @@ const Share = ({ activeCard, modifier }) => {
                             <a href="tel:+79120557755" className="share__phone">+7 (912) 055-77-55</a>
                         </li>
                         <li className="share__item">
-                            <a onClick={() => handleSocialClick('Phone')} className="share__call button">Закажите звонок</a>
+                            <a onClick={() => handleSocialClick('Phone')} className="share__call button animate--pulse">Закажите звонок</a>
                         </li>
                     </>
                 )}

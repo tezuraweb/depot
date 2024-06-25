@@ -41,43 +41,8 @@
             }
         }
 
-        &--prev {
-            &:hover {
-                transition: transform 0.3s ease;
-                animation: pulsePrev 1.5s infinite;
-    
-                @keyframes pulsePrev {
-                    0%, 100% {
-                        transform: translateX(0);
-                    }
-                    50% {
-                        transform: translateX(-10px);
-                    }
-                }
-            }
-    
-            &:disabled {
-                animation: none;
-            }
-        }
-    
-        &--next {
-            &:hover {
-                transition: transform 0.3s ease;
-                animation: pulseNext 1.5s infinite;
-    
-                @keyframes pulseNext {
-                    0%, 100% {
-                        transform: translateX(0);
-                    }
-                    50% {
-                        transform: translateX(10px);
-                    }
-                }
-            }
-        }
-
     }
+    
     &__description {
         padding-top: 20px;
         max-width: 580px;
