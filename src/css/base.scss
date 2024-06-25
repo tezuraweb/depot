@@ -107,6 +107,10 @@ input[type=number] {
     &--nopadding {
         padding: 0;
     }
+
+    @media (max-width: $laptop-breakpoint) {
+        padding: 0 50px;
+    }
 }
 
 .section {
@@ -235,6 +239,10 @@ input[type=number] {
     &--col {
         flex-direction: column;
     }
+}
+
+.icon {
+    max-width: 100%;
 }
 
 .button {
