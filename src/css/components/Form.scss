@@ -82,6 +82,10 @@
         color: $white;
         font-size: 18px;
 
+        &--black {
+            border-color: $black;
+        }
+
         &--select {
             width: 160px;
 
@@ -350,7 +354,6 @@
         }
 
         .form__input {
-            border-color: $black;
             color: $black;
         }
     }

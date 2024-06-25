@@ -67,4 +67,10 @@ router
         res.render('nodes/docs', { page: 'docs' });
     });
 
+router
+    .route('/requests')
+    .get((req, res) => {
+        res.render('nodes/requests', { page: 'requests' });
+    });
+
 module.exports = router;

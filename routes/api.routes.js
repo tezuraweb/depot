@@ -359,6 +359,25 @@ const docs = [
     }
 ]
 
+const requests = [
+    {
+      id: 1,
+      date: '2024-05-03T10:00:00Z',
+      status: 'closed'
+    },
+    {
+      id: 2,
+      date: '2024-06-10T14:30:00Z',
+      status: 'pending'
+    },
+    {
+      id: 3,
+      date: '2024-07-15T09:00:00Z',
+      status: 'active'
+    }
+  ];
+  
+
 router
     .route('/search/count')
     .get(async (req, res) => {
@@ -473,7 +492,17 @@ router
         if (docs) {
             res.json(docs);
         } else {
-            res.status(404).json({ error: 'Tenants not found' });
+            res.status(404).json({ error: 'Documents not found' });
+        }
+    });
+
+router
+    .route('/requests')
+    .get(async (req, res) => {
+        if (requests) {
+            res.json(requests);
+        } else {
+            res.status(404).json({ error: 'Requests not found' });
         }
     });
 

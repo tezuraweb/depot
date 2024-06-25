@@ -37,4 +37,32 @@
             color: $red;
         }
     }
+
+    &__popup {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: $white;
+        padding: 50px 60px;
+
+        &--header {
+            margin-bottom: 50px;
+        }
+
+        &--content {
+            max-width: 600px;
+        }
+
+        &--buttons {
+            display: flex;
+            flex-direction: column;
+            max-width: 150px;
+
+            .button {
+                margin-bottom: 20px;
+            }
+        }
+    }
 }
