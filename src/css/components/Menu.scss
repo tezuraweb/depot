@@ -16,12 +16,13 @@
             background-color: $white;
             border-right-color: $yellow;
             border-bottom-color: $yellow;
+            border-top-color: $yellow;
             font-weight: 700;
         }
 
-        &:not(:first-child).active {
-            border-top-color: $yellow;
-        }
+        // &:first-child.active {
+        //     border-top-color: $white;
+        // }
     }
 
     &__bot {

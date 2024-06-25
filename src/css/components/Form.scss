@@ -343,4 +343,15 @@
             margin-top: 75px;
         }
     }
+
+    &--admin {
+        .form__group {
+            margin-bottom: 35px;
+        }
+
+        .form__input {
+            border-color: $black;
+            color: $black;
+        }
+    }
 }

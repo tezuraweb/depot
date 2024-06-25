@@ -35,14 +35,6 @@ const RentedCardList = () => {
                 cards={premisesData}
                 modifier="rented"
             />
-            {/* {premisesData.map((card, index) => (
-                <Card
-                    key={index}
-                    card={card}
-                    isActive={index === activeCardIndex}
-                    modifier={modifier}
-                />
-            ))} */}
         </div>
     );
 };
