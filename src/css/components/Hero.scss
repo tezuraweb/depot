@@ -1,4 +1,5 @@
 .hero {
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding-bottom: 230px;
@@ -45,6 +46,21 @@
 
         &--text {
             color: $black;
+        }
+    }
+
+    // media
+
+    @media (max-width: $laptop-breakpoint) {
+        padding-bottom: 170px;
+
+        &__column {
+            &--right {
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-40%);
+            }
         }
     }
 }

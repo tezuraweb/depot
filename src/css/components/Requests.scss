@@ -1,0 +1,63 @@
+.requests {
+    &__title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    &__list,
+    &__summary {
+        margin-bottom: 50px;
+    }
+
+    &__info,
+    &__summary {
+        font-size: 24px;
+    }
+
+    &__line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    &__status {
+        padding: 7px 40px;
+        width: 200px;
+        text-align: center;
+
+        &--closed {
+            background-color: $darkGrey;
+            color: $white;
+        }
+
+        &--pending {
+            background-color: $yellow;
+        }
+
+        &--active {
+            background-color: $green;
+        }
+    }
+
+    &__desc {
+        padding: 30px;
+        border: 1px solid;
+        border-radius: 10px;
+        margin-bottom: 20px;
+
+        &--closed {
+            border-color: $darkGrey;
+        }
+
+        &--pending {
+            border-color: $yellow;
+        }
+
+        &--active {
+            border-color: $green;
+        }
+    }
+    
+}

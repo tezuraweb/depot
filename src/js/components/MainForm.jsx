@@ -74,7 +74,7 @@ const MainForm = ({ onSubmit }) => {
                 </div>
             </div>
 
-            <div className="form__group">
+            <div className="form__group form__group--hide">
                 <input type="checkbox" name="promotions" id="promotionCheckbox" checked={formData.promotions} onChange={handleChange} className="form__checkbox" />
                 <label className="form__label" htmlFor="promotionCheckbox">Акции</label>
             </div>

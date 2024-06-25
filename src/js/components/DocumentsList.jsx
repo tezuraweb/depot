@@ -66,8 +66,8 @@ const DocumentsList = () => {
                             <div className="docs__name">{doc.title}</div>
                             <div className="docs__buttons">
                                 <button className="docs__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
-                                    <IconSprite
-                                        selector="MagnifierIcon"
+                                <IconSprite
+                                        selector="PrinterIcon"
                                         width="18"
                                         height="18"
                                     />
@@ -107,7 +107,7 @@ const DocumentsList = () => {
                             <div className="docs__buttons">
                                 <button className="docs__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
                                     <IconSprite
-                                        selector="MagnifierIcon"
+                                        selector="PrinterIcon"
                                         width="18"
                                         height="18"
                                     />
@@ -134,7 +134,7 @@ const DocumentsList = () => {
             <h2 className="docs__title">Запросить документы</h2>
             <form className="form form--admin" onSubmit={handleRequestSubmit}>
                 <div className="form__group">
-                    <select className="form__input" name="documentType">
+                    <select className="form__input form__input--black" name="documentType">
                         <option value="" disabled>Выберите документ</option>
                         {docTypes.map(type => (
                             <option key={type.id} value={type.id}>{type.name}</option>
@@ -143,7 +143,7 @@ const DocumentsList = () => {
                 </div>
                 <div className="form__group">
                     <div className="form__label">Другой запрос</div>
-                    <input className="form__input" type="text" name="otherRequest" placeholder="Введите название необходимого документа" />
+                    <input className="form__input form__input--black" type="text" name="otherRequest" placeholder="Введите название необходимого документа" />
                 </div>
                 <button className="button animate--pulse" type="submit">Запросить</button>
             </form>

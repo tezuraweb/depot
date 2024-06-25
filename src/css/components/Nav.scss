@@ -45,4 +45,12 @@
             }
         }
     }
+
+    // media
+
+    @media (max-width: $laptop-breakpoint) {
+        &__link {
+            padding: 40px 20px;
+        }
+    }
 }

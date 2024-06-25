@@ -30,7 +30,9 @@ const loadComponent = (componentName) => {
         case 'rentedCardList':
             return lazy(() => import('./components/RentedCardList'));
         case 'documents':
-            return lazy(() => import('./components/DocumentsList')); 
+            return lazy(() => import('./components/DocumentsList'));
+        case 'requests':
+            return lazy(() => import('./components/RequestsList'));
         default:
             return null;
     }

@@ -48,4 +48,14 @@
             transform: scaleX(1);
         }
     }
+
+    // media
+
+    @media (max-width: $laptop-breakpoint) {
+        font-size: 14px;
+
+        &__item {
+            margin-left: 45px;
+        }
+    }
 }

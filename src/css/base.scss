@@ -107,6 +107,10 @@ input[type=number] {
     &--nopadding {
         padding: 0;
     }
+
+    @media (max-width: $laptop-breakpoint) {
+        padding: 0 50px;
+    }
 }
 
 .section {
@@ -121,7 +125,7 @@ input[type=number] {
         background-color: $black;
     }
 
-    &#search-block, &#premises-data, &#premises-maps, &#login, &#profile {
+    &#search-block, &#premises-data, &#premises-maps, &#login, &#profile, &#docs, &#requests {
         background-color: $white;
     }
 
@@ -235,6 +239,10 @@ input[type=number] {
     &--col {
         flex-direction: column;
     }
+}
+
+.icon {
+    max-width: 100%;
 }
 
 .button {
