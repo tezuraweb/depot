@@ -61,4 +61,10 @@ router
         res.render('nodes/profile', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'profile' });
     });
 
+router
+    .route('/documents')
+    .get((req, res) => {
+        res.render('nodes/docs', { page: 'docs' });
+    });
+
 module.exports = router;

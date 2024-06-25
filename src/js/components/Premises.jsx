@@ -56,22 +56,26 @@ const Premises = () => {
 
     const handleShare = async () => {
         const url = window.location.href;
-        const title = `Premises ID: ${premisesId}`;
+        const title = `Помещение: ${premisesData.name}`;
 
         if (navigator.share) {
             try {
                 await navigator.share({ title, url });
             } catch (error) {
-                setMessage('Error sharing: ' + error.message);
+                setMessage('Ошибка');
             }
         } else {
             try {
                 await navigator.clipboard.writeText(url);
-                setMessage('Link copied to clipboard!');
+                setMessage('Ссылка скопирована в буфер обмена');
             } catch (error) {
-                setMessage('Failed to copy the link: ' + error.message);
+                setMessage('Ошибка');
             }
         }
+        
+        setTimeout(() => {
+            setMessage('');
+        }, 5000);
     };
 
     const handleNextImage = () => {

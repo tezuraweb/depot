@@ -335,6 +335,30 @@ const rented = [
     }
 ];
 
+const docs = [
+    {
+        id: 1,
+        type: 'contract',
+        title: 'Договор аренды',
+        link: '/test/unique_BB.pdf',
+        signed: false,
+    },
+    {
+        id: 2,
+        type: 'act',
+        title: 'Акт 1',
+        link: '/test/unique_BB.pdf',
+        signed: false,
+    },
+    {
+        id: 3,
+        type: 'klyauza',
+        title: 'Справка 1',
+        link: '/test/unique_BB.pdf',
+        signed: false,
+    }
+]
+
 router
     .route('/search/count')
     .get(async (req, res) => {
@@ -354,6 +378,33 @@ router
         if (cards && !isNaN(page)) {
             if ((page - 1) * 6 < cards.length) {
                 res.json(cards.slice((page - 1) * 6, page * 6));
+            } else {
+                res.json([]);
+            }
+        } else {
+            res.status(404).json({ error: 'Premises not found' });
+        }
+    });
+
+router
+    .route('/partners/count')
+    .get(async (req, res) => {
+        if (cards) {
+            res.json({total: cards.length});
+        } else {
+            res.status(404).json({ error: 'Premises not found' });
+        }
+    });
+
+router
+    .route('/partners')
+    .post(async (req, res) => {
+        const data = pick(req.body, 'page');
+        const page = parseInt(data.page);
+
+        if (cards && !isNaN(page)) {
+            if ((page - 1) * 3 < cards.length) {
+                res.json(cards.slice((page - 1) * 3, page * 3));
             } else {
                 res.json([]);
             }
@@ -411,6 +462,16 @@ router
     .get(async (req, res) => {
         if (tenants) {
             res.json(tenants);
+        } else {
+            res.status(404).json({ error: 'Tenants not found' });
+        }
+    });
+
+router
+    .route('/docs')
+    .get(async (req, res) => {
+        if (docs) {
+            res.json(docs);
         } else {
             res.status(404).json({ error: 'Tenants not found' });
         }

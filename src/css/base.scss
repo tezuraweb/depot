@@ -117,7 +117,7 @@ input[type=number] {
         padding: 0;
     }
 
-    &#main-listing, &#partner-locations {
+    &#main-listing, &#partner-locations, &#error {
         background-color: $black;
     }
 
@@ -303,6 +303,7 @@ input[type=number] {
         width: 50px;
         height: 50px;
         border-radius: 10px;
+        padding: 0;
         background-color: $yellow;
         text-align: center;
 
@@ -312,6 +313,11 @@ input[type=number] {
             left: 50%;
             transform: translate(-50%, -50%);
         }
+    }
+
+    &--smallIcon {
+        width: 30px;
+        height: 30px;
     }
 }
 

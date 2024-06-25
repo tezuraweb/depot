@@ -1,0 +1,40 @@
+.docs {
+    max-width: 600px;
+
+    &__title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    &__list {
+        margin-bottom: 50px;
+    }
+
+    &__line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    &__buttons {
+        display: flex;
+    }
+
+    &__button {
+        margin-left: 15px;
+    }
+
+    &__message {
+        padding: 20px 0;
+
+        &--green {
+            color: $green;
+        }
+
+        &--red {
+            color: $red;
+        }
+    }
+}
