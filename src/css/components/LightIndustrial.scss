@@ -44,4 +44,15 @@
             object-fit: cover;
         }
     }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__frame {
+            padding-top: 103px;
+        }
+
+        &__text {
+            height: 157px;
+            padding: 0 50px;
+        }
+    }
 }

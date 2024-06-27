@@ -26,6 +26,7 @@
     
     &__controls {
         padding: 63px 0;
+        min-width: 40px;
 
         &--button {
             padding: 10px;
@@ -40,7 +41,6 @@
                 fill: $darkGrey;
             }
         }
-
     }
     
     &__description {
@@ -51,4 +51,30 @@
         text-transform: uppercase;
     }
 
+    // media
+
+    @media (min-width: ($containerMaxWidth - 1)) {
+        &__container {
+            display: block;
+            padding: 0 75px;
+        }
+
+        &__frame--image {
+            width: 1100px;
+            height: 650px;
+        }
+    }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__container {
+            margin: 0 -50px;
+        }
+
+        &__description {
+            max-width: 241px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 110%;
+        }
+    }
 }

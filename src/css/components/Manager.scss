@@ -19,7 +19,7 @@
         height: 224px;
         object-fit: cover;
         border: 5px solid $yellow;
-        
+
     }
 
     &__quot {
@@ -54,6 +54,19 @@
                 background-image: url('../../assets/img/pictures/quot_bottom.webp');
                 background-repeat: no-repeat;
             }
+        }
+    }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__photo {
+            margin-right: 80px;
+            width: 327px;
+            height: 327px;
+        }
+
+        &__text {
+            max-width: 417px;
+            padding-left: 45px;
         }
     }
 }

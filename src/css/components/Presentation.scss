@@ -29,26 +29,7 @@
         font-size: 24px;
         line-height: 110%;
         text-transform: uppercase;
-
-        &--page1 {
-            max-width: 555px;
-        }
-
-        &--page2 {
-            max-width: 1044px;
-        }
-
-        &--page3 {
-            max-width: 860px;
-        }
-
-        &--page4 {
-            max-width: 1023px;
-        }
-
-        &--page5 {
-            max-width: 1180px;
-        }
+        max-width: 1180px;
     }
 
     &__controls {
@@ -81,5 +62,17 @@
         }
 
         
+    }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__info {
+            height: 157px;
+            padding: 0 50px;
+        }
+
+        &__text {
+            font-size: 20px;
+            max-width: 853px;
+        }
     }
 }

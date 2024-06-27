@@ -68,22 +68,26 @@
     <section class="section about__section" id="about-logistics">
         <div class="container flex flex--sb flex--center about__title--logistics">
             <h2 class="about--black about__title">Особое предложение</h2>
-            <span>
+            <span class="about__logo--standard">
                 {% set includeIcon = 'depoLogistics' %}
                 {% include "includes/svg.njk" %}
             </span>
         </div>
         <div class="about__subtitle--styling flex flex--sb flex--center">
             <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
-            <span>
+            <span class="about__carIcon">
                 {% set includeIcon = 'carIcon' %}
+                {% include "includes/svg.njk" %}
+            </span>
+            <span class="about__logo--yellow">
+                {% set includeIcon = 'depoLogisticsYellow' %}
                 {% include "includes/svg.njk" %}
             </span>
         </div>
         <div class="about__container flex">
             <div class="about__container--left"> 
                 <ul>
-                    {% for item in advantages %}
+                    {% for item in logistics %}
                         <li class="about__item about__item--{{ item.id }}">{{ item.title }}</li>
                     {% endfor %}
                 </ul>

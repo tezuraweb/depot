@@ -39,20 +39,20 @@ const Gallery = () => {
                 <div className="flex flex--col">
                     <div className="gallery__controls">
                         <button className="gallery__controls--button animate--prev" onClick={handlePrevious} disabled={!canNavigate.prev}>
-                        <IconSprite
-                                    selector="PrevIcon"
-                                    width="40"
-                                    height="40"
-                                    fill="#F9BC07"
-                                />
+                            <IconSprite
+                                selector="PrevIcon"
+                                width="40"
+                                height="40"
+                                fill="#F9BC07"
+                            />
                         </button>
                         <button className="gallery__controls--button animate--next" onClick={handleNext} disabled={!canNavigate.next}>
-                        <IconSprite
-                                    selector="NextIcon"
-                                    width="40"
-                                    height="40"
-                                    fill="#F9BC07"
-                                />
+                            <IconSprite
+                                selector="NextIcon"
+                                width="40"
+                                height="40"
+                                fill="#F9BC07"
+                            />
                         </button>
                     </div>
                     <p className="gallery__description">Это единое пространство для размещения легких производств, организации хранения, офиса и шоурума.</p>
