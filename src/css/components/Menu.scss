@@ -19,10 +19,6 @@
             border-top-color: $yellow;
             font-weight: 700;
         }
-
-        // &:first-child.active {
-        //     border-top-color: $white;
-        // }
     }
 
     &__bot {
@@ -35,6 +31,14 @@
             font-weight: 700;
             color: $tgBlue;
             margin-top: 10px;
+        }
+    }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__link {
+            padding: 35px 60px;
         }
     }
 }

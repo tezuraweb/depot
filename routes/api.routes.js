@@ -242,7 +242,7 @@ const cards = [
         type: "industrial"
     },
     {
-        id: 9,
+        id: 13,
         promotion: true,
         location: "Зеленая зона",
         article: "C789",
@@ -253,7 +253,7 @@ const cards = [
         type: "commercial"
     },
     {
-        id: 10,
+        id: 14,
         promotion: false,
         location: "Возвышенность",
         article: "D012",
@@ -391,12 +391,13 @@ router
 router
     .route('/search')
     .post(async (req, res) => {
-        const data = pick(req.body, 'page', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'storey', 'rooms', 'ceilingHeight', 'promotions');
-        const page = parseInt(data.page);
+        const data = pick(req.body, 'startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'storey', 'rooms', 'ceilingHeight', 'promotions');
+        const startIdx = parseInt(data.startIdx);
+        const endIdx = parseInt(data.endIdx);
 
-        if (cards && !isNaN(page)) {
-            if ((page - 1) * 6 < cards.length) {
-                res.json(cards.slice((page - 1) * 6, page * 6));
+        if (cards && !isNaN(startIdx) && !isNaN(endIdx)) {
+            if (startIdx < cards.length) {
+                res.json(cards.slice(startIdx, endIdx));
             } else {
                 res.json([]);
             }

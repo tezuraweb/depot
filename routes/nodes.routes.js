@@ -64,13 +64,13 @@ router
 router
     .route('/documents')
     .get((req, res) => {
-        res.render('nodes/docs', { page: 'docs' });
+        res.render('nodes/docs', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'docs' });
     });
 
 router
     .route('/requests')
     .get((req, res) => {
-        res.render('nodes/requests', { page: 'requests' });
+        res.render('nodes/requests', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'requests' });
     });
 
 module.exports = router;

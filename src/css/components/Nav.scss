@@ -46,11 +46,52 @@
         }
     }
 
+    // modifiers
+
+    &--mobile {
+        .nav__list {
+            flex-direction: column;
+            background-color: $black;
+        }
+
+        .nav__link {
+            background-color: transparent;
+            color: $white;
+            padding: 45px 80px;
+            transition: background-color .3s, color .3s;
+
+            &::after {
+                display: none;
+            }
+
+            &:hover {
+                background-color: $yellow;
+                color: $black;
+            }
+        }
+    }
+
     // media
 
     @media (max-width: ($desktop-breakpoint - 1)) {
         &__link {
-            padding: 40px 20px;
+            padding: 40px 25px;
+
+            &::after {
+                width: calc(100% - 50px);
+            }
+        }
+    }
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        // modifiers
+
+        &--desktop {
+            .nav__item {
+                &:last-child {
+                    display: none;
+                }
+            }
         }
     }
 }

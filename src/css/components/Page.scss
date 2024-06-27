@@ -43,4 +43,15 @@
             margin-bottom: 70px;
         }
     }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__backoffice {
+            &--content {
+                padding: 35px 60px;
+                position: relative;
+            }
+        }
+    }
 }
