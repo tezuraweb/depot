@@ -57,6 +57,10 @@ a {
 h1 {
     font-size: 60px;
     font-weight: 700;
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        font-size: 46px;
+    }
 }
 
 h2 {
@@ -104,12 +108,12 @@ input[type=number] {
     padding: 0 75px;
     position: relative;
 
-    &--nopadding {
-        padding: 0;
-    }
-
     @media (max-width: ($desktop-breakpoint - 1)) {
         padding: 0 50px;
+
+        &--nopadding {
+            padding: 0;
+        }
     }
 }
 

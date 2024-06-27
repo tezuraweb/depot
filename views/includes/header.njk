@@ -6,9 +6,9 @@
         </a>
 
         {% if navs %}
-            <nav class="header__nav nav">
+            <nav class="header__nav nav nav--desktop">
                 <ul class="nav__list">
-                    {% for item in navs %}
+                    {% for item in navs.slice(0, 2) %}
                         {% set navLinkModifier = '' %}
                         {% if activePage == 'main' and loop.first %}
                             {% set navLinkModifier = 'nav__link--yellow' %}
@@ -51,6 +51,31 @@
                 </div>
                 <div class="header__auth--text">Кабинет арендатора</div>
             </a>
+        {% endif %}
+
+        {% if navs %}
+            <input class="header__burger--checkbox" type="checkbox" id="burgerCheckbox"/>
+            <label class="header__burger--icon button button--icon" for="burgerCheckbox">
+                {% set includeIcon = 'burgerIcon' %}
+                {% include "includes/svg.njk" %}
+            </label>
+
+            <nav class="header__navMobile nav nav--mobile">
+                <ul class="nav__list">
+                    {% for item in navs.slice(1, 5) %}
+                        {% set navLinkModifier = '' %}
+                        {% if activePage == 'main' and loop.first %}
+                            {% set navLinkModifier = 'nav__link--yellow' %}
+                        {% elif activePage == item.link %}
+                            {% set navLinkModifier = 'nav__link--active' %}
+                        {% endif %}
+
+                        <li class="nav__item">
+                            <a class="nav__link {{ navLinkModifier }}" href="{{ item.link }}">{{ item.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
         {% endif %}
     </div>
 </div>

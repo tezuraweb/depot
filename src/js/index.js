@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom';
 import ymaps from 'ymaps';
 import LoadingSpinner from './includes/LoadingSpinner';
+import { ViewportProvider } from './utils/ViewportContext';
 
 const loadComponent = (componentName) => {
     switch (componentName) {
@@ -40,16 +41,18 @@ const loadComponent = (componentName) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-react-component]');
-    
+
     containers.forEach((container) => {
         const componentName = container.getAttribute('data-react-component');
         const Component = loadComponent(componentName);
-        
+
         if (Component) {
             ReactDOM.render(
-                <Suspense fallback={<LoadingSpinner />}>
-                    <Component {...(componentName === 'contactFormModal' && { modal: true })} />
-                </Suspense>,
+                <ViewportProvider>
+                    <Suspense fallback={<LoadingSpinner />}>
+                        <Component {...(componentName === 'contactFormModal' && { modal: true })} />
+                    </Suspense>
+                </ViewportProvider>,
                 container
             );
         }
@@ -83,7 +86,7 @@ ymaps
                 hintContent: 'Default marker',
                 balloonContent: 'This is a default marker'
             });
-    
+
             map.geoObjects.add(myPlacemark);
         }
     })

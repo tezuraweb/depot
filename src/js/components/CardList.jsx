@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Card from '../includes/Card';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
+// import { useViewportContext } from '../ViewportContext';
 
-const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, onPageChange = null, modifier = '' }) => {
+const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, deviceType, activeType, setActiveType }) => {
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
     const tabs = [
@@ -18,6 +19,14 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
         setActiveCardIndex(index);
     };
 
+    const handleTabClick = (type) => {
+        setActiveType(type);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            type: type
+        }));
+    };
+
     const titleMap = {
         main: 'Свободные помещения',
         search: 'Найдено для вас',
@@ -27,27 +36,28 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
 
     const title = titleMap[modifier];
     const showTabs = modifier === 'main';
-    const showPagination = modifier !== 'recommend' && modifier !== 'rented';
+    const showPagination = deviceType !== 'tablet' && deviceType !== 'mobile' && modifier !== 'recommend' && modifier !== 'rented';
     const showShareMain = modifier === 'main';
     const showShareSearch = modifier === 'search';
-    
+
     return (
         <div className={`listing ${modifier ? 'listing--' + modifier : ''}`}>
             {title && <h2 className="listing__title">{title}</h2>}
-    
+
             {showTabs && (
                 <div className="listing__tabs">
                     {tabs.map(tab => (
                         <button
                             key={tab.value}
-                            className={`listing__tab ${filters.type === tab.value ? 'active' : ''}`}
+                            className={`listing__tab ${activeType === tab.value ? 'active' : ''}`}
+                            onClick={() => handleTabClick(tab.value)}
                         >
                             {tab.label}
                         </button>
                     ))}
                 </div>
             )}
-    
+
             <div className="listing__content">
                 <div className="listing__column listing__column--left">
                     <div className="listing__cards">
@@ -62,8 +72,8 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                         ))}
                     </div>
                 </div>
-    
-                {showPagination && (
+
+                {showPagination ? (
                     <div className="listing__column listing__column--right">
                         <div className="listing__pagination">
                             <div className="listing__pagination--line">
@@ -96,14 +106,19 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                                 Стр. {currentPage}/{totalPages}
                             </div>
                         </div>
-    
+
                         {showShareMain && (
                             <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneSmall' />
                         )}
                     </div>
+                ) : (
+                    <div className="card-list__summary">
+                        <p>Найдено всего {totalCards} карточек</p>
+                        <a href="/search">Смотреть все результаты</a>
+                    </div>
                 )}
             </div>
-    
+
             {showShareSearch && (
                 <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneLarge' />
             )}

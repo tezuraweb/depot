@@ -38,7 +38,7 @@ const ContactForm = ({ modal, buttonView }) => {
     };
 
     return (
-        <div>
+        <div className="hero__contactForm">
             {modal && (
                 <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
                     buttonView == 'icon' ?

@@ -227,10 +227,12 @@
     // modifiers
 
     &--main {
-        padding: 20px 40px;
-        background-color: $black;
-        display: flex;
-        justify-content: space-between;
+        .form__wrapper {
+            padding: 20px 40px;
+            background-color: $black;
+            display: flex;
+            justify-content: space-between;
+        }
 
         .form__checkbox {
             &+label {
@@ -354,8 +356,10 @@
         // modifiers
 
         &--main {
-            padding: 20px 30px;
-            align-items: flex-end;
+            .form__wrapper {
+                padding: 20px 30px;
+                align-items: flex-end;
+            }
 
             .form__group--hide {
                 display: none;
@@ -370,25 +374,28 @@
         &--inline {
             flex-wrap: wrap;
 
+            .form__group {
+                flex-basis: 30%;
+                max-width: 277px;
+            }
+
             .form__input {
                 max-width: none;
             }
 
             .form__button {
-                padding: 23px 65px;
+                padding: 23px 82px;
                 margin: 30px auto;
             }
         }
 
         &--search {
-            max-width: none;
-            width: 100%;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(3, 1fr);
             grid-column-gap: 15px;
             grid-row-gap: 15px;
-            
+
             .form__section {
                 margin: 0;
 
@@ -417,10 +424,41 @@
                 gap: 13px;
                 grid-template-columns: 3fr 1fr 20px 1fr;
             }
-    
+
             .form__input {
                 padding: 10px 15px;
                 width: 150px;
+            }
+
+            .form__promotion {
+                padding: 13px 0;
+            }
+        }
+    }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        // modifiers
+
+        &--main {
+            .form__wrapper {
+                display: none;
+            }
+
+            .form__link {
+                bottom: 0;
+                border-radius: 0;
+                background-color: $black;
+                color: $white;
+                padding: 25px 45px 25px 30px;
+
+                &::after {
+                    border-color: $white;
+                }
+            }
+
+            .form__button {
+                padding: 14px 20px;
+                font-size: 18px;
             }
         }
     }

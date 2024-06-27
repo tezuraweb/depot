@@ -58,4 +58,8 @@
             margin-left: 45px;
         }
     }
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        display: none;
+    }
 }

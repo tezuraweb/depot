@@ -17,15 +17,11 @@
                         <span class="main-links__link--text"> Ижевск, Буммашевская, 5</span>
                     </a>
                 </li>
-                <li class="main-links__item">
-                    <a class="main-links__link" href="/">Торговый центр</a>
-                </li>
-                <li class="main-links__item">
-                    <a class="main-links__link" href="/">Light Industrial</a>
-                </li>
-                <li class="main-links__item">
-                    <a class="main-links__link" href="/">Объекты партнеров</a>
-                </li>
+                {% for item in navs.slice(2, 5) %}
+                    <li class="main-links__item">
+                        <a class="main-links__link" href="{{ item.link }}">{{ item.title }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
     </section>
