@@ -36,4 +36,12 @@
             text-transform: uppercase;
         }
     }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__summary {
+            font-size: 20px;
+        }
+    }
 }

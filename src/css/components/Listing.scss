@@ -163,4 +163,18 @@
             margin-right: 0;
         }
     }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__tab {
+            font-size: 20px;
+        }
+
+        &__partners {            
+            &--title {
+                font-size: 20px;
+            }
+        }
+    }
 }

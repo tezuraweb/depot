@@ -108,7 +108,7 @@ input[type=number] {
         padding: 0;
     }
 
-    @media (max-width: $laptop-breakpoint) {
+    @media (max-width: ($desktop-breakpoint - 1)) {
         padding: 0 50px;
     }
 }
@@ -217,7 +217,7 @@ input[type=number] {
     // @media (max-width: $desktop-breakpoint) {
     // }
 
-    // @media (max-width: $laptop-breakpoint-2) {
+    // @media (max-width: ($desktop-breakpoint - 1)-2) {
     // }
 }
 

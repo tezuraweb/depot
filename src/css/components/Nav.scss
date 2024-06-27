@@ -48,7 +48,7 @@
 
     // media
 
-    @media (max-width: $laptop-breakpoint) {
+    @media (max-width: ($desktop-breakpoint - 1)) {
         &__link {
             padding: 40px 20px;
         }

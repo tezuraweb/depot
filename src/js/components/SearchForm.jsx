@@ -105,8 +105,12 @@ const SearchForm = ({ onSubmit }) => {
                         <label className="form__label form__label--inline">Площадь</label>
                     </div>
 
-                    <div className="form__cell form__cell--withLine">
+                    <div className="form__cell">
                         <input type="number" name="areaFrom" value={formData.areaFrom} onChange={handleAreaChange} className="form__input form__input--number" />
+                    </div>
+
+                    <div className="form__cell">
+                        <div className="form__hatch"></div>
                     </div>
 
                     <div className="form__cell">
@@ -122,6 +126,8 @@ const SearchForm = ({ onSubmit }) => {
                         <label htmlFor="totalPrice">Общая</label>
                     </div>
 
+                    <div className="form__cell"></div>
+
                     <div className="form__cell">
                         <input className="form__radio" type="radio" id="perSquareMeterPrice" name="priceType" value="perSquareMeter" checked={formData.priceType === 'perSquareMeter'} onChange={handleChange} />
                         <label htmlFor="perSquareMeterPrice">за м²</label>
@@ -134,12 +140,16 @@ const SearchForm = ({ onSubmit }) => {
                         </button>
                     </div>
 
-                    <div className="form__cell form__cell--withLine">
+                    <div className="form__cell">
                         <select name="priceFrom" value={formData.priceFrom} onChange={handlePriceChange} className="form__input form__input--select">
                             {priceRanges[formData.priceType].map((price, index) => (
                                 <option key={index} value={price}>{price || 'Не выбрано'}</option>
                             ))}
                         </select>
+                    </div>
+
+                    <div className="form__cell">
+                        <div className="form__hatch"></div>
                     </div>
 
                     <div className="form__cell">

@@ -173,4 +173,10 @@
     &.active .card__wrapper{
         border-color: $yellow;
     }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        flex-basis: 50%;
+    }
 }

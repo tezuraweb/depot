@@ -19,26 +19,20 @@
 
     &__grid {
         display: grid;
-        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-template-columns: 1fr 1fr 20px 1fr;
         align-items: center;
         gap: 15px;
     }
 
     &__cell {
         position: relative;
+    }
 
-        &--withLine {
-            &::after {
-                content: '';
-                display: block;
-                position: absolute;
-                right: 0;
-                top: 50%;
-                width: 20px;
-                height: 2px;
-                background-color: $black;
-            }
-        }
+    &__hatch {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: $black;
     }
 
     &__group {
@@ -288,10 +282,6 @@
         }
 
         .form__radio {
-            &+label {
-                margin-right: 60px;
-            }
-
             &+label::after {
                 background-color: $black;
             }
@@ -360,7 +350,7 @@
 
     // media
 
-    @media (max-width: $laptop-breakpoint) {
+    @media (max-width: ($desktop-breakpoint - 1)) {
         // modifiers
 
         &--main {
@@ -374,6 +364,63 @@
             .form__button {
                 padding: 14px 20px;
                 font-size: 18px;
+            }
+        }
+
+        &--inline {
+            flex-wrap: wrap;
+
+            .form__input {
+                max-width: none;
+            }
+
+            .form__button {
+                padding: 23px 65px;
+                margin: 30px auto;
+            }
+        }
+
+        &--search {
+            max-width: none;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            grid-column-gap: 15px;
+            grid-row-gap: 15px;
+            
+            .form__section {
+                margin: 0;
+
+                &--framed {
+                    padding: 20px 30px;
+                }
+
+                &:nth-child(1) {
+                    grid-area: 1 / 1 / 2 / 4;
+                }
+
+                &:nth-child(2) {
+                    grid-area: 2 / 1 / 4 / 4;
+                }
+
+                &:nth-child(3) {
+                    grid-area: 1 / 4 / 3 / 6;
+                }
+
+                &:nth-child(4) {
+                    grid-area: 3 / 4 / 4 / 6;
+                }
+            }
+
+            .form__grid {
+                gap: 13px;
+                grid-template-columns: 3fr 1fr 20px 1fr;
+            }
+    
+            .form__input {
+                padding: 10px 15px;
+                width: 150px;
             }
         }
     }

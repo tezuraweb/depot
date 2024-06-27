@@ -60,4 +60,23 @@
             background-color: $red;
         }
     }
+
+    // media
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &__row {
+            flex-wrap: wrap;
+        }
+    
+        &__column {
+            width: 100%;
+            flex-basis: 100%;
+            margin-right: 0;
+            margin-bottom: 35px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
 }

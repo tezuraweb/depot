@@ -51,7 +51,7 @@
 
     // media
 
-    @media (max-width: $laptop-breakpoint) {
+    @media (max-width: ($desktop-breakpoint - 1)) {
         &__logo {
             max-width: 120px;
             margin-right: 40px;
