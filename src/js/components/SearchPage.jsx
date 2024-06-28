@@ -3,9 +3,11 @@ import axios from 'axios';
 import SearchForm from './SearchForm';
 import CardList from './CardList';
 import Scheme from './ModalScheme';
+import { useViewportContext } from '../utils/ViewportContext';
 
 const SearchPage = () => {
-    const [pages, setPages] = useState([]);
+    const deviceType = useViewportContext();
+    const [cards, setCards] = useState([]);
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -22,58 +24,68 @@ const SearchPage = () => {
         promotions: false,
     });
 
+    const cardsPerPage = deviceType === 'desktop' ? 6 : deviceType === 'laptop' ? 4 : 2;
+
     useEffect(() => {
         fetchTotalCards();
-        fetchCards(formData, 1);
     }, []);
+
+    useEffect(() => {
+        if (cards.length == 0) {
+            fetchCards(0, cardsPerPage, formData);
+        }
+    }, [cards]);
 
     useEffect(() => {
         fetchTotalCards();
     }, [formData]);
 
-    const handleFormSubmit = async (formData) => {
-        setFormData(formData);
-        setPages([]);
-        fetchCards(formData, 1);
+    useEffect(() => {
+        setTotalPages(Math.ceil(totalCards / cardsPerPage));
+    }, [cardsPerPage, totalCards]);
+
+    useEffect(() => {
+        const startIdx = (currentPage - 1) * cardsPerPage;
+        const endIdx = currentPage * cardsPerPage;
+        if (cards.length > startIdx && cards.length < endIdx) {
+            fetchCards(cards.length, endIdx, formData);
+        }
+    }, [deviceType]);
+
+    const handleFormSubmit = async (data) => {
+        setFormData(data);
+        setCards([]);
     };
 
     const fetchTotalCards = async () => {
         try {
             const response = await axios.get('/api/search/count', { params: formData });
             setTotalCards(response.data.total);
-            setTotalPages(Math.ceil(response.data.total / 6));
+            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
         } catch (error) {
             console.error('Error fetching total cards:', error);
         }
     };
 
-    const fetchCards = async (formData, page) => {
-        if (pages[page - 1]) {
-            setCurrentPage(page);
+    const fetchCards = async (startIdx, endIdx, data) => {
+        if (cards.length > startIdx) {
+            setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
             return;
         }
         try {
-            const requestData = { ...formData, page };
+            const requestData = { ...data, startIdx, endIdx };
             const response = await axios.post('/api/search', requestData);
-
-            if (response.data.length === 0) {
-                setPages([]);
-                setTotalPages(1);
-                setCurrentPage(1);
-            } else {
-                const newPages = [...pages];
-                newPages[page - 1] = response.data;
-                setPages(newPages);
-                setCurrentPage(page);
-                setTotalPages(Math.ceil(totalCards / 6));
-            }
+            setCards(prevCards => [...prevCards, ...response.data]);
+            setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
 
     const handlePageChange = (page) => {
-        fetchCards(formData, page);
+        const startIdx = (page - 1) * cardsPerPage;
+        const endIdx = page * cardsPerPage;
+        fetchCards(startIdx, endIdx, formData);
     };
 
     return (
@@ -117,12 +129,13 @@ const SearchPage = () => {
             <section className="section" id="search-listing">
                 <div className="container">
                     <CardList
-                        cards={pages[currentPage - 1] || []}
+                        modifier="search"
+                        cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)}
                         filters={formData}
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={handlePageChange}
-                        modifier="search"
+                        deviceType={deviceType}
                     />
                 </div>
             </section>

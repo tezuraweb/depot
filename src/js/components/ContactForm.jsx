@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import IconSprite from '../includes/IconSprite';
 
-const ContactForm = ({ modal, buttonView }) => {
+const ContactForm = ({ modal=false, buttonView='', modifier='' }) => {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -38,7 +38,7 @@ const ContactForm = ({ modal, buttonView }) => {
     };
 
     return (
-        <div className="hero__contactForm">
+        <div className={`contact-form ${modifier == 'hero' ? 'hero__contactForm' : ''}`}>
             {modal && (
                 <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
                     buttonView == 'icon' ?

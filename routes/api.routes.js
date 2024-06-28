@@ -419,12 +419,13 @@ router
 router
     .route('/partners')
     .post(async (req, res) => {
-        const data = pick(req.body, 'page');
-        const page = parseInt(data.page);
+        const data = pick(req.body, 'startIdx', 'endIdx',);
+        const startIdx = parseInt(data.startIdx);
+        const endIdx = parseInt(data.endIdx);
 
-        if (cards && !isNaN(page)) {
-            if ((page - 1) * 3 < cards.length) {
-                res.json(cards.slice((page - 1) * 3, page * 3));
+        if (cards && !isNaN(startIdx) && !isNaN(endIdx)) {
+            if (startIdx < cards.length) {
+                res.json(cards.slice(startIdx, endIdx));
             } else {
                 res.json([]);
             }

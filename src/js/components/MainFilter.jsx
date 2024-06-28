@@ -19,14 +19,18 @@ const MainFilter = () => {
         promotions: false,
         priceDesc: false
     });
-    const [activeType, setActiveType] = useState('');
 
     const cardsPerPage = deviceType === 'desktop' ? 6 : deviceType === 'laptop' ? 4 : 1;
 
     useEffect(() => {
         fetchTotalCards();
-        fetchCards(0, cardsPerPage, formData);
     }, []);
+
+    useEffect(() => {
+        if (cards.length == 0) {
+            fetchCards(0, cardsPerPage, formData);
+        }
+    }, [cards]);
 
     useEffect(() => {
         fetchTotalCards();
@@ -44,11 +48,10 @@ const MainFilter = () => {
         }
     }, [deviceType]);
 
-    const handleFormSubmit = async (formData) => {
-        setFormData(formData);
-        setActiveType(formData.type);
+    const handleFormSubmit = async (data) => {
+        setFormData(data);
+        setActiveType(data.type);
         setCards([]);
-        fetchCards(0, cardsPerPage, formData);
     };
 
     const fetchTotalCards = async () => {
@@ -61,28 +64,27 @@ const MainFilter = () => {
         }
     };
 
-    const fetchCards = async (startIdx, endIdx, formData) => {
-        console.log(startIdx, endIdx)
+    const fetchCards = async (startIdx, endIdx, data) => {
         if (cards.length > startIdx) {
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
             return;
         }
         try {
-            const requestData = { ...formData, startIdx, endIdx };
+            const requestData = { ...data, startIdx, endIdx };
             const response = await axios.post('/api/search', requestData);
-            console.log(response.data)
-            // setCards(prevCards => {
-            //     const newCards = [...prevCards];
-            //     response.data.forEach((card, idx) => {
-            //         newCards[startIdx + idx] = card;
-            //     });
-            //     return newCards;
-            // });
             setCards(prevCards => [...prevCards, ...response.data]);
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+    };
+
+    const setActiveType = (tabType) => {
+        setFormData({
+            ...formData,
+            type: tabType,
+        });
+        setCards([]);
     };
 
     const handlePageChange = (page) => {
@@ -96,27 +98,22 @@ const MainFilter = () => {
             <section className="section" id="hero">
                 <div className="container">
                     <Hero />
-                    {deviceType === 'tablet' || deviceType === 'mobile' ? (
-                        <a className="form__link" href="/search">Расширенный поиск</a>
-                    ) : (
-                        <MainForm onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} />
-                    )}
+                    <MainForm onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} />
                 </div>
             </section>
 
             <section className="section" id="main-listing">
                 <div className="container">
-                    <CardList 
+                    <CardList
+                        modifier="main"
                         cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)} 
-                        filters={formData} 
                         currentPage={currentPage} 
                         totalPages={totalPages} 
                         onPageChange={handlePageChange}
-                        modifier="main"
                         totalCards={totalCards}
                         deviceType={deviceType}
-                        activeType={activeType}
-                        setActiveType={setActiveType}
+                        activeTab={formData.type}
+                        setActiveTab={setActiveType}
                     />
                 </div>
             </section>

@@ -39,11 +39,16 @@ const loadComponent = (componentName) => {
     }
 };
 
+// const deviceType = ViewportProvider();
+
 document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-react-component]');
 
     containers.forEach((container) => {
         const componentName = container.getAttribute('data-react-component');
+        // if (componentName == 'partnerLinks' && (deviceType === 'tablet' || deviceType === 'mobile')) {
+        //     return
+        // }
         const Component = loadComponent(componentName);
 
         if (Component) {
@@ -64,7 +69,7 @@ ymaps
     .then(maps => {
         const mapContainer = document.getElementById('map');
         if (mapContainer) {
-            mapContainer.style.height = "370px";
+            mapContainer.style.height = "100%";
             mapContainer.style.width = "100%";
 
             const map = new maps.Map(mapContainer, {

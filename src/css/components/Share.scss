@@ -52,4 +52,29 @@
             }
         }
     }
+
+    // media
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        &--phoneLarge {
+            .share__item {
+                margin-right: 0;
+                margin-left: 20px;
+                
+                &:nth-child(4) {
+                    order: -1;
+                    margin-left: 0;
+                    margin-right: auto;
+                }
+                
+                &:last-child {
+                    display: none;
+                }
+            }
+
+            .share__phone {
+                font-size: 18px;
+            }
+        }
+    }
 }
