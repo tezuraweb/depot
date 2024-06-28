@@ -66,6 +66,10 @@ h1 {
 h2 {
     font-size: 44px;
     font-weight: 700;
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        font-size: 24px;
+    }
 }
 
 ul {
@@ -114,6 +118,10 @@ input[type=number] {
         &--nopadding {
             padding: 0;
         }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        padding: 0 20px;
     }
 }
 

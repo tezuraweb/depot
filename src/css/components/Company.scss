@@ -445,6 +445,8 @@
     }
 
     &__advantages {
+        justify-content: space-evenly;
+
         &--item {
             width: 512px;
         }
@@ -584,5 +586,105 @@
                 margin: 0 auto;
             }
         }
+
+        &__accordion {
+            &--wrapper {
+                max-height: 500px;
+            }
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__title {
+            &--main {
+                padding-top: 0;
+                font-size: 26px;
+            }
+        }
+
+        &__subtitle {
+            font-size: 14px;
+
+            &--styling {
+                padding: 20px;
+                flex-direction: column;
+            }
+
+            &--custom {
+                align-self: flex-start;
+                width: 180px;
+            }
+        }
+
+        &__logo {
+            &--yellow {
+                display: block;
+                align-self: flex-end;
+                width: 123px;
+            }
+        }
+
+        &__info {
+            &--number {
+                margin-right: 30px;
+                font-size: 36px;
+            }
+
+            &--text,
+            &--address {
+                font-size: 14px;
+            }
+        }
+
+        &__container {
+            &--righ {
+                flex-basis: auto;
+            }
+        }
+
+        &__list {
+            padding-left: 20px;
+        }
+
+        &__icon {
+            position: static;
+            padding: 0;
+
+            &--docs {
+                padding-top: 0;
+            }
+
+            .icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        &__item {
+            max-width: 200px;
+            padding: 20px;
+            margin: 6px 0;
+            font-size: 14px;
+        }
+
+        &__logistics {
+            left: 70vw;
+
+            &--location {
+                display: none;
+            }
+
+            &--call {
+                top: unset;
+                right: unset;
+                bottom: 75px;
+                
+                .icon {
+                    width: 47px;
+                    height: 47px;
+                }
+            }
+        }
+
     }
 }

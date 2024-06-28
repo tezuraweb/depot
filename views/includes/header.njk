@@ -4,7 +4,10 @@
             {% set includeIcon = 'mainLogo' %}
             {% include "includes/svg.njk" %}
         </a>
-
+        <a href="/" class="header__logoMobile">
+            {% set includeIcon = 'mainLogoMobile' %}
+            {% include "includes/svg.njk" %}
+        </a>
         {% if navs %}
             <nav class="header__nav nav nav--desktop">
                 <ul class="nav__list">

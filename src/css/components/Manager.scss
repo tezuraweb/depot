@@ -69,4 +69,21 @@
             padding-left: 45px;
         }
     }
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        &__content {
+            flex-direction: column;
+        }
+
+        &__photo {
+            margin-right: 0;
+            margin-bottom: 50px;
+            align-self: center;
+        }
+
+        &__text {
+            max-width: unset;
+        }
+
+    }
 }

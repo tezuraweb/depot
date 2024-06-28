@@ -29,7 +29,7 @@ const Manager = () => {
     }, []);
 
     return (
-        <div className="flex">
+        <div className="manager__content flex">
             <img src={data.photo} alt={data.name} className="manager__photo" />
             <div className="flex flex--col">
                 <p className="manager manager__name">{data.name}</p>

@@ -9,6 +9,10 @@
         margin-right: 60px;
     }
 
+    &__logoMobile {
+        display: none;
+    }
+
     &__contacts {
         margin-right: 60px;
         padding-top: 30px;
@@ -48,7 +52,8 @@
             border: 3px solid $yellow;
             margin-left: 65px;
 
-            &::before, &::after {
+            &::before,
+            &::after {
                 content: '';
                 position: absolute;
                 top: 50%;
@@ -126,6 +131,7 @@
     }
 
     @media (max-width: ($laptop-breakpoint - 1)) {
+
         &__navMobile,
         &__burger--icon {
             display: block;
@@ -141,8 +147,10 @@
         }
 
         &__burger {
-            &--checkbox:checked ~ .header__burger--icon {
-                &::before, &::after {
+            &--checkbox:checked~.header__burger--icon {
+
+                &::before,
+                &::after {
                     opacity: 1;
                 }
 
@@ -151,10 +159,75 @@
                 }
             }
 
-            &--checkbox:checked ~ .header__navMobile {
+            &--checkbox:checked~.header__navMobile {
                 opacity: 1;
                 visibility: visible;
             }
+        }
+    }
+
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        &__auth {
+            &--text {
+                font-weight: 18px;
+            }
+        }
+    }
+
+    @media (max-width: 734px) {
+        padding: 20px 0;
+        justify-content: space-between;
+
+        &--desktop {
+            display: none;
+        }
+
+        &__auth {
+            display: none;
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__logo {
+            display: none;
+        }
+
+        &__logoMobile {
+            display: block;
+        }
+
+        &__auth {
+            display: none;
+        }
+
+        &__burger {
+            &--icon {
+                width: 30px;
+                height: 30px;
+                border: 2px solid #f9bc07;
+                margin-left: 0;
+
+                &::before,
+                &::after {
+                    height: 2px;
+                    width: 10px;
+                }
+
+                .icon {
+                    width: 17px;
+                    height: 12px;
+                }
+            }
+        }
+
+        &__navMobile {
+            width: 100vw;
+            right: auto;
+            margin: 0 -20px;
+        }
+
+        &__contacts {
+            display: none;
         }
     }
 }
