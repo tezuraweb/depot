@@ -36,7 +36,7 @@ const Gallery = () => {
         <div className="gallery__container">
             <div className="gallery__frame flex">
                 <img src={images[currentImage]} alt={`showroom ${currentImage}`} className={`gallery__frame--image ${isZoomed ? 'zoomed' : ''}`} onClick={handleZoom} />
-                <div className="flex flex--col">
+                <div className="gallery__frame--bottom flex flex--col">
                     <div className="gallery__controls">
                         <button className="gallery__controls--button animate--prev" onClick={handlePrevious} disabled={!canNavigate.prev}>
                             <IconSprite

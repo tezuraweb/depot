@@ -73,44 +73,46 @@
                 {% include "includes/svg.njk" %}
             </span>
         </div>
-        <div class="about__subtitle--styling flex flex--sb flex--center">
-            <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
-            <span class="about__carIcon">
-                {% set includeIcon = 'carIcon' %}
-                {% include "includes/svg.njk" %}
-            </span>
-            <span class="about__logo--yellow">
-                {% set includeIcon = 'depoLogisticsYellow' %}
-                {% include "includes/svg.njk" %}
-            </span>
-        </div>
-        <div class="about__container flex">
-            <div class="about__container--left"> 
-                <ul>
-                    {% for item in logistics %}
-                        <li class="about__item about__item--{{ item.id }}">{{ item.title }}</li>
-                    {% endfor %}
-                </ul>
+        <div class="container--fixed">
+            <div class="about__subtitle--styling flex flex--sb flex--center">
+                <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
+                <span class="about__carIcon">
+                    {% set includeIcon = 'carIcon' %}
+                    {% include "includes/svg.njk" %}
+                </span>
+                <span class="about__logo--yellow">
+                    {% set includeIcon = 'depoLogisticsYellow' %}
+                    {% include "includes/svg.njk" %}
+                </span>
             </div>
-            <div class="about__container--right">
-                <div class="about__logistics">
-                    <span class="about__logistics--location">
-                        {% set includeIcon = 'locImg' %}
-                        {% include "includes/svg.njk" %}
-                    </span>
-                    <a href="tel:+79092776242" class="about__logistics--call">
-                        {% set includeIcon = 'phoneIcon' %}
-                        {% include "includes/svg.njk" %}
-                    </a>
+            <div class="about__container flex">
+                <div class="about__container--left"> 
+                    <ul>
+                        {% for item in logistics %}
+                            <li class="about__item about__item--{{ item.id }}">{{ item.title }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <ul class="about__list">
-                    {% for item in logistics %}
-                        <li class="about__icon about__icon--{{ item.id }}">
-                            {% set includeIcon = item.iconId %}
+                <div class="about__container--right">
+                    <div class="about__logistics">
+                        <span class="about__logistics--location">
+                            {% set includeIcon = 'locImg' %}
                             {% include "includes/svg.njk" %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                        </span>
+                        <a href="tel:+79092776242" class="about__logistics--call">
+                            {% set includeIcon = 'phoneIcon' %}
+                            {% include "includes/svg.njk" %}
+                        </a>
+                    </div>
+                    <ul class="about__list">
+                        {% for item in logistics %}
+                            <li class="about__icon about__icon--{{ item.id }}">
+                                {% set includeIcon = item.iconId %}
+                                {% include "includes/svg.njk" %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -122,7 +124,7 @@
             <ul class="about__advantages flex flex--sb">
                 {% for item in advantages %}
                     <li class="about__advantages--item">
-                        <div>
+                        <div class="about__advantages--icon">
                             {% set includeIcon = item.iconId %}
                             {% include "includes/svg.njk" %}
                         </div>

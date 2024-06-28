@@ -34,11 +34,13 @@
             margin-right: 50px;
         }
 
-        &--left, &--right {
+        &--left,
+        &--right {
             min-height: max-content;
         }
 
-        &--left img, &--right img {
+        &--left img,
+        &--right img {
             width: 100%;
             height: auto;
             object-fit: cover;
@@ -53,6 +55,18 @@
         &__text {
             height: 157px;
             padding: 0 50px;
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__title {
+            font-size: 26px;
+        }
+        
+        &__subtitle {
+            font-size: 14px;
+            padding-top: 10px;
+            margin-bottom: 0;
         }
     }
 }

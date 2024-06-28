@@ -36,15 +36,18 @@
         padding: 20px;
         padding-right: 0;
 
-        & > button {
+        &>button {
             padding: 10px;
             transition: transform 0.3s ease;
             animation: pulse 1.5s infinite;
 
             @keyframes pulse {
-                0%, 100% {
+
+                0%,
+                100% {
                     transform: translateX(0);
                 }
+
                 50% {
                     transform: translateX(10px);
                 }
@@ -52,16 +55,22 @@
 
         }
 
-        & > button.reversed {
+        &>button.reversed {
             transform: rotate(180deg);
             animation: none;
         }
 
-        & > button:hover {
+        &>button:hover {
             animation: none;
         }
 
-        
+        &>button {
+            .icon {
+                max-width: unset;
+                width: 40px;
+                height: 40px;
+            }
+        }
     }
 
     @media (max-width: ($desktop-breakpoint - 1)) {
@@ -73,6 +82,38 @@
         &__text {
             font-size: 20px;
             max-width: 853px;
+        }
+    }
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        &__text {
+            font-size: 18px;
+        }
+
+        &__info {
+            margin-bottom: 80px;
+        }
+    }
+
+    @media (max-width: 800px) {
+        &__text {
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__info {
+            position: relative;
+            padding: 0 20px;
+            margin-bottom: 60px;
+        }
+
+        &__controls {
+            position: absolute;
+            right: 20px;
+            bottom: -35px;
+            padding: 0;
+            margin: 0;
         }
     }
 }

@@ -112,6 +112,11 @@ input[type=number] {
     padding: 0 75px;
     position: relative;
 
+    &--fixed {
+        max-width: $desktop-breakpoint;
+        margin: 0 auto;
+    }
+
     @media (max-width: ($desktop-breakpoint - 1)) {
         padding: 0 50px;
 
@@ -190,17 +195,6 @@ input[type=number] {
         background-repeat: no-repeat;
         background-position: bottom;
         background-size: 100%;
-
-        &::before {
-            content: '';
-            position: absolute;
-            width: 425px;
-            height: 524px;
-            bottom: 0;
-            right: 202px;
-            background-image: url('../../assets/img/pictures/deliveryperson.webp');
-            background-repeat: no-repeat;
-        }
     }
 
     &#lightindustrial-block {
@@ -236,12 +230,35 @@ input[type=number] {
         opacity: 65%;
     }
 
+    @media (max-width: ($desktop-breakpoint + 20)) {
+        &#about-logistics {
+            &::before {
+                content: '';
+                position: absolute;
+                width: 425px;
+                height: 524px;
+                bottom: 0;
+                right: 202px;
+                background-image: url('../../assets/img/pictures/deliveryperson.webp');
+                background-repeat: no-repeat;
+            }
+        }
+    }
+
     @media (max-width: ($desktop-breakpoint - 1)) {
         &#about-logistics {
             &::before {
                 bottom: -110px;
-                right: 7%;
+                right: 17%;
                 background-size: 80%;
+            }
+        }
+    }
+
+    @media (max-width: 1179px) {
+        &#about-logistics {
+            &::before {
+                right: 14%;
             }
         }
     }
@@ -257,6 +274,14 @@ input[type=number] {
                 height: 0;
                 background-image: none;
             }
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &#about-logistics {
+            background-size: 202%;
+            background-position-x: 47%;
+            background-position-y: auto;
         }
     }
 
@@ -289,6 +314,14 @@ input[type=number] {
 
 .icon {
     max-width: 100%;
+}
+
+.iconNext,
+.iconPrev,
+.icon-NextIco,
+.icon-PrevIcon {
+    width: 40px;
+    height: 40px;
 }
 
 .button {

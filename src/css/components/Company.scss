@@ -6,6 +6,7 @@
 
     &__section {
         background-color: $white;
+        overflow: hidden;
 
         &--black {
             background-color: $black;
@@ -60,10 +61,12 @@
         }
 
         &--styling {
+            position: relative;
             padding: 40px 75px;
-            background-color: $yellow;
             width: 50%;
             margin-bottom: 50px;
+            z-index: 1;
+            background-color: $yellow;
         }
     }
 
@@ -124,44 +127,36 @@
         height: 100%;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
-            width: 757px;
-            height: 689px;
-            bottom: -80px;
-            right: 0;
-            background-image: url('../../assets/img/pictures/circle.svg');
-            background-repeat: no-repeat;
+            width: 1200px;
+            left: -20px;
+            top: -160px;
+            height: 1200px;
+            border: 14px solid $grey;
+            border-radius: 50%;
         }
     }
 
     &__icon {
         position: absolute;
+        display: block;
+        width: 80px;
         transition: transform 0.3s ease;
 
         &--docs {
-            left: 24%;
+            left: 19%;
             bottom: 89%;
-
-            @media (min-width: 1497px) {
-                left: 23%;
-                bottom: 95%;
-            }
         }
 
         &--attorney {
             top: 20%;
-            left: 3%;
-
-            @media (min-width: 1497px) {
-                top: 18%;
-                left: 3%;
-            }
+            left: 5%;
         }
 
         &--goods {
             top: 50%;
-            right: 97%;
+            right: 93%;
         }
 
         &--gifts {
@@ -177,7 +172,7 @@
     &__logistics {
         position: absolute;
         top: 75px;
-        left: 57%;
+        left: 61%;
         width: 255px;
         height: 342px;
 
@@ -336,7 +331,10 @@
         &--wrapper {
             transition: max-height .3s;
             max-height: 0;
-            overflow: hidden;
+            background-color: $yellow;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            overflow-y: scroll;
 
             &.active {
                 max-height: 270px;
@@ -345,10 +343,6 @@
 
         &--content {
             padding: 30px;
-            background-color: $yellow;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            margin-bottom: 10px;
         }
     }
 
@@ -403,16 +397,16 @@
 
         &__list {
             &::before {
-                width: 600px;
-                height: 585px;
-                bottom: -80px;
-                right: 0;
+                left: -75px;
+                top: 24px;
+                width: 800px;
+                height: 800px;
             }
         }
 
         &__icon {
             &--docs {
-                left: 20%;
+                left: 13%;
                 bottom: unset;
                 top: 7%;
             }
@@ -424,12 +418,12 @@
 
             &--goods {
                 top: 56%;
-                right: 105%;
+                right: 102%;
             }
 
             &--gifts {
-                top: 88%;
-                right: 108%;
+                top: 85%;
+                right: 103%;
             }
 
             &:hover {
@@ -439,8 +433,8 @@
 
         &__logistics {
             position: absolute;
-            top: 75px;
-            left: 47%;
+            top: 117px;
+            left: 49%;
         }
     }
 
@@ -466,16 +460,25 @@
         }
     }
 
+    @media (max-width: 1110px) {
+        &__icon {
+            &--docs {
+                left: 17%;
+            }
+        }
+    }
+
     @media (max-width: ($laptop-breakpoint - 1)) {
         &__container {
             flex-direction: row-reverse;
+            justify-content: space-between;
+
+            &--right {
+                flex-basis: auto;
+            }
 
             &--left {
                 flex-basis: 80%;
-            }
-
-            &--right {
-                flex-basis: 20%;
             }
         }
 
@@ -544,10 +547,15 @@
 
         &__icon {
             position: static;
-            padding: 20px 0 20px 50px;
+            padding: 20px 0;
 
             &--docs {
-                padding-top: 35px;
+                padding-top: 33px;
+            }
+
+            .icon {
+                width: 80px;
+                height: 80px;
             }
         }
 
@@ -580,6 +588,20 @@
                 &:last-child {
                     margin-bottom: 30px;
                 }
+
+                &:hover {
+                    background-color: inherit;
+                    color: inherit;
+
+                    .about__advantages--subtitle,
+                    .about__advantages--text {
+                        color: inherit;
+                    }
+
+                    .icon {
+                        fill: inherit;
+                    }
+                }
             }
 
             &--button {
@@ -587,9 +609,70 @@
             }
         }
 
+        &__list {
+            padding-left: 50px;
+        }
+
         &__accordion {
-            &--wrapper {
-                max-height: 500px;
+            &--wrapper.active {
+                max-height: 350px;
+            }
+        }
+    }
+
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        &__accordion {
+            &--header {
+                padding: 10px 0;
+            }
+
+            &--image {
+                height: 80px;
+            }
+
+            &--title {
+                font-size: 20px;
+            }
+
+            &--subtitle {
+                font-size: 20px;
+            }
+
+            &--content {
+                padding: 20px;
+                font-size: 18px;
+                line-height: 1.2;
+            }
+        }
+    }
+
+    @media (max-width: 648px) {
+        &__logistics {
+            left: 70vw;
+
+            &--location {
+                display: none;
+            }
+
+            &--call {
+                top: unset;
+                right: unset;
+                bottom: 0;
+
+                .icon {
+                    width: 47px;
+                    height: 47px;
+                }
+            }
+        }
+
+        &__accordion {
+            &--headerWrapper {
+                justify-content: space-between;
+            }
+
+            &--title {
+                display: none;
             }
         }
     }
@@ -637,8 +720,8 @@
         }
 
         &__container {
-            &--righ {
-                flex-basis: auto;
+            &--left {
+                flex-basis: 70%;
             }
         }
 
@@ -647,11 +730,10 @@
         }
 
         &__icon {
-            position: static;
-            padding: 0;
+            padding: 15px 0;
 
             &--docs {
-                padding-top: 0;
+                padding-top: 17px;
             }
 
             .icon {
@@ -661,30 +743,63 @@
         }
 
         &__item {
-            max-width: 200px;
-            padding: 20px;
+            max-width: 176px;
+            padding: 20px 20px 20px 0;
             margin: 6px 0;
             font-size: 14px;
         }
 
         &__logistics {
-            left: 70vw;
-
-            &--location {
-                display: none;
-            }
-
             &--call {
-                top: unset;
-                right: unset;
-                bottom: 75px;
-                
-                .icon {
-                    width: 47px;
-                    height: 47px;
-                }
+                bottom: 80px;
             }
         }
 
+        &__advantages {
+            padding: 0 20px;
+            text-align: start;
+
+            &--title {
+                margin-bottom: 35px;
+            }
+
+            &--item {
+                width: 100%;
+                height: fit-content;
+                margin-bottom: 30px;
+
+            }
+
+            &--icon {
+                .icon {
+                    width: 60px;
+                    height: 60px;
+                }
+            }
+
+            &--subtitle {
+                padding-top: 15px;
+                margin-bottom: 0;
+                font-size: 14px;
+            }
+
+            &--button {
+                width: 100vw;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+
+        &__accordion {
+            &--subtitle {
+                font-size: 14px;
+            }
+
+            &--content {
+                padding: 20px;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+        }
     }
 }
