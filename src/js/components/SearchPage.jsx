@@ -92,36 +92,40 @@ const SearchPage = () => {
         <>
             <section className="section" id="search-block">
                 <div className="search container">
+                    <h1 className="search__heading section__title">Подобрать помещение</h1>
                     <div className="search__row">
                         <div className="search__column">
                             <SearchForm onSubmit={handleFormSubmit} />
                         </div>
-                        <div className="search__column search__column--flex">
-                            <div className="search__map">
-                                <Scheme
-                                    activeElements={['depot-building-1', 'depot-building-12', 'depot-building-5', 'depot-building-2']}
-                                    isModal={true}
-                                />
-                            </div>
-                            <div className="search__info">
-                                <div className="search__colors">
-                                    <div className="search__title">Карта обозначений</div>
-                                    <div className="search__color">
-                                        <div className="search__palette search__palette--yellow"></div>
-                                        <div className="search__desc">Доступный объект</div>
-                                    </div>
-                                    <div className="search__color">
-                                        <div className="search__palette search__palette--grey"></div>
-                                        <div className="search__desc">Недоступный объект</div>
-                                    </div>
-                                    <div className="search__color">
-                                        <div className="search__palette search__palette--red"></div>
-                                        <div className="search__desc">Выбранный объект</div>
-                                    </div>
+                        {(deviceType === 'desktop' || deviceType === 'laptop') && (
+                            <div className="search__column search__column--flex">
+                                <div className="search__map">
+                                    <Scheme
+                                        activeElements={['depot-building-1', 'depot-building-12', 'depot-building-5', 'depot-building-2']}
+                                        isModal={true}
+                                    />
                                 </div>
-                                <div className="search__facilities"></div>
+                                <div className="search__info">
+                                    <div className="search__colors">
+                                        <div className="search__title">Карта обозначений</div>
+                                        <div className="search__color">
+                                            <div className="search__palette search__palette--yellow"></div>
+                                            <div className="search__desc">Доступный объект</div>
+                                        </div>
+                                        <div className="search__color">
+                                            <div className="search__palette search__palette--grey"></div>
+                                            <div className="search__desc">Недоступный объект</div>
+                                        </div>
+                                        <div className="search__color">
+                                            <div className="search__palette search__palette--red"></div>
+                                            <div className="search__desc">Выбранный объект</div>
+                                        </div>
+                                    </div>
+                                    <div className="search__facilities"></div>
+                                </div>
                             </div>
-                        </div>
+                        )}
+
                     </div>
                 </div>
             </section>
@@ -135,7 +139,6 @@ const SearchPage = () => {
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={handlePageChange}
-                        deviceType={deviceType}
                     />
                 </div>
             </section>

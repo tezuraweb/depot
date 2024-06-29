@@ -45,6 +45,7 @@
 
         &--icon {
             display: block;
+            min-width: 41px;
             width: 41px;
             height: 41px;
             border-radius: 50%;
@@ -209,10 +210,12 @@
 
         &__burger {
             &--icon {
+                min-width: 30px;
                 width: 30px;
                 height: 30px;
                 border: 2px solid $yellow;
                 margin-left: 0;
+                padding: 0;
 
                 &::before,
                 &::after {

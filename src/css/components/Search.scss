@@ -1,4 +1,9 @@
 .search {
+    &__heading {
+        color: $black;
+        margin-bottom: 65px;
+    }
+
     &__row {
         display: flex;
     }
@@ -64,6 +69,10 @@
     // media
 
     @media (max-width: ($desktop-breakpoint - 1)) {
+        &__heading {
+            margin-bottom: 50px;
+        }
+
         &__row {
             flex-wrap: wrap;
         }
@@ -80,6 +89,12 @@
                 margin-right: auto;
                 margin-bottom: 0;
             }
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__heading {
+            margin-bottom: 20px;
         }
     }
 }

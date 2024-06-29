@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
 import IconSprite from '../includes/IconSprite';
+import { useViewportContext } from '../utils/ViewportContext';
 
-const ContactForm = ({ modal=false, buttonView='', modifier='' }) => {
+const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
+    const deviceType = useViewportContext();
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -40,13 +41,26 @@ const ContactForm = ({ modal=false, buttonView='', modifier='' }) => {
     return (
         <div className={`contact-form ${modifier == 'hero' ? 'hero__contactForm' : ''}`}>
             {modal && (
-                <button className={`button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
+                <button className={`form__open button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
                     buttonView == 'icon' ?
                         <IconSprite
                             selector="PhoneSimple"
                             width="26"
                             height="26"
-                        /> : 'Закажите звонок'
+                            fill="#000"
+                        /> : (
+                            <>
+                                <span>Закажите звонок</span>
+                                {(deviceType === 'mobile' && modifier == 'hero') && (
+                                    <IconSprite
+                                        selector="PhoneSimple"
+                                        width="20"
+                                        height="20"
+                                        fill="#fff"
+                                    />
+                                )}
+                            </>
+                        )
                 }</button>
             )}
 

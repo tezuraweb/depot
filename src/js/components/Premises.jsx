@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
 import Scheme from './StaticScheme';
 import CardList from './CardList';
 import ContactForm from './ContactForm';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
 import LoadingSpinner from '../includes/LoadingSpinner';
+import { useViewportContext } from '../utils/ViewportContext';
 
 const Premises = () => {
+    const deviceType = useViewportContext();
     const [premisesId, setPremisesId] = useState(null);
     const [premisesData, setPremisesData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -72,7 +73,7 @@ const Premises = () => {
                 setMessage('Ошибка');
             }
         }
-        
+
         setTimeout(() => {
             setMessage('');
         }, 5000);
@@ -100,19 +101,18 @@ const Premises = () => {
         return <div>No data available</div>;
     }
 
+    const showFullLink = deviceType === 'desktop' || deviceType === 'laptop';
+    const showPrinter = deviceType === 'desktop' || deviceType === 'laptop';
+    const showmaps = deviceType !== 'mobile';
+
     return (
         <>
-            <section class="section" id="premises-data">
-                <div class="premises container">
-                    <a class="premises__back" href="/search">Назад к подбору помещений</a>
-
-                    <div className="premises__wrapper">
-                        <div className="premises__header">
-                            <div className="premises__heading premises__heading--uppercase">Литер</div>
-                            <div className="premises__heading premises__heading--large">{premisesData.liter}</div>
-                            <div className="premises__heading premises__heading--uppercase">{premisesData.type}</div>
-                            <div className="premises__heading premises__heading--large">{premisesData.name}</div>
-                            <div className="premises__buttons">
+            <section className="section" id="premises-data">
+                <div className="premises container">
+                    <div className="premises__line">
+                        <a className="premises__back" href="/search">{`Назад ${showFullLink ? 'к подбору помещений' : ''}`}</a>
+                        <div className="premises__buttons">
+                            {showPrinter && (
                                 <button className="premises__button button button--icon" onClick={handlePrint}>
                                     <IconSprite
                                         selector="PrinterIcon"
@@ -120,15 +120,28 @@ const Premises = () => {
                                         height="30"
                                     />
                                 </button>
-                                <button className="premises__button button button--icon" onClick={handleShare}>
-                                    <IconSprite
-                                        selector="ShareIcon"
-                                        width="26"
-                                        height="28"
-                                    />
-                                </button>
-                                {message && <div className="premises__message">{message}</div>}
-                                <ContactForm modal={true} buttonView="icon" />
+                            )}
+                            <button className="premises__button button button--icon" onClick={handleShare}>
+                                <IconSprite
+                                    selector="ShareIcon"
+                                    width="26"
+                                    height="28"
+                                />
+                            </button>
+                            {message && <div className="premises__message">{message}</div>}
+                            <ContactForm modal={true} buttonView="icon" />
+                        </div>
+                    </div>
+
+                    <div className="premises__wrapper">
+                        <div className="premises__header">
+                            <div className="premises__header--block">
+                                <div className="premises__heading premises__heading--uppercase">Литер</div>
+                                <div className="premises__heading premises__heading--large">{premisesData.liter}</div>
+                            </div>
+                            <div className="premises__header--block">
+                                <div className="premises__heading premises__heading--uppercase">{premisesData.type}</div>
+                                <div className="premises__heading premises__heading--large">{premisesData.name}</div>
                             </div>
                         </div>
 
@@ -191,7 +204,7 @@ const Premises = () => {
                                 {(premisesData.images && premisesData.images.length > 0) && (
                                     <>
                                         <h2 className="premises__title">Фото помещения</h2>
-                                        <div className="card__carousel">
+                                        <div className="premises__carousel card__carousel">
                                             <div className="card__pic">
                                                 {/* {loading && <div className="card__pic--placeholder">Загрузка...</div>} */}
                                                 <img
@@ -218,17 +231,21 @@ const Premises = () => {
             <section className="section" id="premises-maps">
                 <div className="premises container">
                     <div className="premises__wrapper">
-                        <div className="premises__location">
-                            <h2 className="premises__title">Расположение</h2>
-                            <a className="premises__title" href="/">Ижевск, Буммашевская, 5</a>
-                        </div>
+                        {showmaps && (
+                            <>
+                                <div className="premises__location">
+                                    <h2 className="premises__title">Расположение</h2>
+                                    <a className="premises__title" href="/">Ижевск, Буммашевская, 5</a>
+                                </div>
 
-                        <div className="premises__scheme">
-                            <Scheme
-                                activeElement={premisesData.building_id}
-                                floor={premisesData.floor}
-                            />
-                        </div>
+                                <div className="premises__scheme">
+                                    <Scheme
+                                        activeElement={premisesData.building_id}
+                                        floor={premisesData.floor}
+                                    />
+                                </div>
+                            </>
+                        )}
 
                         <h2 className="premises__title">Общая информация</h2>
                         <div className="premises__info">

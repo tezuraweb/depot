@@ -77,7 +77,7 @@ const SearchForm = ({ onSubmit }) => {
     return (
         <form onSubmit={handleSubmit} className="form form--search">
             <div className="form__section form__section--framed">
-                <div className="form__group form__group--inline">
+                <div className="form__group form__group--inline form__group-1">
                     <label className="form__label form__label--inline">Тип</label>
                     <select name="type" value={formData.type} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
@@ -88,7 +88,7 @@ const SearchForm = ({ onSubmit }) => {
                     </select>
                 </div>
 
-                <div className="form__group form__group--inline">
+                <div className="form__group form__group--inline form__group-2">
                     <label className="form__label form__label--inline">Корпус</label>
                     <select name="building" value={formData.building} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
@@ -101,46 +101,46 @@ const SearchForm = ({ onSubmit }) => {
 
             <div className="form__section form__section--framed">
                 <div className="form__grid">
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-1">
                         <label className="form__label form__label--inline">Площадь</label>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-2">
                         <input type="number" name="areaFrom" value={formData.areaFrom} onChange={handleAreaChange} className="form__input form__input--number" />
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-3">
                         <div className="form__hatch"></div>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-4">
                         <input type="number" name="areaTo" value={formData.areaTo} onChange={handleAreaChange} className="form__input form__input--number" />
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-5">
                         <label className="form__label form__label--inline">Стоимость</label>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-6">
                         <input className="form__radio" type="radio" id="totalPrice" name="priceType" value="total" checked={formData.priceType === 'total'} onChange={handleChange} />
                         <label htmlFor="totalPrice">Общая</label>
                     </div>
 
-                    <div className="form__cell"></div>
+                    <div className="form__cell form__cell-7"></div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-8">
                         <input className="form__radio" type="radio" id="perSquareMeterPrice" name="priceType" value="perSquareMeter" checked={formData.priceType === 'perSquareMeter'} onChange={handleChange} />
                         <label htmlFor="perSquareMeterPrice">за м²</label>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-9">
                         <button type="button" onClick={togglePriceOrder} className="form__button--price">
                             <span className={`form__button--arrow ${priceDesc ? 'active' : ''}`}>↓</span>
                             <span className={`form__button--arrow ${priceDesc ? '' : 'active'}`}>↑</span>
                         </button>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-10">
                         <select name="priceFrom" value={formData.priceFrom} onChange={handlePriceChange} className="form__input form__input--select">
                             {priceRanges[formData.priceType].map((price, index) => (
                                 <option key={index} value={price}>{price || 'Не выбрано'}</option>
@@ -148,11 +148,11 @@ const SearchForm = ({ onSubmit }) => {
                         </select>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-11">
                         <div className="form__hatch"></div>
                     </div>
 
-                    <div className="form__cell">
+                    <div className="form__cell form__cell-12">
                         <select name="priceTo" value={formData.priceTo} onChange={handlePriceChange} className="form__input form__input--select">
                             {priceRanges[formData.priceType].map((price, index) => (
                                 <option key={index} value={price}>{price || 'Не выбрано'}</option>
@@ -162,7 +162,7 @@ const SearchForm = ({ onSubmit }) => {
                 </div>
             </div>
 
-            <div className="form__section form__section--framed">
+            <div className="form__section form__section--framed form__section--column">
                 <div className="form__group form__group--inline form__group--spread form__group--marginBottom">
                     <label className="form__label form__label--inline">Этаж</label>
                     <select name="storey" value={formData.storey} onChange={handleChange} className="form__input form__input--select">
@@ -195,8 +195,8 @@ const SearchForm = ({ onSubmit }) => {
             </div>
 
             <div className="form__section">
-                <div className="form__section--framed">
-                    <div className="form__promotion">
+                <div className="form__section--framed form__promotion">
+                    <div className="form__promotion--wrapper">
                         <input type="checkbox" name="promotions" id="promotionCheckbox" checked={formData.promotions} onChange={handleChange} className="form__checkbox" />
                         <label className="form__label" htmlFor="promotionCheckbox">Акции</label>
                     </div>

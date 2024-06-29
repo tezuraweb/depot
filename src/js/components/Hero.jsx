@@ -14,7 +14,7 @@ const Hero = () => {
             <div className="hero__column hero__column--right">
                 <div className="hero__features">
                     <div className="hero__feature">
-                        <div className="hero__feature--icon">
+                        <div className="hero__feature--icon button button--icon">
                             <IconSprite
                                 selector="HandshakeIcon"
                                 width="30"
@@ -25,7 +25,7 @@ const Hero = () => {
                     </div>
 
                     <div className="hero__feature">
-                        <div className="hero__feature--icon">
+                        <div className="hero__feature--icon button button--icon">
                             <IconSprite
                                 selector="DocsIcon"
                                 width="30"
@@ -36,7 +36,7 @@ const Hero = () => {
                     </div>
 
                     <div className="hero__feature">
-                        <div className="hero__feature--icon">
+                        <div className="hero__feature--icon button button--icon">
                             <IconSprite
                                 selector="AreaIcon"
                                 width="30"
