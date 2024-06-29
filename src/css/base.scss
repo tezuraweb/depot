@@ -34,6 +34,10 @@ body {
         overflow: hidden;
         height: 100%;
     }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        font-size: 14px;
+    }
 }
 
 h1,
@@ -61,11 +65,19 @@ h1 {
     @media (max-width: ($desktop-breakpoint - 1)) {
         font-size: 46px;
     }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        font-size: 24px;
+    }
 }
 
 h2 {
     font-size: 44px;
     font-weight: 700;
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        font-size: 36px;
+    }
 
     @media (max-width: ($mobile-breakpoint - 1)) {
         font-size: 24px;
@@ -264,32 +276,52 @@ input[type=number] {
     }
 
     @media (max-width: ($laptop-breakpoint - 1)) {
+        padding: 70px 0;
+
         &#about-logistics {
             background-position-x: 45%;
             background-size: auto;
             background-position-y: 125%;
-            
+
             &::before {
                 width: 0;
                 height: 0;
                 background-image: none;
             }
         }
+
+        &#main-listing {
+            padding-bottom: 0;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 73px;
+                background-color: $yellow;
+            }
+        }
+
+        &#search-listing,
+        &#premises-data {
+            &::before {
+                height: 73px;
+            }
+        }
     }
 
     @media (max-width: ($mobile-breakpoint - 1)) {
+        padding: 50px 0;
+
         &#about-logistics {
             background-size: 202%;
             background-position-x: 47%;
             background-position-y: auto;
         }
     }
-
-    // @media (max-width: $desktop-breakpoint) {
-    // }
-
-    // @media (max-width: ($desktop-breakpoint - 1)-2) {
-    // }
 }
 
 .flex {

@@ -9,7 +9,7 @@ const Hero = () => {
             <div className="hero__column hero__column--left">
                 <div className="hero__desc">ТОРГОВО-СКЛАДСКОЙ КОМПЛЕКС ДЕПО</div>
                 <h1 className="hero__title">Аренда помещений в Ижевске</h1>
-                <ContactForm modal={true} />
+                <ContactForm modal={true} modifier="hero"/>
             </div>
             <div className="hero__column hero__column--right">
                 <div className="hero__features">

@@ -3,7 +3,6 @@ import axios from 'axios';
 import CardList from './CardList';
 import LoadingSpinner from '../includes/LoadingSpinner';
 
-
 const RentedCardList = () => {
     const [premisesData, setPremisesData] = useState([]);
     const [loading, setLoading] = useState(true);

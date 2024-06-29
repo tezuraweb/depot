@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Card from '../includes/Card';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
-// import { useViewportContext } from '../ViewportContext';
 
-const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, deviceType, activeType, setActiveType }) => {
+const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, deviceType = '', activeTab, setActiveTab }) => {
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
     const tabs = [
@@ -20,11 +19,7 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
     };
 
     const handleTabClick = (type) => {
-        setActiveType(type);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            type: type
-        }));
+        setActiveTab(type);
     };
 
     const titleMap = {
@@ -36,9 +31,11 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
 
     const title = titleMap[modifier];
     const showTabs = modifier === 'main';
-    const showPagination = deviceType !== 'tablet' && deviceType !== 'mobile' && modifier !== 'recommend' && modifier !== 'rented';
-    const showShareMain = modifier === 'main';
-    const showShareSearch = modifier === 'search';
+    const showPagination = modifier === 'main' && deviceType !== 'tablet' && deviceType !== 'mobile' || modifier === 'search';
+    const showRedirect = modifier === 'main' && (deviceType === 'tablet' || deviceType === 'mobile');
+    const showShareSide = modifier === 'main' && (deviceType === 'desktop' || deviceType === 'laptop');
+    const showShareBottom = modifier === 'main' && (deviceType === 'tablet' || deviceType === 'mobile') || modifier === 'search';
+    const showAdvantages = modifier === 'main' && (deviceType === 'tablet' || deviceType === 'mobile');
 
     return (
         <div className={`listing ${modifier ? 'listing--' + modifier : ''}`}>
@@ -49,7 +46,7 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                     {tabs.map(tab => (
                         <button
                             key={tab.value}
-                            className={`listing__tab ${activeType === tab.value ? 'active' : ''}`}
+                            className={`listing__tab ${activeTab === tab.value ? 'active' : ''}`}
                             onClick={() => handleTabClick(tab.value)}
                         >
                             {tab.label}
@@ -73,7 +70,7 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                     </div>
                 </div>
 
-                {showPagination ? (
+                {showPagination && (
                     <div className="listing__column listing__column--right">
                         <div className="listing__pagination">
                             <div className="listing__pagination--line">
@@ -107,19 +104,58 @@ const CardList = ({ cards = [], filters = {}, currentPage = 0, totalPages = 0, o
                             </div>
                         </div>
 
-                        {showShareMain && (
+                        {showShareSide && (
                             <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneSmall' />
                         )}
                     </div>
-                ) : (
-                    <div className="card-list__summary">
-                        <p>Найдено всего {totalCards} карточек</p>
-                        <a href="/search">Смотреть все результаты</a>
+                )}
+
+                {showAdvantages && (
+                    <div className="listing__column listing__column--right">
+                        <div className="listing__points">
+                            <div className="listing__point">
+                                <div className="button button--icon">
+                                    <IconSprite
+                                        selector="HoursIcon"
+                                        width="26"
+                                        height="26"
+                                    />
+                                </div>
+                                <div className="listing__point--text">Круглосуточный доступ</div>
+                            </div>
+                            <div className="listing__point">
+                                <div className="button button--icon">
+                                    <IconSprite
+                                        selector="ParkingIcon"
+                                        width="31"
+                                        height="30"
+                                    />
+                                </div>
+                                <div className="listing__point--text">Вместительный паркинг</div>
+                            </div>
+                            <div className="listing__point">
+                                <div className="button button--icon">
+                                    <IconSprite
+                                        selector="CanteenIcon"
+                                        width="27"
+                                        height="26"
+                                    />
+                                </div>
+                                <div className="listing__point--text">Столовая на территории комплекса</div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
 
-            {showShareSearch && (
+            {showRedirect && (
+                <div className="listing__redirect">
+                    <div className="listing__redirect--text">Свободных помещений: <span className="listing__redirect--yellow">{totalCards}</span></div>
+                    <a className="listing__redirect--link button" href="/search">Смотреть еще</a>
+                </div>
+            )}
+
+            {showShareBottom && (
                 <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneLarge' />
             )}
         </div>

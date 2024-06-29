@@ -436,7 +436,7 @@
         }
     }
 
-    @media (max-width: ($desktop-breakpoint - 1)) {
+    @media (max-width: ($laptop-breakpoint - 1)) {
         // modifiers
 
         &--main {
@@ -459,6 +459,20 @@
             .form__button {
                 padding: 14px 20px;
                 font-size: 18px;
+            }
+        }
+
+        &--inline {
+            flex-direction: column;
+
+            .form__group {
+                max-width: none;
+                width: 100%;
+                flex-basis: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 45px;
             }
         }
     }
