@@ -65,7 +65,7 @@
         }
 
         &__text {
-            max-width: 417px;
+            max-width: unset;
             padding-left: 45px;
         }
     }
@@ -80,11 +80,6 @@
             margin-bottom: 50px;
             align-self: center;
         }
-
-        &__text {
-            max-width: unset;
-        }
-
     }
 
     @media (max-width: ($mobile-breakpoint - 1)) {

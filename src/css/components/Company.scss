@@ -315,8 +315,13 @@
             border-bottom: 2px solid $black;
         }
 
+        &--headerWrapper {
+            height: 180px;
+        }
+
         &--title {
             padding-left: 75px;
+            margin-right: 5px;
             font-size: 24px;
         }
 
@@ -326,6 +331,11 @@
             display: inline-block;
             margin-bottom: 20px;
             margin-right: 50px;
+        }
+
+        &--image {
+            max-width: 200px;
+            max-height: 155px;
         }
 
         &--wrapper {
@@ -338,6 +348,7 @@
 
             &.active {
                 max-height: 270px;
+                margin-bottom: 10px;
             }
         }
 
@@ -626,10 +637,6 @@
                 padding: 10px 0;
             }
 
-            &--image {
-                height: 80px;
-            }
-
             &--title {
                 font-size: 20px;
             }
@@ -648,7 +655,7 @@
 
     @media (max-width: 648px) {
         &__logistics {
-            left: 70vw;
+            left: 80vw;
 
             &--location {
                 display: none;
@@ -751,7 +758,7 @@
 
         &__logistics {
             &--call {
-                bottom: 80px;
+                bottom: 120px;
             }
         }
 
@@ -785,8 +792,10 @@
 
             &--button {
                 width: 100vw;
+                margin: 20px 0 -50px 0;
                 font-size: 14px;
                 font-weight: bold;
+                text-align: center;
             }
         }
 
@@ -795,10 +804,19 @@
                 font-size: 14px;
             }
 
+            &--headerWrapper {
+                height: 130px;
+            }
+
             &--content {
                 padding: 20px;
                 font-size: 14px;
                 line-height: 1.2;
+            }
+
+            &--image {
+                max-width: 150px;
+                max-height: 110px;
             }
         }
     }
