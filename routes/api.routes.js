@@ -1,14 +1,16 @@
 const express = require('express');
 const pick = require('lodash/pick');
 
+const Premises = require('../models/Premises');
+
 const router = express.Router();
 
 const manager = {
-        id: 1,
-        name: "Ладыгин Сергей Александрович",
-        text: "В нашем торгово-складском комплекс созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами!",
-        photo: "/img/pics/depo_manager.webp",
-    };
+    id: 1,
+    name: "Ладыгин Сергей Александрович",
+    text: "В нашем торгово-складском комплекс созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами!",
+    photo: "/img/pics/depo_manager.webp",
+};
 
 const premises = {
     '1': {
@@ -345,7 +347,7 @@ const depotTenants = [
     },
     {
         id: 12,
-        logo: "/img/pics/depot_tenants/borsch.webp",
+        logo: "/img/pics/depot_tenants/melofon.webp",
         title: "Мелофон",
         link: "https://melofon18.ru/",
         text: "Мобильные аксессуары Мелофон. Сеть магазинов, в которых представлен полный ассортимент аксессуаров для сотовых телефонов, смартфонов и планшетов, флешки, автомобильные товары, батареи и зарядные устройства, защитные плёнки, карты памяти, колонки и многое другое. Кроме того, компания осуществляет ремонт гаджетов по низкой цене.",
@@ -366,7 +368,7 @@ const depotTenants = [
     },
     {
         id: 15,
-        logo: "/img/pics/depot_tenants/borsch.webp",
+        logo: "/img/pics/depot_tenants/zolot_tabak.webp",
         title: "Золотая Табакерка",
         link: "https://vk.com/goldtabakerka?ysclid=lwyqthofx92970824",
         text: "Компания «Золотая табакерка» основана в 2002 году. На сегодняшний день  компания единственная на территории Удмуртской Республики, работающая в формате «Есть всё» по ассортименту табачной продукции.",
@@ -380,7 +382,7 @@ const depotTenants = [
     },
     {
         id: 17,
-        logo: "/img/pics/depot_tenants/borsch.webp",
+        logo: "/img/pics/depot_tenants/gambrinus.webp",
         title: "Гамбринус",
         link: "http://www.gambrinus-izh.ru/",
         text: "Известная сеть магазинов в Ижевске, которая специализируется по продажам разливного и бутылочного фирменного пива и различных закусок к нему. В том числе производят безалкоольные напитки",
@@ -460,7 +462,7 @@ const gagarinskiTenants = [
     },
     {
         id: 11,
-        logo: "/img/pics/gagarinski_tenants/borsch.webp",
+        logo: "/img/pics/gagarinski_tenants/zolot_tabak.webp",
         title: "Золотая Табакерка",
         link: "https://vk.com/goldtabakerka",
         text: "Компания «Золотая табакерка» основана в 2002 году. На сегодняшний день  компания единственная на территории Удмуртской Республики, работающая в формате «Есть всё» по ассортименту табачной продукции.",
@@ -584,28 +586,28 @@ const docs = [
 
 const requests = [
     {
-      id: 1,
-      date: '2024-05-03T10:00:00Z',
-      status: 'closed'
+        id: 1,
+        date: '2024-05-03T10:00:00Z',
+        status: 'closed'
     },
     {
-      id: 2,
-      date: '2024-06-10T14:30:00Z',
-      status: 'pending'
+        id: 2,
+        date: '2024-06-10T14:30:00Z',
+        status: 'pending'
     },
     {
-      id: 3,
-      date: '2024-07-15T09:00:00Z',
-      status: 'active'
+        id: 3,
+        date: '2024-07-15T09:00:00Z',
+        status: 'active'
     }
-  ];
-  
+];
+
 
 router
     .route('/search/count')
     .get(async (req, res) => {
         if (cards) {
-            res.json({total: cards.length});
+            res.json({ total: cards.length });
         } else {
             res.status(404).json({ error: 'Premises not found' });
         }
@@ -633,7 +635,7 @@ router
     .route('/partners/count')
     .get(async (req, res) => {
         if (cards) {
-            res.json({total: cards.length});
+            res.json({ total: cards.length });
         } else {
             res.status(404).json({ error: 'Premises not found' });
         }
@@ -683,7 +685,7 @@ router
     .route('/recommendations/:id')
     .get(async (req, res) => {
         const id = req.params.id;
-        const premisesData = recs[id-1];
+        const premisesData = recs[id - 1];
         if (premisesData) {
             res.json(premisesData);
         } else {
@@ -728,6 +730,21 @@ router
             res.json(requests);
         } else {
             res.status(404).json({ error: 'Requests not found' });
+        }
+    });
+
+router
+    .route('/premises/all')
+    .get(async (req, res) => {
+        try {
+            const data = await Premises.getPremises();
+            if (data) {
+                res.json(data);
+            } else {
+                res.status(404).json({ error: 'Premises not found' });
+            }
+        } catch (error) {
+            res.status(404).json({ error: 'Premises not found' });
         }
     });
 
