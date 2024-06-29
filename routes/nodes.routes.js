@@ -1,5 +1,7 @@
 const express = require('express');
 
+const Premises = require('../models/Premises');
+
 const router = express.Router();
 
 router
@@ -54,23 +56,45 @@ router
     .get((req, res) => {
         res.render('nodes/login', { user: null });
     });
-    
+
 router
     .route('/profile')
     .get((req, res) => {
-        res.render('nodes/profile', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'profile' });
+        res.render('nodes/profile', { user: { name: 'Иван Федорович Крузенштерн' }, page: 'profile' });
     });
 
 router
     .route('/documents')
     .get((req, res) => {
-        res.render('nodes/docs', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'docs' });
+        res.render('nodes/docs', { user: { name: 'Иван Федорович Крузенштерн' }, page: 'docs' });
     });
 
 router
     .route('/requests')
     .get((req, res) => {
-        res.render('nodes/requests', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'requests' });
+        res.render('nodes/requests', { user: { name: 'Иван Федорович Крузенштерн' }, page: 'requests' });
+    });
+
+router
+    .route('/test')
+    .get(async (req, res) => {
+        // try {
+        //     res.render('nodes/test');
+        // } catch (error) {
+        //     res.status(500).json({ error: 'Internal Server Error' });
+        // }
+        try {
+            const data = await Premises.getPremises();
+            console.log(data);
+            if (data) {
+                res.json(data);
+            } else {
+                res.status(404).json({ error: 'lol' });
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(404).json({ error: error });
+        }
     });
 
 module.exports = router;
