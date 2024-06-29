@@ -169,17 +169,6 @@ input[type=number] {
     &#search-listing,
     &#premises-data {
         padding-bottom: 0;
-
-        &::before {
-            content: '';
-            position: absolute;
-            display: block;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 84px;
-            background-color: $yellow;
-        }
     }
 
     &#contact-block {
@@ -242,6 +231,22 @@ input[type=number] {
         opacity: 65%;
     }
 
+    @media (min-width: $containerMaxWidth) {
+        &#search-listing,
+        &#premises-data {
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 84px;
+                background-color: $yellow;
+            }
+        }
+    }
+
     @media (max-width: ($desktop-breakpoint + 20)) {
         &#about-logistics {
             &::before {
@@ -292,17 +297,6 @@ input[type=number] {
 
         &#main-listing {
             padding-bottom: 0;
-
-            &::before {
-                content: '';
-                position: absolute;
-                display: block;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 73px;
-                background-color: $yellow;
-            }
         }
 
         &#search-listing,
@@ -313,8 +307,18 @@ input[type=number] {
         }
     }
 
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        &#hero {
+            border-bottom: 2px solid $yellow;
+        }
+    }
+
     @media (max-width: ($mobile-breakpoint - 1)) {
         padding: 50px 0;
+
+        &#search-block {
+            padding-bottom: 0;
+        }
 
         &#about-logistics {
             background-size: 202%;
@@ -419,6 +423,7 @@ input[type=number] {
 
     &--icon {
         position: relative;
+        min-width: 50px;
         width: 50px;
         height: 50px;
         border-radius: 10px;
@@ -431,12 +436,28 @@ input[type=number] {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            max-width: 65%;
         }
     }
 
     &--smallIcon {
         width: 30px;
         height: 30px;
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        padding: 12px 20px;
+
+        &--large {
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+
+        &--icon {
+            min-width: 40px;
+            width: 40px;
+            height: 40px;
+        }
     }
 }
 
@@ -455,68 +476,118 @@ input[type=number] {
 }
 
 .animate {
-
     &--pulse {
         &:hover {
             animation: pulseGlobal 2s infinite;
-        }
-
-        @keyframes pulseGlobal {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            75% {
-                transform: scale(1);
-            }
         }
     }
 
     &--prev {
         &:hover {
             animation: pulsePrevGlobal 1.5s infinite;
-
-            @keyframes pulsePrevGlobal {
-
-                0%,
-                100% {
-                    transform: translateX(0);
-                }
-
-                50% {
-                    transform: translateX(-10px);
-                }
-            }
-        }
-
-        &:disabled {
-            animation: none;
         }
     }
 
     &--next {
         &:hover {
             animation: pulseNextGlobal 1.5s infinite;
+        }
+    }
 
-            @keyframes pulseNextGlobal {
-
-                0%,
-                100% {
-                    transform: translateX(0);
-                }
-
-                50% {
-                    transform: translateX(10px);
-                }
-            }
+    @keyframes pulseGlobal {
+        0%,
+        100% {
+            transform: scale(1);
         }
 
+        50% {
+            transform: scale(1.1);
+        }
+
+        75% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes pulsePrevGlobal {
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(-10px);
+        }
+    }
+
+    @keyframes pulseNextGlobal {
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(10px);
+        }
+    }
+
+    @keyframes pulsePrevGlobalVertical {
+        0%,
+        100% {
+            transform: rotate(90deg) translateX(0);
+        }
+
+        50% {
+            transform: rotate(90deg) translateX(-10px);
+        }
+    }
+
+    @keyframes pulseNextGlobalVertical {
+        0%,
+        100% {
+            transform: rotate(90deg) translateX(0);
+        }
+
+        50% {
+            transform: rotate(90deg) translateX(10px);
+        }
+    }
+
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &--prev {
+            &:hover {
+                animation: pulsePrevGlobalVertical 1.5s infinite;
+            }
+        }
+    
+        &--next {
+            &:hover {
+                animation: pulseNextGlobalVertical 1.5s infinite;
+            }
+        }
+    }
+
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        &--prev {
+            &:hover {
+                animation: pulsePrevGlobal 1.5s infinite;
+            }
+        }
+    
+        &--next {
+            &:hover {
+                animation: pulseNextGlobal 1.5s infinite;
+            }
+        }
+    }
+
+    &--prev {
+        &:disabled {
+            animation: none;
+        }
+    }
+
+    &--next {
         &:disabled {
             animation: none;
         }

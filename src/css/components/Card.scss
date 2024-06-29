@@ -1,6 +1,7 @@
 .card {
     flex-basis: 33.333%;
     padding: 15px;
+    max-width: 500px;
 
     &__wrapper {
         display: flex;
@@ -63,6 +64,7 @@
         border-radius: 50%;
         color: $white;
         font-family: inherit;
+        font-size: 20px;
         font-weight: 700;
 
         &--prev {
@@ -110,6 +112,8 @@
     }
 
     &__details {
+        margin-right: 15px;
+
         &>.card__detail {
             margin-bottom: 10px;
 
@@ -184,8 +188,18 @@
     @media (max-width: ($laptop-breakpoint - 1)) {
         // modifiers
 
-        &--main {
-            flex-basis: 100%;
+        flex-basis: 100%;
+    }
+
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        flex-basis: 100%;
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        padding: 20px 0;
+
+        &__wrapper {
+            border: none;
         }
     }
 }

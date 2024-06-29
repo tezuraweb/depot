@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import IconSprite from '../includes/IconSprite';
+import { useViewportContext } from '../utils/ViewportContext';
 
 const MainForm = ({ onSubmit, formData, setFormData }) => {
+    const deviceType = useViewportContext();
     const [priceDesc, setPriceDesc] = useState(formData.priceDesc);
 
     const handleChange = (e) => {
@@ -79,7 +82,16 @@ const MainForm = ({ onSubmit, formData, setFormData }) => {
                 <button type="submit" className="form__button button button--large animate--pulse">Показать</button>
             </div>
 
-            <a className="form__link" href={`/search?${generateQueryParams()}`}>Расширенный поиск</a>
+            <a className="form__link" href={`/search?${generateQueryParams()}`}>
+                <span>Расширенный поиск</span>
+                {deviceType === 'mobile' && (
+                    <IconSprite
+                        selector="SearchIcon"
+                        width="20"
+                        height="20"
+                    />
+                )}
+            </a>
         </form>
     );
 };

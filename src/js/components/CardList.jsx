@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Card from '../includes/Card';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
+import { useViewportContext } from '../utils/ViewportContext';
 
-const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, deviceType = '', activeTab, setActiveTab }) => {
+const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab }) => {
+    const deviceType = useViewportContext();
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
     const tabs = [

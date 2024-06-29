@@ -29,6 +29,7 @@
     &__call {
         background-color: $black;
         color: $white;
+        cursor: pointer;
     }
 
     // modifiers
@@ -38,9 +39,11 @@
     }
 
     &--phoneLarge {
+        margin: 0 -75px;
+
         .share__list {
             flex-direction: row;
-            padding: 20px;
+            padding: 20px 75px;
         }
 
         .share__item {
@@ -55,18 +58,36 @@
 
     // media
 
+    @media (max-width: ($desktop-breakpoint - 1)) {
+        &--phoneLarge {
+            margin: 0 -50px;
+
+            .share__list {
+                flex-direction: row;
+                padding: 20px 50px;
+            }
+        }
+
+        &--phoneSmall {
+            .share__list {
+                padding: 0 30px;
+                min-width: 90px;
+            }
+        }
+    }
+
     @media (max-width: ($laptop-breakpoint - 1)) {
         &--phoneLarge {
             .share__item {
                 margin-right: 0;
                 margin-left: 20px;
-                
+
                 &:nth-child(4) {
                     order: -1;
                     margin-left: 0;
                     margin-right: auto;
                 }
-                
+
                 &:last-child {
                     display: none;
                 }
@@ -74,6 +95,24 @@
 
             .share__phone {
                 font-size: 18px;
+            }
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &--phoneLarge {
+            margin: 0 -20px;
+
+            .share__list {
+                padding: 5px 20px;
+            }
+
+            .share__item {
+                margin-left: 15px;
+            }
+
+            .share__phone {
+                font-size: 14px;
             }
         }
     }

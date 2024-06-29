@@ -97,8 +97,13 @@ const MainFilter = () => {
         <>
             <section className="section" id="hero">
                 <div className="container">
-                    <Hero />
-                    <MainForm onSubmit={handleFormSubmit} formData={formData} setFormData={setFormData} />
+                    <Hero showSearchIcon={deviceType === 'mobile' ? true : false}/>
+                    <MainForm
+                        onSubmit={handleFormSubmit}
+                        formData={formData}
+                        setFormData={setFormData}
+                        showSearchIcon={deviceType === 'mobile' ? true : false}
+                    />
                 </div>
             </section>
 
@@ -111,7 +116,6 @@ const MainFilter = () => {
                         totalPages={totalPages} 
                         onPageChange={handlePageChange}
                         totalCards={totalCards}
-                        deviceType={deviceType}
                         activeTab={formData.type}
                         setActiveTab={setActiveType}
                     />
