@@ -97,7 +97,8 @@ img {
 
 input,
 button,
-select {
+select,
+textarea {
     font-family: inherit;
     font-size: inherit;
 }
@@ -131,24 +132,20 @@ input[type=number] {
 
     @media (max-width: ($desktop-breakpoint - 1)) {
         padding: 0 50px;
-
-        &--nopadding {
-            padding: 0;
-        }
     }
 
     @media (max-width: ($mobile-breakpoint - 1)) {
         padding: 0 20px;
+    }
+
+    &--nopadding {
+        padding: 0;
     }
 }
 
 .section {
     position: relative;
     padding: 80px 0;
-
-    &--nopadding {
-        padding: 0;
-    }
 
     &#main-listing,
     &#partner-locations,
@@ -232,6 +229,7 @@ input[type=number] {
     }
 
     @media (min-width: $containerMaxWidth) {
+
         &#search-listing,
         &#premises-data {
             &::before {
@@ -326,6 +324,10 @@ input[type=number] {
             background-position-y: auto;
         }
     }
+
+    &--nopadding {
+        padding: 0;
+    }
 }
 
 .flex {
@@ -350,6 +352,7 @@ input[type=number] {
 
 .icon {
     max-width: 100%;
+    height: auto;
 }
 
 .iconNext,
@@ -369,6 +372,14 @@ input[type=number] {
     font-size: 14px;
     line-height: 1;
     font-weight: 500;
+
+    // media
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        padding: 12px 20px;
+    }
+
+    // modifiers
 
     &--grey {
         background-color: $grey;
@@ -407,7 +418,6 @@ input[type=number] {
         position: relative;
         padding: 20px;
 
-
         &::before {
             content: '';
             position: absolute;
@@ -423,7 +433,6 @@ input[type=number] {
 
     &--icon {
         position: relative;
-        min-width: 50px;
         width: 50px;
         height: 50px;
         border-radius: 10px;
@@ -440,21 +449,37 @@ input[type=number] {
         }
     }
 
+    &--iconBlack {
+        width: 30px;
+        height: 30px;
+        background-color: $black;
+        border-radius: 50%;
+
+        .icon {
+            fill: $yellow;
+            width: 17px;
+        }
+    }
+
     &--smallIcon {
         width: 30px;
         height: 30px;
     }
 
-    @media (max-width: ($mobile-breakpoint - 1)) {
-        padding: 12px 20px;
+    &--black {
+        background-color: $black;
+        color: $white;
+    }
 
+    // modifiers media
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
         &--large {
             padding: 12px 20px;
             font-size: 14px;
         }
 
         &--icon {
-            min-width: 40px;
             width: 40px;
             height: 40px;
         }
@@ -495,6 +520,7 @@ input[type=number] {
     }
 
     @keyframes pulseGlobal {
+
         0%,
         100% {
             transform: scale(1);
@@ -510,6 +536,7 @@ input[type=number] {
     }
 
     @keyframes pulsePrevGlobal {
+
         0%,
         100% {
             transform: translateX(0);
@@ -521,6 +548,7 @@ input[type=number] {
     }
 
     @keyframes pulseNextGlobal {
+
         0%,
         100% {
             transform: translateX(0);
@@ -532,6 +560,7 @@ input[type=number] {
     }
 
     @keyframes pulsePrevGlobalVertical {
+
         0%,
         100% {
             transform: rotate(90deg) translateX(0);
@@ -543,6 +572,7 @@ input[type=number] {
     }
 
     @keyframes pulseNextGlobalVertical {
+
         0%,
         100% {
             transform: rotate(90deg) translateX(0);
@@ -559,7 +589,7 @@ input[type=number] {
                 animation: pulsePrevGlobalVertical 1.5s infinite;
             }
         }
-    
+
         &--next {
             &:hover {
                 animation: pulseNextGlobalVertical 1.5s infinite;
@@ -573,7 +603,7 @@ input[type=number] {
                 animation: pulsePrevGlobal 1.5s infinite;
             }
         }
-    
+
         &--next {
             &:hover {
                 animation: pulseNextGlobal 1.5s infinite;

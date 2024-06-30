@@ -1,5 +1,9 @@
-.docs {
+.editor {
     max-width: 600px;
+
+    &__block {
+        margin-bottom: 70px;
+    }
 
     &__title {
         font-size: 24px;
@@ -63,6 +67,12 @@
             .button {
                 margin-bottom: 20px;
             }
+        }
+    }
+
+    @media (max-width: ($mobile-breakpoint - 1)) {
+        &__popup {
+            padding: 35px 20px;
         }
     }
 }

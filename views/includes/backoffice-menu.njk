@@ -1,21 +1,32 @@
 <div class="menu">
-    <ul class="menu__list">
-        <li class="menu__item">
-            <a href="/profile" class="menu__link{% if page == 'profile' %} active{% endif %}">Профиль</a>
-        </li>
-        <li class="menu__item">
-            <a href="/documents" class="menu__link{% if page == 'docs' %} active{% endif %}">Документы</a>
-        </li>
-        <li class="menu__item">
-            <a href="/requests" class="menu__link{% if page == 'requests' %} active{% endif %}">Обращения</a>
-        </li>
-    </ul>
-    <a class="menu__bot" href="/bot" target="_blank" rel="nofollow noopener">
-        <div class="menu__bot--icon">
-            {% set includeIcon = 'telegramIcon' %}
-            {% set iconWidth = 50 %}
-            {% include "includes/svg.njk" %}
-        </div>
-        <div class="menu__bot--text">Телеграм-бот</div>
-    </a>
+    {% if user.admin %}
+        <ul class="menu__list">
+            <li class="menu__item">
+                <a href="/editor" class="menu__link{% if page == 'editor' %} active{% endif %}">Редактор сайта</a>
+            </li>
+            <li class="menu__item">
+                <a href="/feedback" class="menu__link{% if page == 'feedback' %} active{% endif %}">Обращения</a>
+            </li>
+        </ul>
+    {% else %}
+        <ul class="menu__list">
+            <li class="menu__item">
+                <a href="/profile" class="menu__link{% if page == 'profile' %} active{% endif %}">Профиль</a>
+            </li>
+            <li class="menu__item">
+                <a href="/documents" class="menu__link{% if page == 'docs' %} active{% endif %}">Документы</a>
+            </li>
+            <li class="menu__item">
+                <a href="/requests" class="menu__link{% if page == 'requests' %} active{% endif %}">Обращения</a>
+            </li>
+        </ul>
+        <a class="menu__bot" href="/bot" target="_blank" rel="nofollow noopener">
+            <div class="menu__bot--icon">
+                {% set includeIcon = 'telegramIcon' %}
+                {% set iconWidth = 50 %}
+                {% include "includes/svg.njk" %}
+            </div>
+            <div class="menu__bot--text">Телеграм-бот</div>
+        </a>
+    {% endif %}
 </div>

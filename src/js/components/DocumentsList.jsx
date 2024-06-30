@@ -57,29 +57,29 @@ const DocumentsList = () => {
     };
 
     return (
-        <div className="docs">
-            <h2 className="docs__title">Договоры</h2>
-            <div className="docs__list">
+        <div className="editor">
+            <h2 className="editor__title">Договоры</h2>
+            <div className="editor__list">
                 {documents.filter(doc => doc.type === 'contract').map(doc => (
-                    <div className="docs__item" key={doc.id}>
-                        <div className="docs__line">
-                            <div className="docs__name">{doc.title}</div>
-                            <div className="docs__buttons">
-                                <button className="docs__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
+                    <div className="editor__item" key={doc.id}>
+                        <div className="editor__line">
+                            <div className="editor__name">{doc.title}</div>
+                            <div className="editor__buttons">
+                                <button className="editor__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
                                 <IconSprite
                                         selector="PrinterIcon"
                                         width="18"
                                         height="18"
                                     />
                                 </button>
-                                <a className="docs__button button button--icon button--smallIcon" href={doc.link} download>
+                                <a className="editor__button button button--icon button--smallIcon" href={doc.link} download>
                                     <IconSprite
                                         selector="DownloadIcon"
                                         width="18"
                                         height="18"
                                     />
                                 </a>
-                                <a className="docs__button button button--icon button--smallIcon" href={doc.link} target='_blank'>
+                                <a className="editor__button button button--icon button--smallIcon" href={doc.link} target='_blank'>
                                     <IconSprite
                                         selector="MagnifierIcon"
                                         width="16"
@@ -90,7 +90,7 @@ const DocumentsList = () => {
                         </div>
 
                         {!doc.signed && (
-                            <div className="docs__line">
+                            <div className="editor__line">
                                 <button className="button animate--pulse" onClick={() => handleSign(doc)}>Подписать</button>
                             </div>
                         )}
@@ -98,28 +98,28 @@ const DocumentsList = () => {
                 ))}
             </div>
 
-            <h2 className="docs__title">Документы</h2>
-            <div className="docs__list">
+            <h2 className="editor__title">Документы</h2>
+            <div className="editor__list">
                 {documents.filter(doc => doc.type !== 'contract').map(doc => (
-                    <div className="docs__item" key={doc.id}>
-                        <div className="docs__line">
-                            <div className="docs__name">{doc.title}</div>
-                            <div className="docs__buttons">
-                                <button className="docs__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
+                    <div className="editor__item" key={doc.id}>
+                        <div className="editor__line">
+                            <div className="editor__name">{doc.title}</div>
+                            <div className="editor__buttons">
+                                <button className="editor__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
                                     <IconSprite
                                         selector="PrinterIcon"
                                         width="18"
                                         height="18"
                                     />
                                 </button>
-                                <a className="docs__button button button--icon button--smallIcon" href={doc.link} download>
+                                <a className="editor__button button button--icon button--smallIcon" href={doc.link} download>
                                     <IconSprite
                                         selector="DownloadIcon"
                                         width="18"
                                         height="18"
                                     />
                                 </a>
-                                <a className="docs__button button button--icon button--smallIcon" href={doc.link} target='_blank'>
+                                <a className="editor__button button button--icon button--smallIcon" href={doc.link} target='_blank'>
                                     <IconSprite
                                         selector="MagnifierIcon"
                                         width="16"
@@ -131,7 +131,7 @@ const DocumentsList = () => {
                     </div>
                 ))}
             </div>
-            <h2 className="docs__title">Запросить документы</h2>
+            <h2 className="editor__title">Запросить документы</h2>
             <form className="form form--admin" onSubmit={handleRequestSubmit}>
                 <div className="form__group">
                     <select className="form__input form__input--black" name="documentType">
@@ -147,8 +147,8 @@ const DocumentsList = () => {
                 </div>
                 <button className="button animate--pulse" type="submit">Запросить</button>
             </form>
-            {successMessage && <div className="docs__message docs__message--green">Запрос успешно отправлен</div>}
-            {failMessage && <div className="docs__message docs__message--red">Ошибка отправки запроса</div>}
+            {successMessage && <div className="editor__message editor__message--green">Запрос успешно отправлен</div>}
+            {failMessage && <div className="editor__message editor__message--red">Ошибка отправки запроса</div>}
             {showSignModal && <SignModal doc={signingDoc} onClose={() => setShowSignModal(false)} />}
         </div>
     );

@@ -14,6 +14,7 @@
 
     &__item {
         margin-bottom: 20px;
+        cursor: pointer;
 
         &:last-child {
             margin-bottom: 0;
@@ -24,12 +25,6 @@
         font-size: 24px;
         font-weight: 700;
         color: $black;
-    }
-
-    &__call {
-        background-color: $black;
-        color: $white;
-        cursor: pointer;
     }
 
     // modifiers
