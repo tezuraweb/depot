@@ -1,5 +1,6 @@
 import React from 'react';
 import IconSprite from './IconSprite';
+import ContactForm from '../components/ContactForm';
 
 const Share = ({ activeCard, modifier }) => {
 
@@ -24,22 +25,30 @@ const Share = ({ activeCard, modifier }) => {
                     return `https://api.whatsapp.com/send?phone=+8618717766242&text=${encodedMessage}`;
                 case 'Viber':
                     return `viber://pa?chatURI=test_bot&text=${encodedMessage}`;
-                case 'Phone':
-                    return `tel:+11111111`;
+                default:
+                    return '#';
+            }
+        } else {
+            switch (platform) {
+                case 'Telegram':
+                    return `https://t.me/langbey`;
+                case 'Whatsapp':
+                    return `https://api.whatsapp.com/send?phone=+8618717766242&text=`;
+                case 'Viber':
+                    return `viber://pa?chatURI=test_bot&text=`;
                 default:
                     return '#';
             }
         }
-        return '#';
     };
 
     const handleSocialClick = (platform) => {
         if (activeCard) {
             const message = `Интересует лот артикул ${activeCard.article}`;
             copyToClipboard(message);
-            const link = generateSocialLink(platform);
-            window.open(link, '_blank');
         }
+        const link = generateSocialLink(platform);
+        window.open(link, '_blank');
     };
 
     return (
@@ -47,13 +56,7 @@ const Share = ({ activeCard, modifier }) => {
             <ul className="share__list">
                 {modifier == 'phoneSmall' && (
                     <li className="share__item">
-                        <a href={generateSocialLink('Phone')} className="share__link" target="_blank" rel="nofollow noopener">
-                            <IconSprite
-                                selector="PhoneIcon"
-                                width="30"
-                                height="30"
-                            />
-                        </a>
+                        <ContactForm modal={true} modifier="share" buttonView="icon" />
                     </li>
                 )}
                 <li className="share__item">
@@ -89,7 +92,7 @@ const Share = ({ activeCard, modifier }) => {
                             <a href="tel:+79120557755" className="share__phone">+7 (912) 055-77-55</a>
                         </li>
                         <li className="share__item">
-                            <a onClick={() => handleSocialClick('Phone')} className="share__call button animate--pulse">Закажите звонок</a>
+                            <ContactForm modal={true} modifier="share" />
                         </li>
                     </>
                 )}

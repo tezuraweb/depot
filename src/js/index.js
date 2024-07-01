@@ -34,21 +34,18 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/DocumentsList'));
         case 'requests':
             return lazy(() => import('./components/RequestsList'));
+        case 'siteEditor':
+            return lazy(() => import('./components/SiteEditor'));
         default:
             return null;
     }
 };
-
-// const deviceType = ViewportProvider();
 
 document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-react-component]');
 
     containers.forEach((container) => {
         const componentName = container.getAttribute('data-react-component');
-        // if (componentName == 'partnerLinks' && (deviceType === 'tablet' || deviceType === 'mobile')) {
-        //     return
-        // }
         const Component = loadComponent(componentName);
 
         if (Component) {

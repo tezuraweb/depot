@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '../includes/Card';
 import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
@@ -14,6 +14,12 @@ const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = 
         { label: 'Торговые', value: 'commercial' },
         { label: 'Участки', value: 'land' }
     ];
+
+    useEffect(() => {
+        if (deviceType !== 'desktop' && deviceType !== 'laptop' && modifier === 'main') {
+            setActiveCardIndex(0);
+        }
+    }, []);
 
     const handleCardClick = (card, index) => {
         if (modifier === 'recommend' || modifier === 'rented') return;

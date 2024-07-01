@@ -38,10 +38,13 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
         }
     };
 
+    const modifierClass = modifier === 'hero' ? 'hero__contactForm' : (modifier === 'share' ? 'share__contactForm' : '');
+    const buttonModifier = modifier === 'share' ? (buttonView === 'icon' ? 'button--icon button--iconBlack' : 'button--black') : (buttonView === 'icon' ? 'button--icon' : 'button--large');
+
     return (
-        <div className={`contact-form ${modifier == 'hero' ? 'hero__contactForm' : ''}`}>
+        <div className={`contact-form ${modifierClass}`}>
             {modal && (
-                <button className={`form__open button ${buttonView == 'icon' ? 'button--icon' : 'button--large'} animate--pulse`} onClick={() => setModalVisible(true)}>{
+                <button className={`form__open button ${buttonModifier} animate--pulse`} onClick={() => setModalVisible(true)}>{
                     buttonView == 'icon' ?
                         <IconSprite
                             selector="PhoneSimple"

@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const cors = require('cors');
 const nunjucks = require('nunjucks');
 const routes = require('./routes/index');
 
@@ -12,6 +13,7 @@ nunjucks.configure('views', {
 
 app.set('view engine', 'njk');
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('static'));

@@ -1,9 +1,24 @@
 const express = require('express');
 const pick = require('lodash/pick');
-
-const Premises = require('../models/Premises');
+const axios = require('axios');
+const multer = require('multer');
+const FormData = require('form-data');
 
 const router = express.Router();
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+    cb(null, file.mimetype.match(/^image\//));
+};
+
+const upload = multer({
+    storage: storage,
+    fileFilter,
+    limits: {
+        fileSize: 10485760, // 10 MB в байтах
+    },
+});
 
 const manager = {
     id: 1,
@@ -644,7 +659,7 @@ router
 router
     .route('/partners')
     .post(async (req, res) => {
-        const data = pick(req.body, 'startIdx', 'endIdx',);
+        const data = pick(req.body, 'startIdx', 'endIdx');
         const startIdx = parseInt(data.startIdx);
         const endIdx = parseInt(data.endIdx);
 
@@ -704,6 +719,18 @@ router
     });
 
 router
+    .route('/manager/update')
+    .post(async (req, res) => {
+        try {
+            const data = pick(req.body, 'name', 'text', 'photo');
+            console.log(data);
+            res.status(200);
+        } catch (error) {
+            res.status(404).json({ error: 'Manager not updated' });
+        }
+    });
+
+router
     .route('/tenants')
     .get(async (req, res) => {
         if (depotTenants) {
@@ -734,17 +761,30 @@ router
     });
 
 router
-    .route('/premises/all')
-    .get(async (req, res) => {
+    .route('/upload')
+    .post(upload.single('file'), async (req, res) => {
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ message: 'Файл не найден' });
+        }
         try {
-            const data = await Premises.getPremises();
-            if (data) {
-                res.json(data);
-            } else {
-                res.status(404).json({ error: 'Premises not found' });
-            }
+            const formData = new FormData();
+            formData.append('file', file.buffer, file.originalname);
+
+            const response = await axios.post('https://api.cloudflare.com/client/v4/accounts/888/images/v1', formData, {
+                headers: {
+                    'Authorization': 'Bearer 888 ',
+                    ...formData.getHeaders()
+                }
+            });
+
+            console.log(response.data);
+
+            res.json(response.data);
         } catch (error) {
-            res.status(404).json({ error: 'Premises not found' });
+            console.log('Error uploading photo:', error);
+            res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
         }
     });
 

@@ -132,6 +132,7 @@
     }
 
     @media (max-width: ($laptop-breakpoint - 1)) {
+
         &__navMobile,
         &__burger--icon {
             display: block;
@@ -166,6 +167,14 @@
                 visibility: visible;
             }
         }
+
+        // modifiers
+
+        &--backoffice {
+            .header__contacts {
+                margin-right: auto;
+            }
+        }
     }
 
     @media (max-width: ($tablet-breakpoint - 1)) {
@@ -192,6 +201,18 @@
             &--desktop {
                 display: none;
             }
+
+            &--backoffice {
+                padding: 15px 0;
+            }
+        }
+
+        // modifiers
+
+        &--backoffice {
+            .header__contacts {
+                display: none;
+            }
         }
     }
 
@@ -204,8 +225,16 @@
             display: block;
         }
 
-        &__contacts, &__auth {
+        &__contacts {
             padding: 15px 30px;
+        }
+
+        &__auth {
+            padding: 15px 30px;
+
+            &--backoffice {
+                padding: 15px 0;
+            }
         }
 
         &__burger {

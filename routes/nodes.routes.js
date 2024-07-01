@@ -73,4 +73,16 @@ router
         res.render('nodes/requests', { user: { name: 'Иван Федорович Крузенштерн'}, page: 'requests' });
     });
 
+router
+    .route('/editor')
+    .get((req, res) => {
+        res.render('nodes/editor', { user: { name: 'Иван Федорович Крузенштерн', admin: true }, page: 'editor' });
+    });
+
+router
+    .route('/feedback')
+    .get((req, res) => {
+        res.render('nodes/feedback', { user: { name: 'Иван Федорович Крузенштерн', admin: true }, page: 'feedback' });
+    });
+
 module.exports = router;
