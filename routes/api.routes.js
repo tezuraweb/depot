@@ -790,11 +790,6 @@ router
     });
 
 router
-    .route('/test')
-    .get(dbController.getVersion);
-    // .get(async (req, res, next) => dbController.getVersion(req, res, next));
-
-router
     .route('/test/:id')
     .get(dbController.getTenantById);
 

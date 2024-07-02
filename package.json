@@ -29,6 +29,7 @@
     "react-redux": "^9.1.0",
     "redux": "^5.0.1",
     "sqlstring": "^2.3.3",
+    "telegraf": "^4.16.3",
     "ymaps": "^0.2.1"
   },
   "devDependencies": {

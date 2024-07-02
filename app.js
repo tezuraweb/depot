@@ -1,9 +1,10 @@
-require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const nunjucks = require('nunjucks');
+const config = require('./config/appConfig');
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
+const bot = require('./bot/index');
 
 const app = new express();
 
@@ -21,4 +22,6 @@ app.use(express.static('static'));
 app.use('/', routes);
 app.use(errorHandler);
 
-app.listen(process.env.PORT);
+app.listen(config.port, () => {
+    console.log(`Server is running on port ${config.port}`);
+});
