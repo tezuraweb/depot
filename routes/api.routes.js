@@ -3,6 +3,7 @@ const pick = require('lodash/pick');
 const axios = require('axios');
 const multer = require('multer');
 const FormData = require('form-data');
+const dbController = require('../controllers/dbController');
 
 const router = express.Router();
 
@@ -787,5 +788,18 @@ router
             res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
         }
     });
+
+router
+    .route('/test')
+    .get(dbController.getVersion);
+    // .get(async (req, res, next) => dbController.getVersion(req, res, next));
+
+router
+    .route('/test/:id')
+    .get(dbController.getTenantById);
+
+router
+    .route('/upd/:id')
+    .get(dbController.alterTenantById);
 
 module.exports = router;
