@@ -29,6 +29,8 @@ body {
     min-width: $containerMinWidth;
     overflow-x: hidden;
     overflow-anchor: none;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
 
     &.no-scroll {
         overflow: hidden;
@@ -159,7 +161,8 @@ input[type=number] {
     &#login,
     &#profile,
     &#docs,
-    &#requests {
+    &#requests,
+    &#report {
         background-color: $white;
     }
 
@@ -621,5 +624,15 @@ input[type=number] {
         &:disabled {
             animation: none;
         }
+    }
+}
+
+@media print {
+    body {
+        background-color: $white;
+    }
+
+    .section#premises-listing {
+        display: none;
     }
 }

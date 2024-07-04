@@ -576,6 +576,54 @@ const rented = [
     }
 ];
 
+const tickets = [
+    {
+        "id": 1,
+        "status": "Новое",
+        "tgId": "privet.qq",
+        "inn": "0000000000",
+        "liter": "Литер А",
+        "place": "12",
+        "date": "1 июля 2024"
+    },
+    {
+        "id": 2,
+        "status": "В работе",
+        "tgId": "example.id",
+        "inn": "1234567890",
+        "liter": "Литер Б",
+        "place": "34",
+        "date": "2 июля 2024"
+    },
+    {
+        "id": 3,
+        "status": "Завершено",
+        "tgId": "hello.world",
+        "inn": "0987654321",
+        "liter": "Литер В",
+        "place": "56",
+        "date": "3 июля 2024"
+    },
+    {
+        "id": 4,
+        "status": "Новое",
+        "tgId": "user.test",
+        "inn": "1111111111",
+        "liter": "Литер Г",
+        "place": "78",
+        "date": "4 июля 2024"
+    },
+    {
+        "id": 5,
+        "status": "В работе",
+        "tgId": "sample.id",
+        "inn": "2222222222",
+        "liter": "Литер Д",
+        "place": "90",
+        "date": "5 июля 2024"
+    }
+]
+
 const docs = [
     {
         id: 1,
@@ -690,10 +738,20 @@ router
 router
     .route('/rented')
     .get(async (req, res) => {
-        if (cards) {
+        if (rented) {
             res.json(rented);
         } else {
             res.status(404).json({ error: 'Premises not found' });
+        }
+    });
+
+router
+    .route('/tickets')
+    .get(async (req, res) => {
+        if (tickets) {
+            res.json(tickets);
+        } else {
+            res.status(404).json({ error: 'Tickets not found' });
         }
     });
 
@@ -762,6 +820,16 @@ router
     });
 
 router
+    .route('/report')
+    .get(dbController.getReportRooms);
+
+router
+    .route('/report/print')
+    .get((req, res) => {
+        res.render('nodes/report-print', { user: { name: 'Иван Федорович Крузенштерн', admin: true } });
+    });
+
+router
     .route('/upload')
     .post(upload.single('file'), async (req, res) => {
         const file = req.file;
@@ -788,6 +856,10 @@ router
             res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
         }
     });
+
+router
+    .route('/testrooms')
+    .get(dbController.getReportRooms);
 
 router
     .route('/test/:id')

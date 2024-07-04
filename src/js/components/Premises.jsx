@@ -109,7 +109,7 @@ const Premises = () => {
         <>
             <section className="section" id="premises-data">
                 <div className="premises container">
-                    <div className="premises__line">
+                    <div className="premises__links">
                         <a className="premises__back" href="/search">{`Назад ${showFullLink ? 'к подбору помещений' : ''}`}</a>
                         <div className="premises__buttons">
                             {showPrinter && (
@@ -247,8 +247,8 @@ const Premises = () => {
                             </>
                         )}
 
-                        <h2 className="premises__title">Общая информация</h2>
                         <div className="premises__info">
+                            <h2 className="premises__title">Общая информация</h2>
                             <div className="premises__text">{premisesData.text}</div>
                             <div className="premises__points">
                                 <div className="premises__point">

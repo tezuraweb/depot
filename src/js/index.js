@@ -36,6 +36,10 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/RequestsList'));
         case 'siteEditor':
             return lazy(() => import('./components/SiteEditor'));
+        case 'webReport':
+            return lazy(() => import('./components/Report'));
+        case 'tickets':
+            return lazy(() => import('./components/Tickets'));
         default:
             return null;
     }
