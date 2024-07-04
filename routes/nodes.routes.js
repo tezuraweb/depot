@@ -85,4 +85,10 @@ router
         res.render('nodes/feedback', { user: { name: 'Иван Федорович Крузенштерн', admin: true }, page: 'feedback' });
     });
 
+router
+    .route('/report')
+    .get((req, res) => {
+        res.render('nodes/report', { user: { name: 'Иван Федорович Крузенштерн', admin: true }, page: 'report' });
+    });
+
 module.exports = router;

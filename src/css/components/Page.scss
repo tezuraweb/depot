@@ -1,5 +1,7 @@
 .page {
-    &__header, &__footer {
+
+    &__header,
+    &__footer {
         background-color: $black;
     }
 
@@ -79,6 +81,14 @@
             &--content {
                 padding: 35px 20px 100px;
             }
+        }
+    }
+
+    @media print {
+        &__header,
+        &__footer,
+        &__backoffice--first {
+            display: none;
         }
     }
 }

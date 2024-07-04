@@ -22,6 +22,12 @@ app.use(express.static('static'));
 app.use('/', routes);
 app.use(errorHandler);
 
+try {
+    bot.launch();
+} catch (error) {
+    console.log(`Error occured while launching bot: ${error}`)
+}
+
 app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
 });
