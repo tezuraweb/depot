@@ -39,11 +39,43 @@ async function getTicketById(id) {
     }
 }
 
+async function getTicketByUserTg(id, offset, limit) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `
+        SELECT * 
+        FROM (
+            SELECT *, 
+                row_number() OVER (PARTITION BY ticket_number ORDER BY date DESC) AS rn
+            FROM ticket 
+            WHERE tg_id = ${sanitizedId}
+        ) 
+        WHERE rn = 1
+        ORDER BY date DESC
+        LIMIT ${limit} OFFSET ${offset}
+        FORMAT JSON
+`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function insertTicket(data) {
     if (data.isNew) {
         data.ticket_number = generateUniqueTicketNumber();
-        data.status = 'Новое',
-        data.date =  new Date(),
+        data.status = 'Новое';
+        data.date = new Date().toISOString().slice(0, 19).replace('T', ' ');
         delete data.isNew;
     }
 
@@ -71,4 +103,5 @@ async function insertTicket(data) {
 module.exports = {
     getTicketById,
     insertTicket,
+    getTicketByUserTg,
 };

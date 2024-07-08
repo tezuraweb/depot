@@ -6,11 +6,7 @@ const createAuthScene = () => {
 
     authScene.enter(async (ctx) => {
         try {
-            // const user = await db.getUser(ctx.from.id);
-            const user = {
-                name: 'иван федорыч крузенштерн',
-                id: 1
-            };
+            const user = await db.getUserBot(ctx.from.username);
 
             if (user) {
                 ctx.reply("Добро пожаловать, " + user.name + "!");

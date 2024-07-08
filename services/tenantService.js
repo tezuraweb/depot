@@ -35,6 +35,26 @@ async function getTenantById(id) {
     }
 }
 
+async function getTenantByTgId(id) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `SELECT id, name, tg_id FROM tenants WHERE tg_id = ${sanitizedId} LIMIT 1 FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function insertTenant(data) {
     const keys = Object.keys(data).map(key => sqlstring.escapeId(key)).join(', ');
     const values = Object.keys(data).map(key => sqlstring.escape(data[key])).join(', ');
@@ -87,5 +107,6 @@ async function alterTenantById(id, newData) {
 
 module.exports = {
     getTenantById,
+    getTenantByTgId,
     alterTenantById,
 };

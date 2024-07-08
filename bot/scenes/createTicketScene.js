@@ -14,7 +14,6 @@ const createTicketScene = () => {
     });
 
     createTicketScene.hears("Назад", (ctx) => {
-        ctx.session.ticket = null;
         return ctx.scene.enter('MAIN_MENU_SCENE');
     });
 
@@ -66,6 +65,10 @@ const createTicketScene = () => {
             console.log(e.message);
             return ctx.scene.enter('MAIN_MENU_SCENE');
         }
+    });
+
+    createTicketScene.leave(async (ctx) => {
+        ctx.session.ticket = null;
     });
 
     return createTicketScene;
