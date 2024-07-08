@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const SiteEditor = () => {
-    // State for Manager Block
     const [managerData, setManagerData] = useState({
         name: '',
         text: '',
@@ -11,7 +10,6 @@ const SiteEditor = () => {
     const [managerSuccessMessage, setManagerSuccessMessage] = useState('');
     const [managerFailMessage, setManagerFailMessage] = useState('');
 
-    // State for Tenants Block
     const [tenants, setTenants] = useState([]);
     const [selectedTenant, setSelectedTenant] = useState('');
     const [tenantData, setTenantData] = useState({
@@ -24,7 +22,6 @@ const SiteEditor = () => {
     const [tenantSuccessMessage, setTenantSuccessMessage] = useState('');
     const [tenantFailMessage, setTenantFailMessage] = useState('');
 
-    // Fetch initial data
     useEffect(() => {
         fetchManager();
         fetchTenants();
@@ -42,13 +39,11 @@ const SiteEditor = () => {
             .catch(error => console.error('Error fetching tenants list:', error));
     };
 
-    // Handle input changes for Manager Block
     const handleManagerChange = (e) => {
         const { name, value } = e.target;
         setManagerData({ ...managerData, [name]: value });
     };
 
-    // Handle input changes for Tenant Block
     const handleTenantChange = (e) => {
         const { name, value } = e.target;
         setTenantData({ ...tenantData, [name]: value });
@@ -65,13 +60,12 @@ const SiteEditor = () => {
         }
     };
 
-    // Handle Manager Form Submit
     const handleManagerSubmit = async (e) => {
         e.preventDefault();
         try {
             if (managerData.photoFile) {
-                console.log('here', managerData.photoFile);
                 const photoUrl = await uploadPhoto(managerData.photoFile);
+                console.log('here', photoUrl);
                 setManagerData(prevData => ({ ...prevData, photo: photoUrl }));
             }
             await axios.post('/api/manager/update', managerData);
@@ -81,7 +75,6 @@ const SiteEditor = () => {
         }
     };
 
-    // Handle Tenant Form Submit
     const handleTenantSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -101,7 +94,6 @@ const SiteEditor = () => {
         }
     };
 
-    // Handle Tenant Delete
     const handleTenantDelete = async () => {
         if (selectedTenant === '') return;
         try {
@@ -109,7 +101,6 @@ const SiteEditor = () => {
             showMessage('Данные успешно удалены', setTenantSuccessMessage);
             setTenantData({ id: '', title: '', link: '', text: '', photo: '' });
             setSelectedTenant('');
-            // Refetch tenants list
             fetchTenants();
         } catch (error) {
             showMessage('Ошибка при удалении данных', setTenantFailMessage);
@@ -129,6 +120,9 @@ const SiteEditor = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log(response.data)
+            console.log(response.data.result)
+            console.log(response.data.result.variants)
             return response.data.result.variants[0];
         } catch (error) {
             console.error('Ошибка при загрузке фотографии:', error);
@@ -139,7 +133,6 @@ const SiteEditor = () => {
     const handlePhotoChange = (e, setData) => {
         const file = e.target.files[0];
         if (!file) return;
-        console.log('File selected:', file); // Отладочная информация
         setData(prevData => ({ ...prevData, photoFile: file }));
     };
 

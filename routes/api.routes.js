@@ -5,6 +5,7 @@ const multer = require('multer');
 const FormData = require('form-data');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const cdnConfig = require('../config/cdnConfig');
 const dbController = require('../controllers/dbController');
 
 const router = express.Router();
@@ -19,7 +20,7 @@ const upload = multer({
     storage: storage,
     fileFilter,
     limits: {
-        fileSize: 10485760, // 10 MB в байтах
+        fileSize: 10485760,
     },
 });
 
@@ -831,47 +832,47 @@ router
         res.render('nodes/report-print', { user: { name: 'Иван Федорович Крузенштерн', admin: true } });
     });
 
-    router
+router
     .route('/upload')
     .post(upload.single('file'), async (req, res) => {
-    const file = req.file;
+        const file = req.file;
 
-    if (!file) {
-        return res.status(400).json({ message: 'Файл не найден' });
-    }
+        if (!file) {
+            return res.status(400).json({ message: 'Файл не найден' });
+        }
 
-    try {
-        const filename = crypto.randomBytes(10).toString('hex').substr(0, 10);
+        try {
+            const filename = crypto.randomBytes(10).toString('hex').substr(0, 10);
 
-        const webpBuffer = await sharp(file.buffer)
-            .webp()
-            .toBuffer();
+            const webpBuffer = await sharp(file.buffer)
+                .webp()
+                .toBuffer();
 
-        const formData = new FormData();
-        formData.append('file', webpBuffer, {
-            filename: `${filename}.webp`,
-            contentType: 'image/webp'
-        });
+            const formData = new FormData();
+            formData.append('file', webpBuffer, {
+                filename: `${filename}.webp`,
+                contentType: 'image/webp'
+            });
 
-        const headers = {
-            'Authorization': `Bearer 888`,
-            ...formData.getHeaders()
-        };
+            const headers = {
+                'Authorization': `Bearer ${cdnConfig.token}`,
+                ...formData.getHeaders()
+            };
 
-        const response = await axios.post(
-            'https://api.cloudflare.com/client/v4/accounts/725cb9e9c30401606bcdcffa8b4ce08c/images/v1',
-            formData,
-            { headers }
-        );
+            const response = await axios.post(
+                `https://api.cloudflare.com/client/v4/accounts/${cdnConfig.acc}/images/v1`,
+                formData,
+                { headers }
+            );
 
-        res.json(response.data);
-    }
-    
-    catch (error) {
-        console.log('Error uploading photo:', error.response ? error.response.data : error.message);
-        res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
-    }
-});
+            res.json(response.data);
+        }
+
+        catch (error) {
+            console.log('Error uploading photo:', error.response ? error.response.data : error.message);
+            res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
+        }
+    });
 
 router
     .route('/testrooms')

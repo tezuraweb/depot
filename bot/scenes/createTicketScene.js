@@ -7,7 +7,9 @@ const createTicketScene = () => {
     createTicketScene.enter((ctx) => {
         ctx.session.ticket = {
             text: '',
-            attachments: []
+            files: [],
+            photos: [],
+            messages: []
         };
         ctx.reply("Опишите ваше обращение. Вы также можете прикрепить файлы. Когда закончите, нажмите 'Подтвердить'.", 
             Markup.keyboard(['Назад']).oneTime().resize());
@@ -20,10 +22,11 @@ const createTicketScene = () => {
     createTicketScene.hears("Подтвердить", async (ctx) => {
         try {
             const ticket = await db.insertTicketBot({
-                tg_id: ctx.from.id,
+                inquirer: ctx.from.id,
                 text: ctx.session.ticket.text,
-                files: ctx.session.ticket.attachments,
-                message_id: ctx.message.message_id,
+                files: ctx.session.ticket.files,
+                photos: ctx.session.ticket.photos,
+                messages: ctx.session.ticket.messages,
                 isNew: true,
             });
 
@@ -48,16 +51,15 @@ const createTicketScene = () => {
             }
 
             if (ctx.message.photo) {
-                for (const photo of ctx.message.photo) {
-                    const fileLink = await ctx.telegram.getFileLink(photo.file_id);
-                    ctx.session.ticket.attachments.push(fileLink.href);
-                }
+                const photo = ctx.message.photo[0];
+                ctx.session.ticket.photos.push(photo.file_id);
             }
 
             if (ctx.message.document) {
-                const fileLink = await ctx.telegram.getFileLink(ctx.message.document.file_id);
-                ctx.session.ticket.attachments.push(fileLink.href);
+                ctx.session.ticket.files.push(ctx.message.document.file_id);
             }
+
+            ctx.session.ticket.messages.push(ctx.message.message_id);
 
             ctx.reply("Часть обращения сохранена. Вы можете продолжать добавлять информацию или нажать 'Подтвердить'.", Markup.keyboard(['Подтвердить', 'Назад']).oneTime().resize());
         } catch (e) {

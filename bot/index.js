@@ -2,8 +2,10 @@ const { Scenes, Telegraf, session } = require('telegraf');
 const config = require('../config/botConfig');
 const createAuthScene = require('./scenes/authScene');
 const createMainMenuScene = require('./scenes/mainMenuScene');
+const createAdminMenuScene = require('./scenes/adminMenuScene');
 const createTicketScene = require('./scenes/createTicketScene');
 const createTicketHistoryScene = require('./scenes/ticketHistoryScene');
+const createTicketHandlingScene = require('./scenes/ticketHandlingScene');
 const createReportScene = require('./scenes/createReportScene');
 
 class Bot {
@@ -22,8 +24,10 @@ class Bot {
             const stage = new Scenes.Stage([
                 createAuthScene(),
                 createMainMenuScene(),
+                createAdminMenuScene(),
                 createTicketScene(),
                 createTicketHistoryScene(),
+                createTicketHandlingScene(),
                 createReportScene(),
             ]);
 

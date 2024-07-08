@@ -29,11 +29,11 @@ const createReportScene = () => {
             await ctx.replyWithDocument({ source: pdfPath });
 
             fs.unlinkSync(pdfPath);
-            return ctx.scene.enter('MAIN_MENU_SCENE');
+            return ctx.scene.enter('ADMIN_MENU_SCENE');
         } catch (error) {
             console.error(error);
             ctx.reply("Произогла ошибка генерации отчета, попробуйте позже.");
-            return ctx.scene.enter('MAIN_MENU_SCENE');
+            return ctx.scene.enter('ADMIN_MENU_SCENE');
         }
     };
 

@@ -7,10 +7,20 @@ const createAuthScene = () => {
     authScene.enter(async (ctx) => {
         try {
             const user = await db.getUserBot(ctx.from.username);
+            // ctx.session.userData = user;
 
             if (user) {
-                ctx.reply("Добро пожаловать, " + user.name + "!");
-                return ctx.scene.enter('MAIN_MENU_SCENE');
+                if (user.status != 'admin' && user.status != 'tenant') {
+                    ctx.reply("Вам отказано в доступе!");
+                } else {
+                    ctx.reply("Добро пожаловать, " + user.name + "!");
+
+                    if (user.status == 'admin') {
+                        return ctx.scene.enter('ADMIN_MENU_SCENE');
+                    } else {
+                        return ctx.scene.enter('MAIN_MENU_SCENE');
+                    }
+                }
             } else {
                 ctx.reply("Неверный идентификатор пользователя!");
             }

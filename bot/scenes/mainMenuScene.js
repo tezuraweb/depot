@@ -6,7 +6,7 @@ const createMainMenuScene = () => {
     menuScene.enter((ctx) => {
         ctx.reply(
             "Выберите пункт меню:",
-            Markup.keyboard(["Написать обращение", "Мои обращения", "Создать отчет"]).oneTime().resize(),
+            Markup.keyboard(["Написать обращение", "Мои обращения"]).oneTime().resize(),
         );
     });
 
@@ -16,10 +16,6 @@ const createMainMenuScene = () => {
 
     menuScene.hears("Мои обращения", (ctx) => {
         return ctx.scene.enter('TICKET_HISTORY_SCENE');
-    });
-
-    menuScene.hears("Создать отчет", (ctx) => {
-        return ctx.scene.enter('CREATE_REPORT_SCENE');
     });
 
     return menuScene;

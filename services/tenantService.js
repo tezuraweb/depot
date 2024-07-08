@@ -37,7 +37,7 @@ async function getTenantById(id) {
 
 async function getTenantByTgId(id) {
     const sanitizedId = sqlstring.escape(id);
-    const query = `SELECT id, name, tg_id FROM tenants WHERE tg_id = ${sanitizedId} LIMIT 1 FORMAT JSON`;
+    const query = `SELECT id, name, tg_id, status FROM tenants WHERE tg_id = ${sanitizedId} LIMIT 1 FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -88,22 +88,22 @@ async function deleteTenantById(id) {
     }
 }
 
-async function alterTenantById(id, newData) {
-    try {
-        const currentTenant = await getTenantById(id);
-        if (!currentTenant || !currentTenant.data) {
-            throw new Error('Tenant not found');
+async function alterTenantById(id, data) {
+        const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
+        const query = `ALTER TABLE users UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
+        console.log(query);
+        const queryParams = querystring.stringify({
+            'database': config.database,
+            'query': query,
+        });
+    
+        try {
+            const response = await axios.post(`/?${queryParams}`, null, dbOptions);
+            return response.data;
+        } catch (error) {
+            throw error;
         }
-
-        const updatedTenant = { ...currentTenant.data[0], ...newData };
-        await deleteTenantById(id);
-        await insertTenant(updatedTenant);
-
-        return updatedTenant;
-    } catch (error) {
-        throw error;
     }
-}
 
 module.exports = {
     getTenantById,

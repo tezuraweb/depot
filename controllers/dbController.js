@@ -16,7 +16,8 @@ async function alterTenantById(req, res, next) {
     try {
         const userId = req.params.id;
         const name = req.query.name;
-        const user = await tenantService.alterTenantById(userId, { name });
+        const status = req.query.status;
+        const user = await tenantService.alterTenantById(userId, { name, status });
         res.json(user.data);
     } catch (error) {
         next(error);
@@ -61,9 +62,27 @@ async function getTicketByIdBot(id) {
     }
 }
 
+async function getTicketByNumberBot(number) {
+    try {
+        const ticket = await ticketService.getTicketByNumber(number);
+        return ticket.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function getTicketsByUserBot(id, offset, limit) {
     try {
         const ticket = await ticketService.getTicketByUserTg(id, offset, limit);
+        return ticket.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTicketsByStatusBot(status, offset, limit) {
+    try {
+        const ticket = await ticketService.getTicketByStatusTg(status, offset, limit);
         return ticket.data;
     } catch (error) {
         console.log(error);
@@ -86,6 +105,8 @@ module.exports = {
     getReportRooms,
     getUserBot,
     getTicketByIdBot,
+    getTicketByNumberBot,
     insertTicketBot,
     getTicketsByUserBot,
+    getTicketsByStatusBot,
 };
