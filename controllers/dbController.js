@@ -41,9 +41,29 @@ async function getReportRooms(req, res, next) {
     }
 }
 
+// Bot
+
+async function getUserBot(id) {
+    try {
+        const user = await tenantService.getTenantByTgId(id);
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function getTicketByIdBot(id) {
     try {
         const ticket = await ticketService.getTicketById(id);
+        return ticket.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTicketsByUserBot(id, offset, limit) {
+    try {
+        const ticket = await ticketService.getTicketByUserTg(id, offset, limit);
         return ticket.data;
     } catch (error) {
         console.log(error);
@@ -64,6 +84,8 @@ module.exports = {
     alterTenantById,
     getAllRooms,
     getReportRooms,
+    getUserBot,
     getTicketByIdBot,
     insertTicketBot,
+    getTicketsByUserBot,
 };
