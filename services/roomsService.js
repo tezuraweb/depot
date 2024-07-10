@@ -34,6 +34,103 @@ async function getAll() {
     }
 }
 
+async function getTypes() {
+    const query = `SELECT DISTINCT type FROM rooms FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getIdLiter() {
+    const query = `SELECT DISTINCT id_liter, liter FROM rooms FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getPage(data) {
+    const conditions = [];
+
+    if (data.type) conditions.push(`type = ${sqlstring.escape(data.type)}`);
+    if (data.id_liter) conditions.push(`id_liter = ${sqlstring.escape(data.id_liter)}`);
+    if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
+    if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
+    if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
+    if (data.areaFrom !== undefined && data.areaTo !== undefined) {
+        conditions.push(`area BETWEEN ${sqlstring.escape(data.areaFrom)} AND ${sqlstring.escape(data.areaTo)}`);
+    } else if (data.areaFrom !== undefined) {
+        conditions.push(`area >= ${sqlstring.escape(data.areaFrom)}`);
+    } else if (data.areaTo !== undefined) {
+        conditions.push(`area <= ${sqlstring.escape(data.areaTo)}`);
+    }
+
+    if (data.priceType === 'total') {
+        if (data.priceFrom !== undefined && data.priceTo !== undefined) {
+            conditions.push(`cost * area BETWEEN ${sqlstring.escape(data.priceFrom)} AND ${sqlstring.escape(data.priceTo)}`);
+        } else if (data.priceFrom !== undefined) {
+            conditions.push(`cost * area >= ${sqlstring.escape(data.priceFrom)}`);
+        } else if (data.priceTo !== undefined) {
+            conditions.push(`cost * area <= ${sqlstring.escape(data.priceTo)}`);
+        }
+    } else {
+        if (data.priceFrom !== undefined && data.priceTo !== undefined) {
+            conditions.push(`cost BETWEEN ${sqlstring.escape(data.priceFrom)} AND ${sqlstring.escape(data.priceTo)}`);
+        } else if (data.priceFrom !== undefined) {
+            conditions.push(`cost >= ${sqlstring.escape(data.priceFrom)}`);
+        } else if (data.priceTo !== undefined) {
+            conditions.push(`cost <= ${sqlstring.escape(data.priceTo)}`);
+        }
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const query = `
+        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion
+        FROM rooms 
+        ${whereClause} 
+        ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
+        LIMIT ${data.limit}
+        OFFSET ${data.offset}
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getReport() {
     const query = `
         SELECT 
@@ -45,7 +142,64 @@ async function getReport() {
         FROM 
             rooms
         GROUP BY 
-            type FORMAT JSON`;
+            type
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getRoomById(id) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `
+        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, text, promotion
+        FROM rooms
+        WHERE id = ${sanitizedId}
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getRecommended(id) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `
+        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion
+        FROM rooms
+        JOIN (
+            SELECT type, cost, area
+            FROM rooms
+            WHERE id = ${sanitizedId}
+        ) AS subquery
+        ON rooms.type = subquery.type
+        WHERE rooms.id != ${sanitizedId}
+        ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
+        LIMIT 3
+        FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -66,4 +220,9 @@ async function getReport() {
 module.exports = {
     getAll,
     getReport,
+    getPage,
+    getTypes,
+    getIdLiter,
+    getRoomById,
+    getRecommended,
 };

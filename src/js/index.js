@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ymaps from 'ymaps';
 import LoadingSpinner from './includes/LoadingSpinner';
 import { ViewportProvider } from './utils/ViewportContext';
@@ -53,14 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const Component = loadComponent(componentName);
 
         if (Component) {
-            ReactDOM.render(
-                <ViewportProvider>
-                    <Suspense fallback={<LoadingSpinner />}>
-                        <Component {...(componentName === 'contactFormModal' && { modal: true })} />
-                    </Suspense>
-                </ViewportProvider>,
-                container
-            );
+            if (componentName == 'premises') {
+                ReactDOM.render(
+                    <ViewportProvider>
+                        <Router>
+                            <Suspense fallback={<LoadingSpinner />}>
+                                <Routes>
+                                    <Route path="/premises/:id" element={<Component />} />
+                                </Routes>
+                            </Suspense>
+                        </Router>
+                    </ViewportProvider>,
+                    container
+                );
+            } else {
+                ReactDOM.render(
+                    <ViewportProvider>
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <Component {...(componentName === 'contactFormModal' && { modal: true })} />
+                        </Suspense>
+                    </ViewportProvider>,
+                    container
+                );
+            }
+
         }
     });
 });

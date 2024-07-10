@@ -669,33 +669,34 @@ const requests = [
     }
 ];
 
-
-router
-    .route('/search/count')
-    .get(async (req, res) => {
-        if (cards) {
-            res.json({ total: cards.length });
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
-        }
-    });
-
 router
     .route('/search')
-    .post(async (req, res) => {
-        const data = pick(req.body, 'startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'storey', 'rooms', 'ceilingHeight', 'promotions');
-        const startIdx = parseInt(data.startIdx);
-        const endIdx = parseInt(data.endIdx);
+    .post(dbController.getRoomsSearch);
 
-        if (cards && !isNaN(startIdx) && !isNaN(endIdx)) {
-            if (startIdx < cards.length) {
-                res.json(cards.slice(startIdx, endIdx));
-            } else {
-                res.json([]);
-            }
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
-        }
+router
+    .route('/search/types')
+    .get(dbController.getRoomsTypes);
+
+router
+    .route('/search/buildings')
+    .get(dbController.getRoomsLiters);
+
+router
+    .route('/report')
+    .get(dbController.getRoomsReport);
+
+router
+    .route('/premises/:id')
+    .get(dbController.getRoomsById);
+
+router
+    .route('/recommendations/:id')
+    .get(dbController.getRoomsRecommended);
+
+router
+    .route('/report/print')
+    .get((req, res) => {
+        res.render('nodes/report-print', { user: { name: 'Иван Федорович Крузенштерн', admin: true } });
     });
 
 router
@@ -727,18 +728,6 @@ router
     });
 
 router
-    .route('/premises/:id')
-    .get(async (req, res) => {
-        const id = req.params.id;
-        const premisesData = premises[id];
-        if (premisesData) {
-            res.json(premisesData);
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
-        }
-    });
-
-router
     .route('/rented')
     .get(async (req, res) => {
         if (rented) {
@@ -755,18 +744,6 @@ router
             res.json(tickets);
         } else {
             res.status(404).json({ error: 'Tickets not found' });
-        }
-    });
-
-router
-    .route('/recommendations/:id')
-    .get(async (req, res) => {
-        const id = req.params.id;
-        const premisesData = recs[id - 1];
-        if (premisesData) {
-            res.json(premisesData);
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
         }
     });
 
@@ -823,16 +800,6 @@ router
     });
 
 router
-    .route('/report')
-    .get(dbController.getReportRooms);
-
-router
-    .route('/report/print')
-    .get((req, res) => {
-        res.render('nodes/report-print', { user: { name: 'Иван Федорович Крузенштерн', admin: true } });
-    });
-
-router
     .route('/upload')
     .post(upload.single('file'), async (req, res) => {
         const file = req.file;
@@ -876,7 +843,7 @@ router
 
 router
     .route('/testrooms')
-    .get(dbController.getReportRooms);
+    .get(dbController.getRoomsReport);
 
 router
     .route('/test/:id')

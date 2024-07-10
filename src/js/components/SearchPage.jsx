@@ -8,9 +8,12 @@ import { useViewportContext } from '../utils/ViewportContext';
 const SearchPage = () => {
     const deviceType = useViewportContext();
     const [cards, setCards] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [buildings, setBuildings] = useState([]);
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [noResults, setNoResults] = useState(false);
     const [formData, setFormData] = useState({
         type: '',
         building: '',
@@ -26,19 +29,28 @@ const SearchPage = () => {
 
     const cardsPerPage = deviceType === 'desktop' ? 6 : deviceType === 'laptop' ? 4 : 2;
 
-    useEffect(() => {
-        fetchTotalCards();
+    useEffect(async () => {
+        try {
+            const response = await axios.get('/api/search/types');
+            setTypes(response.data.map(item => item.type));
+        } catch (error) {
+            console.error('Error fetching types:', error);
+        }
+
+        try {
+            const response = await axios.get('/api/search/buildings');
+            setBuildings(response.data);
+        } catch (error) {
+            console.error('Error fetching buildings:', error);
+        }
     }, []);
 
     useEffect(() => {
+        setNoResults(false);
         if (cards.length == 0) {
             fetchCards(0, cardsPerPage, formData);
         }
     }, [cards]);
-
-    useEffect(() => {
-        fetchTotalCards();
-    }, [formData]);
 
     useEffect(() => {
         setTotalPages(Math.ceil(totalCards / cardsPerPage));
@@ -57,16 +69,6 @@ const SearchPage = () => {
         setCards([]);
     };
 
-    const fetchTotalCards = async () => {
-        try {
-            const response = await axios.get('/api/search/count', { params: formData });
-            setTotalCards(response.data.total);
-            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
-        } catch (error) {
-            console.error('Error fetching total cards:', error);
-        }
-    };
-
     const fetchCards = async (startIdx, endIdx, data) => {
         if (cards.length > startIdx) {
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
@@ -75,7 +77,13 @@ const SearchPage = () => {
         try {
             const requestData = { ...data, startIdx, endIdx };
             const response = await axios.post('/api/search', requestData);
-            setCards(prevCards => [...prevCards, ...response.data]);
+            setTotalCards(response.data.total);
+            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
+            if (response.data.total === 0) {
+                setNoResults(true);
+                return;
+            }
+            setCards(prevCards => [...prevCards, ...response.data.rows]);
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -95,7 +103,7 @@ const SearchPage = () => {
                     <h1 className="search__heading section__title">Подобрать помещение</h1>
                     <div className="search__row">
                         <div className="search__column">
-                            <SearchForm onSubmit={handleFormSubmit} />
+                            <SearchForm onSubmit={handleFormSubmit} types={types} buildings={buildings}/>
                         </div>
                         {(deviceType === 'desktop' || deviceType === 'laptop') && (
                             <div className="search__column search__column--flex">
@@ -135,10 +143,10 @@ const SearchPage = () => {
                     <CardList
                         modifier="search"
                         cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)}
-                        filters={formData}
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={handlePageChange}
+                        noResults={noResults}
                     />
                 </div>
             </section>

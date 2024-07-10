@@ -5,13 +5,6 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    const types = {
-        office: 'Офис',
-        industrial: 'Производственно-складское',
-        commercial: 'Торговое',
-        land: 'Участок',
-    };
-
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % card.images.length);
     };
@@ -28,40 +21,51 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
 
     const isExternal = modifier === 'external';
     const showPromotion = card.promotion && modifier !== 'rented';
-    const showType = isExternal && card.type;
-    const showLocation = isExternal ? card.location : card.location && !isExternal;
+    const showType = card.type !== undefined;
+    const showLocation = card.liter !== undefined;
     const showArea = card.area !== undefined;
     const showStorey = !isExternal && card.floor !== undefined;
-    const showPrice = card.price !== undefined || (isExternal && !card.price);
+    const showPrice = card.cost !== undefined || isExternal;
     const showDetailsButton = !isExternal && modifier !== 'rented';
     const showRentedUntil = modifier === 'rented' && card.rentedUntil;
+    const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
+    const coverPlaceholder = card.type == 'Офис' ? '/img/pics/officePlaceholder.webp' : '/img/pics/warehousePlaceholder.webp';
 
     return (
         <div className={`card ${modifier ? 'card--' + modifier : ''} ${isActive ? 'active' : ''}`} onClick={handleClick}>
             <div className="card__wrapper">
                 <div className="card__carousel">
                     <div className="card__pic">
-                        <img
-                            src={card.images[currentImageIndex]}
-                            alt="Property"
-                            className="card__pic--img"
-                        />
+                        {showPics ? (
+                            <img
+                                src={card.images[currentImageIndex]}
+                                alt="Property"
+                                className="card__pic--img"
+                            />
+                        ) : (
+                            <img
+                                src={coverPlaceholder}
+                                alt="Property"
+                                className="card__pic--img"
+                            />
+                        )}
+
                         {showPromotion && <div className="card__promotion">Акция</div>}
                     </div>
-                    {card.images.length > 1 && <button className="card__nav card__nav--prev" onClick={handlePrevImage}>{'<'}</button>}
-                    {card.images.length > 1 && <button className="card__nav card__nav--next" onClick={handleNextImage}>{'>'}</button>}
+                    {(showPics && card.images.length > 1) && <button className="card__nav card__nav--prev" onClick={handlePrevImage}>{'<'}</button>}
+                    {(showPics && card.images.length > 1) && <button className="card__nav card__nav--next" onClick={handleNextImage}>{'>'}</button>}
                 </div>
                 <div className="card__info">
                     {showType && (
-                        <div className="card__type">{types[card.type]}</div>
+                        <div className="card__type">{card.type}</div>
                     )}
 
                     <div className="card__location">
                         {showLocation && (
                             <>
-                                {isExternal ? card.location : `Место: `}
-                                {!isExternal && <span className="card__value">{card.location}</span>}
+                                {isExternal ? card.liter : `Место: `}
+                                {!isExternal && <span className="card__value">{card.liter} {card.room}</span>}
                             </>
                         )}
                     </div>
@@ -104,7 +108,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                         />
                                     </span>
                                     <span className="card__value">
-                                        {isExternal && !card.price ? 'По запросу' : `${card.price} / мес.`}
+                                        {isExternal && !card.cost ? 'По запросу' : `${card.cost}₽ / мес.`}
                                     </span>
                                 </div>
                             )}

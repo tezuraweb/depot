@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Scheme from './StaticScheme';
 import CardList from './CardList';
@@ -11,15 +12,16 @@ import { useViewportContext } from '../utils/ViewportContext';
 const Premises = () => {
     const deviceType = useViewportContext();
     const [premisesId, setPremisesId] = useState(null);
-    const [premisesData, setPremisesData] = useState(null);
+    const [premisesData, setPremisesData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [message, setMessage] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [recommendations, setRecommendations] = useState([]);
 
+    const { id } = useParams();
+    
     useEffect(() => {
-        const id = window.premisesId;
         if (id) {
             setPremisesId(id);
 
@@ -32,8 +34,6 @@ const Premises = () => {
                     setError(error);
                     setLoading(false);
                 });
-        } else {
-            setLoading(false);
         }
     }, []);
 
@@ -46,8 +46,6 @@ const Premises = () => {
                 .catch(error => {
                     setRecommendations([]);
                 });
-        } else {
-            setLoading(false);
         }
     }, [premisesId]);
 
@@ -57,7 +55,7 @@ const Premises = () => {
 
     const handleShare = async () => {
         const url = window.location.href;
-        const title = `Помещение: ${premisesData.name}`;
+        const title = `Помещение: ${premisesData.room}`;
 
         if (navigator.share) {
             try {
@@ -81,25 +79,25 @@ const Premises = () => {
 
     const handleNextImage = () => {
         // setLoading(true);
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % premisesData.images.length);
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % premisesData?.images.length);
     };
 
     const handlePrevImage = () => {
         // setLoading(true);
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + premisesData.images.length) % premisesData.images.length);
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + premisesData?.images.length) % premisesData?.images.length);
     };
 
     if (loading) {
         return <LoadingSpinner />;
     }
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
+    // if (error) {
+    //     return <div>Error: {error.message}</div>;
+    // }
 
-    if (!premisesData) {
-        return <div>No data available</div>;
-    }
+    // if (!premisesData) {
+    //     return <div>No data available</div>;
+    // }
 
     const showFullLink = deviceType === 'desktop' || deviceType === 'laptop';
     const showPrinter = deviceType === 'desktop' || deviceType === 'laptop';
@@ -141,7 +139,7 @@ const Premises = () => {
                             </div>
                             <div className="premises__header--block">
                                 <div className="premises__heading premises__heading--uppercase">{premisesData.type}</div>
-                                <div className="premises__heading premises__heading--large">{premisesData.name}</div>
+                                <div className="premises__heading premises__heading--large">{premisesData.room}</div>
                             </div>
                         </div>
 
@@ -187,7 +185,7 @@ const Premises = () => {
                                             height="19"
                                         />
                                     </div>
-                                    <div className="premises__cell premises__cell--bold">{Math.round(premisesData.cost / premisesData.area)} ₽ / м²</div>
+                                    <div className="premises__cell premises__cell--bold">{premisesData.cost} ₽ / м²</div>
                                     <div className="premises__cell">
                                         <IconSprite
                                             selector="PriceIcon"
@@ -195,7 +193,7 @@ const Premises = () => {
                                             height="19"
                                         />
                                     </div>
-                                    <div className="premises__cell premises__cell--bold">{premisesData.cost} ₽ / мес.</div>
+                                    <div className="premises__cell premises__cell--bold">{Math.round(premisesData.cost * premisesData.area)} ₽ / мес.</div>
                                 </div>
                                 <div className="premises__label">без НДС</div>
                             </div>
@@ -240,7 +238,7 @@ const Premises = () => {
 
                                 <div className="premises__scheme">
                                     <Scheme
-                                        activeElement={premisesData.building_id}
+                                        activeElement={premisesData.liter_id}
                                         floor={premisesData.floor}
                                     />
                                 </div>
@@ -287,14 +285,14 @@ const Premises = () => {
                 </div>
             </section>
 
-            <section className="section" id="premises-listing">
+            {recommendations?.length > 0 && <section className="section" id="premises-listing">
                 <div className="container">
                     <CardList
                         cards={recommendations}
                         modifier="recommend"
                     />
                 </div>
-            </section>
+            </section>}
         </>
     );
 };

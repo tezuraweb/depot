@@ -10,12 +10,12 @@ const PartnerCardList = () => {
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [noResults, setNoResults] = useState(false);
 
     const cardsPerPage = deviceType === 'desktop' ? 3 : deviceType === 'laptop' ? 2 : 1;
     const deviceIsDesktop = deviceType === 'desktop' || deviceType === 'laptop';
 
     useEffect(() => {
-        fetchTotalCards();
         fetchCards(0, cardsPerPage);
     }, []);
 
@@ -31,15 +31,15 @@ const PartnerCardList = () => {
         }
     }, [deviceType]);
 
-    const fetchTotalCards = async () => {
-        try {
-            const response = await axios.get('/api/partners/count');
-            setTotalCards(response.data.total);
-            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
-        } catch (error) {
-            console.error('Error fetching total cards:', error);
-        }
-    };
+    // const fetchTotalCards = async () => {
+    //     try {
+    //         const response = await axios.get('/api/partners/count');
+    //         setTotalCards(response.data.total);
+    //         setTotalPages(Math.ceil(response.data.total / cardsPerPage));
+    //     } catch (error) {
+    //         console.error('Error fetching total cards:', error);
+    //     }
+    // };
 
     const fetchCards = async (startIdx, endIdx) => {
         if (cards.length > startIdx) {
@@ -47,9 +47,15 @@ const PartnerCardList = () => {
             return;
         }
         try {
-            const requestData = { startIdx, endIdx };
-            const response = await axios.post('/api/partners', requestData);
-            setCards(prevCards => [...prevCards, ...response.data]);
+            const requestData = { startIdx, endIdx, organization: 'ДЕПО АО' };
+            const response = await axios.post('/api/search', requestData);
+            setTotalCards(response.data.total);
+            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
+            if (response.data.total === 0) {
+                setNoResults(true);
+                return;
+            }
+            setCards(prevCards => [...prevCards, ...response.data.rows]);
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -70,15 +76,19 @@ const PartnerCardList = () => {
 
                     <div className="listing__content">
                         <div className="listing__column listing__column--left">
-                            <div className="listing__cards">
-                                {cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage).map((card, index) => (
-                                    <Card
-                                        key={index}
-                                        card={card}
-                                        modifier="external"
-                                    />
-                                ))}
-                            </div>
+                            {noResults ? (
+                                <div className="no-results">Ничего не найдено</div>
+                            ) : (
+                                <div className="listing__cards">
+                                    {cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage).map((card, index) => (
+                                        <Card
+                                            key={index}
+                                            card={card}
+                                            modifier="external"
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         <div className="listing__column listing__column--right">

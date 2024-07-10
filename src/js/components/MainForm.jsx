@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const MainForm = ({ onSubmit, formData, setFormData }) => {
+const MainForm = ({ types = [], onSubmit, formData, setFormData }) => {
     const deviceType = useViewportContext();
     const [priceDesc, setPriceDesc] = useState(formData.priceDesc);
 
@@ -11,6 +11,26 @@ const MainForm = ({ onSubmit, formData, setFormData }) => {
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
+        });
+    };
+
+    const handleAreaChange = (e) => {
+        const { value } = e.target;
+        let from = '', to = '';
+
+        if (value === '1') {
+            to = '100';
+        } else if (value === '2') {
+            from = '100';
+            to = '200';
+        } else if (value === '3') {
+            from = '200';
+        }
+
+        setFormData({
+            ...formData,
+            areaFrom: from,
+            areaTo: to,
         });
     };
 
@@ -27,32 +47,25 @@ const MainForm = ({ onSubmit, formData, setFormData }) => {
         });
     };
 
-    const generateQueryParams = () => {
-        const data = { ...formData, priceDesc };
-
-        return Object.keys(data)
-            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-            .join('&');
-    };
-
     return (
         <form onSubmit={handleSubmit} className="form form--main">
             <div className="form__wrapper">
                 <div className="form__group">
                     <label className="form__label">Тип</label>
                     <select name="type" value={formData.type} onChange={handleChange} className="form__input form__input--select">
-                        <option value="office">Офисы</option>
-                        <option value="industrial">Производственно-складские</option>
-                        <option value="commercial">Торговые</option>
-                        <option value="land">Участки</option>
+                        <option value="">Не выбрано</option>
+                        {types.map(type => (
+                            <option value={type}>{type}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="form__group">
                     <label className="form__label">Площадь</label>
-                    <select name="area" value={formData.area} onChange={handleChange} className="form__input form__input--select">
-                        <option value="area1">до 500</option>
-                        <option value="area2">500 - 1000</option>
-                        <option value="area3">более 1000</option>
+                    <select name="area" value={formData.area} onChange={handleAreaChange} className="form__input form__input--select">
+                        <option value="">Не выбрано</option>
+                        <option value="1">до 100</option>
+                        <option value="2">100 - 200</option>
+                        <option value="3">более 200</option>
                     </select>
                 </div>
                 <div className="form__group">
@@ -82,7 +95,7 @@ const MainForm = ({ onSubmit, formData, setFormData }) => {
                 <button type="submit" className="form__button button button--large animate--pulse">Показать</button>
             </div>
 
-            <a className="form__link" href={`/search?${generateQueryParams()}`}>
+            <a className="form__link" href='/search'>
                 <span>Расширенный поиск</span>
                 {deviceType === 'mobile' && (
                     <IconSprite

@@ -1,6 +1,9 @@
+const pick = require('lodash/pick');
 const tenantService = require('../services/tenantService');
 const roomsService = require('../services/roomsService');
 const ticketService = require('../services/ticketService');
+
+// Tenants
 
 async function getTenantById(req, res, next) {
     try {
@@ -24,6 +27,8 @@ async function alterTenantById(req, res, next) {
     }
 }
 
+// Rooms
+
 async function getAllRooms(req, res, next) {
     try {
         const rooms = await roomsService.getAll();
@@ -33,9 +38,76 @@ async function getAllRooms(req, res, next) {
     }
 }
 
-async function getReportRooms(req, res, next) {
+async function getRoomsSearch(req, res, next) {
+    try {
+        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions']);
+        const dbData = {};
+
+        if (data.startIdx !== undefined && data.startIdx !== null) dbData.offset = data.startIdx || 0;
+        if (data.endIdx !== undefined && data.endIdx !== null) dbData.limit = (data.endIdx - dbData.offset) || 6;
+
+        if (data.type && data.type !== '') dbData.type = data.type;
+        if (data.building && data.building !== '') dbData.id_liter = data.building;
+        if (data.areaFrom && data.areaFrom !== '') dbData.areaFrom = parseFloat(data.areaFrom);
+        if (data.areaTo && data.areaTo !== '') dbData.areaTo = parseFloat(data.areaTo);
+        if (data.priceFrom && data.priceFrom !== '') dbData.priceFrom = parseFloat(data.priceFrom);
+        if (data.priceTo && data.priceTo !== '') dbData.priceTo = parseFloat(data.priceTo);
+        if (data.priceType && data.priceType !== '') dbData.priceType = data.priceType;
+        if (data.priceDesc !== undefined) dbData.priceDesc = data.priceDesc;
+        if (data.storey && data.storey !== '') dbData.floor = parseFloat(data.storey);
+        if (data.rooms && data.rooms !== '') dbData.roomsAmount = data.rooms;
+        if (data.ceilingHeight && data.ceilingHeight !== '') dbData.ceiling = parseFloat(data.ceilingHeight);
+        if (data.promotions !== undefined) dbData.promotion = data.promotions;
+        if (data.organization && data.organization !== '') dbData.organization = data.organization;
+
+        const rooms = await roomsService.getPage(dbData);
+        res.json({ rows: rooms.data, total: rooms.rows_before_limit_at_least });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsTypes(req, res, next) {
+    try {
+        const rooms = await roomsService.getTypes();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsLiters(req, res, next) {
+    try {
+        const rooms = await roomsService.getIdLiter();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsReport(req, res, next) {
     try {
         const rooms = await roomsService.getReport();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsById(req, res, next) {
+    try {
+        const id = req.params.id;
+        const rooms = await roomsService.getRoomById(id);
+        res.json(rooms.data[0]);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsRecommended(req, res, next) {
+    try {
+        const id = req.params.id;
+        const rooms = await roomsService.getRecommended(id);
         res.json(rooms.data);
     } catch (error) {
         next(error);
@@ -102,7 +174,12 @@ module.exports = {
     getTenantById,
     alterTenantById,
     getAllRooms,
-    getReportRooms,
+    getRoomsSearch,
+    getRoomsTypes,
+    getRoomsLiters,
+    getRoomsReport,
+    getRoomsById,
+    getRoomsRecommended,
     getUserBot,
     getTicketByIdBot,
     getTicketByNumberBot,

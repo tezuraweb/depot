@@ -4,16 +4,9 @@ import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab }) => {
+const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false }) => {
     const deviceType = useViewportContext();
     const [activeCardIndex, setActiveCardIndex] = useState(null);
-
-    const tabs = [
-        { label: 'Офисы', value: 'office' },
-        { label: 'Производственно-складские', value: 'industrial' },
-        { label: 'Торговые', value: 'commercial' },
-        { label: 'Участки', value: 'land' }
-    ];
 
     useEffect(() => {
         if (deviceType !== 'desktop' && deviceType !== 'laptop' && modifier === 'main') {
@@ -51,13 +44,13 @@ const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = 
 
             {showTabs && (
                 <div className="listing__tabs">
-                    {tabs.map(tab => (
+                    {types.map(type => (
                         <button
-                            key={tab.value}
-                            className={`listing__tab ${activeTab === tab.value ? 'active' : ''}`}
-                            onClick={() => handleTabClick(tab.value)}
+                            key={type}
+                            className={`listing__tab ${activeTab === type ? 'active' : ''}`}
+                            onClick={() => handleTabClick(type)}
                         >
-                            {tab.label}
+                            {type}
                         </button>
                     ))}
                 </div>
@@ -65,17 +58,21 @@ const CardList = ({ cards = [], currentPage = 0, totalPages = 0, onPageChange = 
 
             <div className="listing__content">
                 <div className="listing__column listing__column--left">
-                    <div className="listing__cards">
-                        {cards.map((card, index) => (
-                            <Card
-                                key={index}
-                                card={card}
-                                onClick={() => handleCardClick(card, index)}
-                                isActive={index === activeCardIndex}
-                                modifier={modifier}
-                            />
-                        ))}
-                    </div>
+                    {noResults ? (
+                        <div className="no-results">Ничего не найдено</div>
+                    ) : (
+                        <div className="listing__cards">
+                            {cards.map((card, index) => (
+                                <Card
+                                    key={index}
+                                    card={card}
+                                    onClick={() => handleCardClick(card, index)}
+                                    isActive={index === activeCardIndex}
+                                    modifier={modifier}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {showPagination && (

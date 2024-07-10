@@ -8,12 +8,15 @@ import { useViewportContext } from '../utils/ViewportContext';
 const MainFilter = () => {
     const deviceType = useViewportContext();
     const [cards, setCards] = useState([]);
+    const [types, setTypes] = useState([]);
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [noResults, setNoResults] = useState(false);
     const [formData, setFormData] = useState({
         type: '',
-        area: '',
+        areaFrom: '',
+        areaTo: '',
         priceFrom: '',
         priceTo: '',
         promotions: false,
@@ -22,19 +25,21 @@ const MainFilter = () => {
 
     const cardsPerPage = deviceType === 'desktop' ? 6 : deviceType === 'laptop' ? 4 : 1;
 
-    useEffect(() => {
-        fetchTotalCards();
+    useEffect(async () => {
+        try {
+            const response = await axios.get('/api/search/types');
+            setTypes(response.data.map(item => item.type));
+        } catch (error) {
+            console.error('Error fetching types:', error);
+        }
     }, []);
 
     useEffect(() => {
+        setNoResults(false);
         if (cards.length == 0) {
             fetchCards(0, cardsPerPage, formData);
         }
     }, [cards]);
-
-    useEffect(() => {
-        fetchTotalCards();
-    }, [formData]);
 
     useEffect(() => {
         setTotalPages(Math.ceil(totalCards / cardsPerPage));
@@ -54,16 +59,6 @@ const MainFilter = () => {
         setCards([]);
     };
 
-    const fetchTotalCards = async () => {
-        try {
-            const response = await axios.get('/api/search/count', { params: formData });
-            setTotalCards(response.data.total);
-            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
-        } catch (error) {
-            console.error('Error fetching total cards:', error);
-        }
-    };
-
     const fetchCards = async (startIdx, endIdx, data) => {
         if (cards.length > startIdx) {
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
@@ -72,7 +67,13 @@ const MainFilter = () => {
         try {
             const requestData = { ...data, startIdx, endIdx };
             const response = await axios.post('/api/search', requestData);
-            setCards(prevCards => [...prevCards, ...response.data]);
+            setTotalCards(response.data.total);
+            setTotalPages(Math.ceil(response.data.total / cardsPerPage));
+            if (response.data.total === 0) {
+                setNoResults(true);
+                return;
+            }
+            setCards(prevCards => [...prevCards, ...response.data.rows]);
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -97,8 +98,9 @@ const MainFilter = () => {
         <>
             <section className="section" id="hero">
                 <div className="container">
-                    <Hero showSearchIcon={deviceType === 'mobile' ? true : false}/>
+                    <Hero showSearchIcon={deviceType === 'mobile' ? true : false} />
                     <MainForm
+                        types={types}
                         onSubmit={handleFormSubmit}
                         formData={formData}
                         setFormData={setFormData}
@@ -111,13 +113,15 @@ const MainFilter = () => {
                 <div className="container">
                     <CardList
                         modifier="main"
-                        cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)} 
-                        currentPage={currentPage} 
-                        totalPages={totalPages} 
+                        types={types}
+                        cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
                         onPageChange={handlePageChange}
                         totalCards={totalCards}
                         activeTab={formData.type}
                         setActiveTab={setActiveType}
+                        noResults={noResults}
                     />
                 </div>
             </section>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchForm = ({ onSubmit }) => {
+const SearchForm = ({ onSubmit, types = [], buildings = [] }) => {
     const [formData, setFormData] = useState({
         type: '',
         building: '',
@@ -81,10 +81,9 @@ const SearchForm = ({ onSubmit }) => {
                     <label className="form__label form__label--inline">Тип</label>
                     <select name="type" value={formData.type} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
-                        <option value="area1">Офисы</option>
-                        <option value="area2">Производственно-складские</option>
-                        <option value="area3">Торговые</option>
-                        <option value="area4">Участки</option>
+                        {types.map(type => (
+                            <option value={type}>{type}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -92,9 +91,9 @@ const SearchForm = ({ onSubmit }) => {
                     <label className="form__label form__label--inline">Корпус</label>
                     <select name="building" value={formData.building} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
-                        <option value="a">А</option>
-                        <option value="b">Б</option>
-                        <option value="v">В</option>
+                        {buildings.map(building => (
+                            <option value={building.id_liter}>{building.liter}</option>
+                        ))}
                     </select>
                 </div>
             </div>

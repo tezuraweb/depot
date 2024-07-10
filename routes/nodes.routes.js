@@ -11,30 +11,13 @@ router
 router
     .route('/search')
     .get((req, res) => {
-        const {
-            type = '',
-            area = '',
-            priceFrom = '',
-            priceTo = '',
-            promotions = false,
-            priceDesc = false,
-            page = 1
-        } = req.query;
-
-        const numericPriceFrom = priceFrom ? parseFloat(priceFrom) : undefined;
-        const numericPriceTo = priceTo ? parseFloat(priceTo) : undefined;
-        const booleanPromotions = promotions === 'true';
-        const booleanPriceDesc = priceDesc === 'true';
-        const pageNumber = parseInt(page, 10);
-
         res.render('nodes/search');
     });
 
 router
     .route('/premises/:id')
     .get((req, res) => {
-        const id = req.params.id;
-        res.render('nodes/premises', { id });
+        res.render('nodes/premises');
     });
 
 router
