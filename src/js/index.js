@@ -41,6 +41,12 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/Report'));
         case 'tickets':
             return lazy(() => import('./components/Tickets'));
+        case 'login':
+            return lazy(() => import('./components/AuthLogin'));
+        case 'signup':
+            return lazy(() => import('./components/AuthRegister'));
+        case 'resetPassword':
+            return lazy(() => import('./components/AuthReset'));
         default:
             return null;
     }
@@ -61,6 +67,33 @@ document.addEventListener('DOMContentLoaded', () => {
                             <Suspense fallback={<LoadingSpinner />}>
                                 <Routes>
                                     <Route path="/premises/:id" element={<Component />} />
+                                </Routes>
+                            </Suspense>
+                        </Router>
+                    </ViewportProvider>,
+                    container
+                );
+            } else if (componentName == 'signup') {
+                ReactDOM.render(
+                    <ViewportProvider>
+                        <Router>
+                            <Suspense fallback={<LoadingSpinner />}>
+                                <Routes>
+                                    <Route path="/auth/signup" element={<Component mode="signup" />} />
+                                    <Route path="/auth/password-reset" element={<Component mode="password-reset" />} />
+                                </Routes>
+                            </Suspense>
+                        </Router>
+                    </ViewportProvider>,
+                    container
+                );
+            } else if (componentName == 'resetPassword') {
+                ReactDOM.render(
+                    <ViewportProvider>
+                        <Router>
+                            <Suspense fallback={<LoadingSpinner />}>
+                                <Routes>
+                                    <Route path="/auth/reset/:token" element={<Component />} />
                                 </Routes>
                             </Suspense>
                         </Router>

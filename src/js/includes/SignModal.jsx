@@ -30,11 +30,11 @@ const SignModal = ({ doc, onClose }) => {
     };
 
     return (
-        <div className="docs__popup">
-            <div className="docs__popup--content">
-                <div className="docs__popup--header flex flex--sb flex--center">
-                    <h2 className="docs__title">Выбрать способ подписания</h2>
-                    <button className="docs__close" onClick={onClose} aria-label="Закрыть">
+        <div className="editor__popup">
+            <div className="editor__popup--content">
+                <div className="editor__popup--header flex flex--sb flex--center">
+                    <h2 className="editor__title">Выбрать способ подписания</h2>
+                    <button className="editor__close" onClick={onClose} aria-label="Закрыть">
                         <IconSprite
                             selector="CloseIcon"
                             width="30"
@@ -43,7 +43,7 @@ const SignModal = ({ doc, onClose }) => {
                     </button>
                 </div>
 
-                <div className="docs__popup--buttons">
+                <div className="editor__popup--buttons">
                     <button className="button animate--pulse" onClick={handlePersonalClick}>Лично</button>
                     <button className="button animate--pulse" onClick={() => setSignED(true)}>Через ЭДО</button>
                 </div>
@@ -60,8 +60,8 @@ const SignModal = ({ doc, onClose }) => {
                         <button className="button animate--pulse" onClick={handleSignSubmit}>Отправить</button>
                     </div>
                 )}
-                {successMessage && <div className="docs__message docs__message--green">Запрос на подписание отправлен</div>}
-                {failMessage && <div className="docs__message docs__message--red">Ошибка отправки запроса</div>}
+                {successMessage && <div className="editor__message editor__message--green">Запрос на подписание отправлен</div>}
+                {failMessage && <div className="editor__message editor__message--red">Ошибка отправки запроса</div>}
             </div>
         </div>
     );

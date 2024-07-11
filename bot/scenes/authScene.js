@@ -6,7 +6,7 @@ const createAuthScene = () => {
 
     authScene.enter(async (ctx) => {
         try {
-            const user = await db.getUserBot(ctx.from.username);
+            const user = await db.getTenantByParam({ 'tg_id': ctx.from.username });
             // ctx.session.userData = user;
 
             if (user) {

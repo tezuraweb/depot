@@ -4,9 +4,13 @@ const router = express.Router();
 
 const nodesRoutes = require('./nodes.routes');
 const apiRoutes = require('./api.routes');
+const backofficeRoutes = require('./backoffice.routes');
+const authRoutes = require('./auth.routes');
 
 router.use(express.json());
 router.use('/api', apiRoutes);
+router.use('/backoffice', backofficeRoutes);
+router.use('/auth', authRoutes);
 router.use('/', nodesRoutes);
 router.all('*', (req, res) => {
     res.status(404);

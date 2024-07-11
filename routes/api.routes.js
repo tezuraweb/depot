@@ -1,12 +1,17 @@
 const express = require('express');
 const pick = require('lodash/pick');
+const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 const axios = require('axios');
 const multer = require('multer');
 const FormData = require('form-data');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const auth = require('../middlewares/auth');
 const cdnConfig = require('../config/cdnConfig');
+const jwtConfig = require('../config/jwtConfig');
 const dbController = require('../controllers/dbController');
+const { sendVerificationEmail, generateToken } = require('../services/emailService');
 
 const router = express.Router();
 
@@ -30,261 +35,6 @@ const manager = {
     text: "В нашем торгово-складском комплекс созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами!",
     photo: "/img/pics/depo_manager.webp",
 };
-
-const premises = {
-    '1': {
-        id: '1',
-        liter: 'Б',
-        building_id: 'depot-building-1',
-        type: 'офис',
-        name: 'Пр244',
-        area: '9.7',
-        floor: 2,
-        ceiling: '5',
-        cost: '273',
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        text: 'Офисные площади имеют свежий ремонт, пластиковые окна. Некоторые офисы оснащены мебелью.'
-    },
-    '2': {
-        id: '2',
-        liter: 'А',
-        building_id: 'depot-building-1',
-        type: 'офис',
-        name: 'Пр101',
-        area: '15',
-        floor: 3,
-        ceiling: '4',
-        cost: '300',
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        text: 'Офисные площади имеют свежий ремонт, пластиковые окна. Некоторые офисы оснащены мебелью.'
-    },
-    '3': {
-        id: '3',
-        liter: 'В',
-        type: 'офис',
-        building_id: 'depot-building-1',
-        name: 'Пр202',
-        area: '20',
-        floor: 1,
-        ceiling: '3.5',
-        cost: '250',
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-    },
-    '4': {
-        id: '4',
-        liter: 'Г',
-        building_id: 'depot-building-2',
-        type: 'офис',
-        name: 'Пр303',
-        area: '12',
-        floor: 4,
-        ceiling: '4.5',
-        cost: '280',
-    },
-    '5': {
-        id: '5',
-        liter: 'Д',
-        type: 'офис',
-        name: 'Пр404',
-        area: '25',
-        floor: 5,
-        ceiling: '5.5',
-        cost: '320',
-    }
-};
-
-const recs = [
-    [{
-        id: 6,
-        promotion: false,
-        location: "Индустриальный парк",
-        article: "F678",
-        area: 800,
-        floor: 1,
-        price: "200000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    },
-    {
-        id: 7,
-        promotion: true,
-        location: "Элитный квартал",
-        article: "A123",
-        area: 100,
-        floor: 3,
-        price: "50000 руб.",
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        type: "office"
-    },
-    {
-        id: 8,
-        promotion: false,
-        location: "Элитный квартал",
-        article: "B456",
-        area: 500,
-        floor: 1,
-        price: "150000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    }],
-];
-
-const cards = [
-    {
-        id: 1,
-        promotion: true,
-        location: "Центр города",
-        article: "A123",
-        area: 100,
-        floor: 3,
-        price: "50000 руб.",
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        type: "office"
-    },
-    {
-        id: 2,
-        promotion: false,
-        location: "Промышленная зона",
-        article: "B456",
-        area: 500,
-        floor: 1,
-        price: "150000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    },
-    {
-        id: 3,
-        promotion: true,
-        location: "Торговый центр",
-        article: "C789",
-        area: 200,
-        floor: 2,
-        price: "80000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "commercial"
-    },
-    {
-        id: 4,
-        promotion: false,
-        location: "Пригород",
-        article: "D012",
-        area: 1000,
-        floor: 0,
-        price: "100000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "land"
-    },
-    {
-        id: 5,
-        promotion: true,
-        location: "Центр города",
-        article: "E345",
-        area: 120,
-        floor: 4,
-        price: "60000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "office"
-    },
-    {
-        id: 6,
-        promotion: false,
-        location: "Индустриальный парк",
-        article: "F678",
-        area: 800,
-        floor: 1,
-        price: "200000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    },
-    {
-        id: 7,
-        promotion: true,
-        location: "Элитный квартал",
-        article: "A123",
-        area: 100,
-        floor: 3,
-        price: "50000 руб.",
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        type: "office"
-    },
-    {
-        id: 8,
-        promotion: false,
-        location: "Элитный квартал",
-        article: "B456",
-        area: 500,
-        floor: 1,
-        price: "150000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    },
-    {
-        id: 9,
-        promotion: true,
-        location: "Зеленая зона",
-        article: "C789",
-        area: 200,
-        floor: 2,
-        price: "80000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "commercial"
-    },
-    {
-        id: 10,
-        promotion: false,
-        location: "Возвышенность",
-        article: "D012",
-        area: 1000,
-        floor: 0,
-        price: "100000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "land"
-    },
-    {
-        id: 11,
-        promotion: true,
-        location: "Технопарк",
-        article: "E345",
-        area: 120,
-        floor: 4,
-        price: "60000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "office"
-    },
-    {
-        id: 12,
-        promotion: false,
-        location: "Спальный район",
-        article: "F678",
-        area: 800,
-        floor: 1,
-        price: "200000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial"
-    },
-    {
-        id: 13,
-        promotion: true,
-        location: "Зеленая зона",
-        article: "C789",
-        area: 200,
-        floor: 2,
-        price: "80000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "commercial"
-    },
-    {
-        id: 14,
-        promotion: false,
-        location: "Возвышенность",
-        article: "D012",
-        area: 1000,
-        floor: 0,
-        price: "100000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "land"
-    },
-];
 
 const depotTenants = [
     {
@@ -700,32 +450,131 @@ router
     });
 
 router
-    .route('/partners/count')
-    .get(async (req, res) => {
-        if (cards) {
-            res.json({ total: cards.length });
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
+    .route('/login')
+    .post(async (req, res) => {
+        try {
+            const { login, password } = req.body;
+            let user;
+
+            if (/\S+@\S+\.\S+/.test(login)) {
+                // Login using email
+                user = await dbController.getTenantByParam({ 'email': login });
+            } else if (/^\d+$/.test(login)) {
+                // Login using TIN
+                user = await dbController.getTenantByParam({ 'tin': login });
+            } else {
+                return res.status(400).json({ success: false, message: 'Invalid login format' });
+            }
+
+            if (!user || user.password == null) {
+                return res.status(400).json({ success: false, message: 'No such user' });
+            }
+
+            if (await bcrypt.compare(password, user.password)) {
+                const token = generateToken({ id: user.id, status: user.status, name: user.name });
+
+                return res.cookie("secretToken", token, { httpOnly: true }).json({ success: true });
+            } else {
+                return res.status(400).json({ success: false, message: 'Wrong password' });
+            }
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ success: false, message: 'Failed to login' });
         }
     });
 
 router
-    .route('/partners')
+    .route('/signup/check')
     .post(async (req, res) => {
-        const data = pick(req.body, 'startIdx', 'endIdx');
-        const startIdx = parseInt(data.startIdx);
-        const endIdx = parseInt(data.endIdx);
+        try {
+            const { tin } = pick(req.body, ['tin']);
 
-        if (cards && !isNaN(startIdx) && !isNaN(endIdx)) {
-            if (startIdx < cards.length) {
-                res.json(cards.slice(startIdx, endIdx));
-            } else {
-                res.json([]);
+            user = await dbController.getTenantByParam({ tin });
+
+            if (user) {
+                return res.status(200).json({ exists: true });
             }
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
+            return res.status(404).json({ exists: false });
+        } catch (error) {
+            console.log(err);
+            return res.status(500).json({ success: false, message: 'Failed to check tin' });
         }
     });
+
+router
+    .route('/signup/verify-email')
+    .post(async (req, res) => {
+        try {
+            const { tin, email } = pick(req.body, ['tin', 'email']);
+
+            const user = await dbController.getTenantByParam({ tin });
+
+            if (user) {
+                const token = generateToken({ id: user.id, email }, true);
+                await sendVerificationEmail(email, token);
+                return res.status(200).json({ message: 'Verification email sent' });
+            }
+
+            return res.status(404).json({ message: 'TIN not found' });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ success: false, message: 'Failed to verify email' });
+        }
+    });
+
+router
+    .route('/password-reset/initiate')
+    .post(async (req, res) => {
+        try {
+            const { tin, email } = pick(req.body, ['tin', 'email']);
+
+            user = await dbController.getTenantByParam({ tin, email });
+
+            if (user) {
+                const token = generateToken({ id: user.id, email }, true);
+                await sendVerificationEmail(email, token);
+                return res.status(200).json({ message: 'Password reset email sent' });
+            }
+
+            return res.status(404).json({ message: 'User not found' });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ success: false, message: 'Failed to verify email' });
+        }
+    });
+
+router
+    .route('/reset-password')
+    .post(async (req, res) => {
+        const { password, confirmPassword, token } = pick(req.body, ['password', 'confirmPassword', 'token']);
+
+        if (!token) {
+            return res.status(400).json({ success: false, message: 'No reset token found' });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ success: false, message: 'Passwords do not match' });
+        }
+
+        try {
+            jwt.verify(token, jwtConfig.emailToken, async (err, decoded) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send("Email verification failed, possibly the link is invalid or expired");
+                }
+                const hashedPassword = await bcrypt.hash(password, 10);
+
+                const user = await dbController.setTenantPassword(decoded.id, hashedPassword);
+
+                return res.status(200).json({ success: true, message: 'Password reset successfully' });
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ success: false, message: 'Failed to reset password' });
+        }
+    });
+
+
 
 router
     .route('/rented')

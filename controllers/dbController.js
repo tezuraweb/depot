@@ -27,6 +27,33 @@ async function alterTenantById(req, res, next) {
     }
 }
 
+async function getTenantByParam(params) {
+    try {
+        const user = await tenantService.getTenantByParam(params);
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function setTenantEmail(id, email) {
+    try {
+        const user = await tenantService.alterTenantById(id, { email });
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function setTenantPassword(id, password) {
+    try {
+        const user = await tenantService.alterTenantById(id, { password });
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // Rooms
 
 async function getAllRooms(req, res, next) {
@@ -114,16 +141,7 @@ async function getRoomsRecommended(req, res, next) {
     }
 }
 
-// Bot
-
-async function getUserBot(id) {
-    try {
-        const user = await tenantService.getTenantByTgId(id);
-        return user && user.data?.length > 0 ? user.data[0] : null;
-    } catch (error) {
-        console.log(error);
-    }
-}
+// Tickets
 
 async function getTicketByIdBot(id) {
     try {
@@ -173,6 +191,9 @@ async function insertTicketBot(data) {
 module.exports = {
     getTenantById,
     alterTenantById,
+    getTenantByParam,
+    setTenantEmail,
+    setTenantPassword,
     getAllRooms,
     getRoomsSearch,
     getRoomsTypes,
@@ -180,7 +201,6 @@ module.exports = {
     getRoomsReport,
     getRoomsById,
     getRoomsRecommended,
-    getUserBot,
     getTicketByIdBot,
     getTicketByNumberBot,
     insertTicketBot,

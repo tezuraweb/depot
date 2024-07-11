@@ -35,9 +35,19 @@ async function getTenantById(id) {
     }
 }
 
-async function getTenantByTgId(id) {
-    const sanitizedId = sqlstring.escape(id);
-    const query = `SELECT id, name, tg_id, status FROM tenants WHERE tg_id = ${sanitizedId} LIMIT 1 FORMAT JSON`;
+async function getTenantByParam(params) {
+    const conditions = Object.keys(params)
+        .map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(params[key])}`)
+        .join(' AND ');
+
+    let fields = '*';
+    if (params.hasOwnProperty('tg_id')) {
+        fields = 'id, name, tg_id, status, base';
+    } else {
+        fields = 'id, name, email, tin, password, status, base';
+    }
+
+    const query = `SELECT ${fields} FROM tenants WHERE ${conditions} LIMIT 1 FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -90,12 +100,14 @@ async function deleteTenantById(id) {
 
 async function alterTenantById(id, data) {
         const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
-        const query = `ALTER TABLE users UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
+        const query = `ALTER TABLE tenants UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
         console.log(query);
         const queryParams = querystring.stringify({
             'database': config.database,
             'query': query,
         });
+
+        console.log(query)
     
         try {
             const response = await axios.post(`/?${queryParams}`, null, dbOptions);
@@ -107,6 +119,6 @@ async function alterTenantById(id, data) {
 
 module.exports = {
     getTenantById,
-    getTenantByTgId,
+    getTenantByParam,
     alterTenantById,
 };

@@ -45,9 +45,9 @@
         {% endif %}
 
         {% if user %}
-            <a class="header__auth{% if hideLogin %} header__auth--backoffice{% else %} header__auth--desktop{% endif %}" href="/logout">Выйти</a>
+            <a class="header__auth{% if hideLogin %} header__auth--backoffice{% else %} header__auth--desktop{% endif %}" href="/auth/logout">Выйти</a>
         {% elif not hideLogin %}
-            <a class="header__auth header__auth--desktop" href="/login" aria-label="Войти в кабинет арендатора">
+            <a class="header__auth header__auth--desktop" href="/auth/login" aria-label="Войти в кабинет арендатора">
                 <div class="header__auth--icon">
                     {% set includeIcon = 'authIcon' %}
                     {% include "includes/svg.njk" %}
