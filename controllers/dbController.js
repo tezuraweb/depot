@@ -5,27 +5,27 @@ const ticketService = require('../services/ticketService');
 
 // Tenants
 
-async function getTenantById(req, res, next) {
-    try {
-        const userId = req.params.id;
-        const user = await tenantService.getTenantById(userId);
-        res.json(user.data);
-    } catch (error) {
-        next(error);
-    }
-}
+// async function getTenantById(req, res, next) {
+//     try {
+//         const userId = req.params.id;
+//         const user = await tenantService.getTenantById(userId);
+//         res.json(user.data);
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
-async function alterTenantById(req, res, next) {
-    try {
-        const userId = req.params.id;
-        const name = req.query.name;
-        const status = req.query.status;
-        const user = await tenantService.alterTenantById(userId, { name, status });
-        res.json(user.data);
-    } catch (error) {
-        next(error);
-    }
-}
+// async function alterTenantById(req, res, next) {
+//     try {
+//         const userId = req.params.id;
+//         const name = req.query.name;
+//         const status = req.query.status;
+//         const user = await tenantService.alterTenantById(userId, { name, status });
+//         res.json(user.data);
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 async function getTenantByParam(params) {
     try {
@@ -33,6 +33,17 @@ async function getTenantByParam(params) {
         return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
         console.log(error);
+    }
+}
+
+async function getTenantTgUsername(req, res, next) {
+    try {
+        const id = req.user.id;
+        const user = await tenantService.getTenantByParam({ id });
+        const username = user && user.data?.length > 0 ? user.data[0].tg_id : '';
+        res.json({ username });
+    } catch (error) {
+        next(error);
     }
 }
 
@@ -54,11 +65,32 @@ async function setTenantPassword(id, password) {
     }
 }
 
+async function setTenantTgUsername(req, res, next) {
+    try {
+        const id = req.user.id;
+        const { tg_id } = pick(req.body, ['tg_id']);
+        const user = await tenantService.alterTenantById(id, { tg_id });
+        const username = user && user.data?.length > 0 ? user.data[0].tg_id : '';
+        res.json({ username });
+    } catch (error) {
+        next(error);
+    }
+}
+
 // Rooms
 
 async function getAllRooms(req, res, next) {
     try {
         const rooms = await roomsService.getAll();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsByTenant(req, res, next) {
+    try {
+        const rooms = await roomsService.getRoomsByTenant(req.user.id);
         res.json(rooms.data);
     } catch (error) {
         next(error);
@@ -188,12 +220,30 @@ async function insertTicketBot(data) {
     }
 }
 
+async function updateTicketStatusBot(data) {
+    try {
+        const ticket = await ticketService.updateTicketStatus(data);
+        return ticket.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTicketsByTenant(req, res, next) {
+    try {
+        const rooms = await ticketService.getTicketsByTenant(req.user.id);
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
-    getTenantById,
-    alterTenantById,
     getTenantByParam,
     setTenantEmail,
+    getTenantTgUsername,
     setTenantPassword,
+    setTenantTgUsername,
     getAllRooms,
     getRoomsSearch,
     getRoomsTypes,
@@ -201,9 +251,12 @@ module.exports = {
     getRoomsReport,
     getRoomsById,
     getRoomsRecommended,
+    getRoomsByTenant,
     getTicketByIdBot,
     getTicketByNumberBot,
+    getTicketsByTenant,
     insertTicketBot,
     getTicketsByUserBot,
     getTicketsByStatusBot,
+    updateTicketStatusBot,
 };

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    // const history = useNavigate();
 
     const isEmail = (login) => /\S+@\S+\.\S+/.test(login);
     const isTin = (login) => /^\d+$/.test(login);
@@ -16,7 +14,7 @@ const Login = () => {
         setError(null);
 
         if (!isEmail(login) && !isTin(login)) {
-            setError('Please enter a valid email or TIN');
+            setError('Введите корректный Email или ИНН.');
             return;
         }
 
@@ -27,19 +25,19 @@ const Login = () => {
             });
 
             if (response.data.success) {
-                // history.push('/screens');
+                window.location.href = '/backoffice/profile';
             } else {
                 setError(response.data.message);
             }
         } catch (err) {
-            setError('Failed to login. Please check your credentials.');
+            setError('Ошибка входа. Проверьте ваши данные.');
         }
     };
 
     return (
         <div className="page__login">
             <h1 className="page__login--title">Авторизация</h1>
-            <form className="form form--login" onSubmit={handleSubmit}>
+            <form className="form form--auth" onSubmit={handleSubmit}>
                 <div className="form__group">
                     <label className="form__label">Email или ИНН</label>
                     <input
@@ -64,8 +62,12 @@ const Login = () => {
                         required
                     />
                 </div>
-                {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="form__button button button--large">Войти</button>
+                <div className="form__group form__group--inline">
+                    <a href="/auth/signup" className="form__link button">Регистрация</a>
+                    <a href="/auth/password-reset" className="form__link button">Сброс пароля</a>
+                </div>
+                {error && <div className="form__message form__message--red">{error}</div>}
             </form>
         </div>
     );

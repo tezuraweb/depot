@@ -13,15 +13,24 @@ const transporter = nodemailer.createTransport({
     secure: true,
 });
 
-const sendVerificationEmail = async (email, token) => {
+const sendVerificationEmail = async (email, token, isVerify = true) => {
+    let text = '';
+    if (isVerify) {
+        text = `Добрый день!
+        Для подтверждения данного почтового адреса и задания пароля перейдите по ссылке:
+        http://localhost:3000/auth/verify/${token} 
+        Спасибо!`
+    } else {
+        text = `Добрый день!
+        Для обновления пароля перейдите по ссылке:
+        http://localhost:3000/auth/reset/${token} 
+        Спасибо!`;
+    }
     const mailConfigurations = {
         from: mailConfig.address,
         to: email,
         subject: 'Задание или сброс пароля',
-        text: `Добрый день!
-            Для задания или сброса пароля перейдите по ссылке:
-            http://localhost:3000/auth/reset/${token} 
-            Спасибо!`
+        text: text
     };
 
     try {
@@ -37,12 +46,7 @@ const generateToken = (data, isMail = false) => {
     return jwt.sign(data, isMail ? jwtConfig.emailToken : jwtConfig.token, { expiresIn: isMail ? '10m' : '12h' });
 };
 
-// const verifyToken = (token, callback) => {
-//     jwt.verify(token, jwtConfig.emailToken, callback);
-// };
-
 module.exports = {
     sendVerificationEmail,
     generateToken,
-    // verifyToken
 };

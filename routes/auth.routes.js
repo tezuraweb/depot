@@ -25,7 +25,7 @@ router
     });
 
 router
-    .route('/reset/:token')
+    .route('/verify/:token')
     .get(auth, (req, res) => {
         try {
             const { token } = req.params;
@@ -36,6 +36,24 @@ router
                     return res.status(400).send("Email verification failed, possibly the link is invalid or expired");
                 }
                 const user = await dbController.setTenantEmail(decoded.id, decoded.email);
+                res.render('nodes/reset');
+            });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: 'Failed to login' });
+        }
+    });
+
+router
+    .route('/reset/:token')
+    .get(auth, (req, res) => {
+        try {
+            const { token } = req.params;
+
+            jwt.verify(token, jwtConfig.emailToken, async (err, decoded) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send("Email verification failed, possibly the link is invalid or expired");
+                }
 
                 res.render('nodes/reset');
             });

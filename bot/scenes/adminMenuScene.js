@@ -11,7 +11,7 @@ const createAdminMenuScene = () => {
     });
 
     adminMenuScene.hears("Все обращения", (ctx) => {
-        return ctx.scene.enter('TICKET_HANDLING_SCENE');
+        return ctx.scene.enter('TICKET_HISTORY_SCENE');
     });
 
     adminMenuScene.hears("Создать отчет", (ctx) => {

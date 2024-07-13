@@ -27,7 +27,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
     const showStorey = !isExternal && card.floor !== undefined;
     const showPrice = card.cost !== undefined || isExternal;
     const showDetailsButton = !isExternal && modifier !== 'rented';
-    const showRentedUntil = modifier === 'rented' && card.rentedUntil;
+    const showRentedUntil = modifier === 'rented' && card.date_d;
     const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
     const coverPlaceholder = card.type == 'Офис' ? '/img/pics/officePlaceholder.webp' : '/img/pics/warehousePlaceholder.webp';
@@ -122,7 +122,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                     {showRentedUntil && (
                         <div className="card__rented">
                             <div className="card__subtitle">Арендовано до:</div>
-                            <div className="card__value">{card.rentedUntil}</div>
+                            <div className="card__value">{card.date_d}</div>
                         </div>
                     )}
                 </div>

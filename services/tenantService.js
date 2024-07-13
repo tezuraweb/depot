@@ -44,7 +44,7 @@ async function getTenantByParam(params) {
     if (params.hasOwnProperty('tg_id')) {
         fields = 'id, name, tg_id, status, base';
     } else {
-        fields = 'id, name, email, tin, password, status, base';
+        fields = 'id, name, email, tin, password, status, base, tg_id';
     }
 
     const query = `SELECT ${fields} FROM tenants WHERE ${conditions} LIMIT 1 FORMAT JSON`;
@@ -99,23 +99,20 @@ async function deleteTenantById(id) {
 }
 
 async function alterTenantById(id, data) {
-        const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
-        const query = `ALTER TABLE tenants UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
-        console.log(query);
-        const queryParams = querystring.stringify({
-            'database': config.database,
-            'query': query,
-        });
+    const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
+    const query = `ALTER TABLE tenants UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
 
-        console.log(query)
-    
-        try {
-            const response = await axios.post(`/?${queryParams}`, null, dbOptions);
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
+    try {
+        const response = await axios.post(`/?${queryParams}`, null, dbOptions);
+        return response.data;
+    } catch (error) {
+        throw error;
     }
+}
 
 module.exports = {
     getTenantById,

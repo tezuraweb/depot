@@ -290,45 +290,6 @@ const yujnayaTenants = [
     },
 ]
 
-const rented = [
-    {
-        id: 1,
-        promotion: true,
-        location: "Центр города",
-        article: "A123",
-        area: 100,
-        floor: 3,
-        price: "50000 руб.",
-        images: ['/img/pics/ft.png', '/img/pics/ft.png', '/img/pics/ft.png'],
-        type: "office",
-        rentedUntil: '08.10.2027',
-    },
-    {
-        id: 2,
-        promotion: false,
-        location: "Промышленная зона",
-        article: "B456",
-        area: 500,
-        floor: 1,
-        price: "150000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "industrial",
-        rentedUntil: '08.09.2027',
-    },
-    {
-        id: 3,
-        promotion: true,
-        location: "Торговый центр",
-        article: "C789",
-        area: 200,
-        floor: 2,
-        price: "80000 руб.",
-        images: ['/img/pics/ft.png'],
-        type: "commercial",
-        rentedUntil: '08.09.2025',
-    }
-];
-
 const tickets = [
     {
         "id": 1,
@@ -446,8 +407,24 @@ router
 router
     .route('/report/print')
     .get((req, res) => {
-        res.render('nodes/report-print', { user: { name: 'Иван Федорович Крузенштерн', admin: true } });
+        res.render('nodes/report-print');
     });
+
+router
+    .route('/rented')
+    .get(auth, dbController.getRoomsByTenant);
+
+router
+    .route('/requests')
+    .get(auth, dbController.getTicketsByTenant);
+
+router
+    .route('/tenant/tg')
+    .get(auth, dbController.getTenantTgUsername);
+
+router
+    .route('/tenant/tg')
+    .post(auth, dbController.setTenantTgUsername);
 
 router
     .route('/login')
@@ -490,12 +467,11 @@ router
             const { tin } = pick(req.body, ['tin']);
 
             user = await dbController.getTenantByParam({ tin });
-
             if (user) {
-                return res.status(200).json({ exists: true });
+                return res.status(200).json({ exists: true, signedUp: user.email !== '' });
             }
             return res.status(404).json({ exists: false });
-        } catch (error) {
+        } catch (err) {
             console.log(err);
             return res.status(500).json({ success: false, message: 'Failed to check tin' });
         }
@@ -511,13 +487,13 @@ router
 
             if (user) {
                 const token = generateToken({ id: user.id, email }, true);
-                await sendVerificationEmail(email, token);
+                await sendVerificationEmail(email, token, true);
                 return res.status(200).json({ message: 'Verification email sent' });
             }
 
             return res.status(404).json({ message: 'TIN not found' });
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
             return res.status(500).json({ success: false, message: 'Failed to verify email' });
         }
     });
@@ -532,7 +508,7 @@ router
 
             if (user) {
                 const token = generateToken({ id: user.id, email }, true);
-                await sendVerificationEmail(email, token);
+                await sendVerificationEmail(email, token, false);
                 return res.status(200).json({ message: 'Password reset email sent' });
             }
 
@@ -571,18 +547,6 @@ router
         } catch (err) {
             console.log(err);
             res.status(400).json({ success: false, message: 'Failed to reset password' });
-        }
-    });
-
-
-
-router
-    .route('/rented')
-    .get(async (req, res) => {
-        if (rented) {
-            res.json(rented);
-        } else {
-            res.status(404).json({ error: 'Premises not found' });
         }
     });
 
@@ -639,16 +603,6 @@ router
     });
 
 router
-    .route('/requests')
-    .get(async (req, res) => {
-        if (requests) {
-            res.json(requests);
-        } else {
-            res.status(404).json({ error: 'Requests not found' });
-        }
-    });
-
-router
     .route('/upload')
     .post(upload.single('file'), async (req, res) => {
         const file = req.file;
@@ -689,17 +643,5 @@ router
             res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
         }
     });
-
-router
-    .route('/testrooms')
-    .get(dbController.getRoomsReport);
-
-router
-    .route('/test/:id')
-    .get(dbController.getTenantById);
-
-router
-    .route('/upd/:id')
-    .get(dbController.alterTenantById);
 
 module.exports = router;

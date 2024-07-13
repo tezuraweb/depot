@@ -7,7 +7,7 @@ const createAuthScene = () => {
     authScene.enter(async (ctx) => {
         try {
             const user = await db.getTenantByParam({ 'tg_id': ctx.from.username });
-            // ctx.session.userData = user;
+            ctx.session.user = user;
 
             if (user) {
                 if (user.status != 'admin' && user.status != 'tenant') {

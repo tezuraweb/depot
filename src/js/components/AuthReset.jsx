@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 const AuthReset = () => {
@@ -8,7 +7,6 @@ const AuthReset = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    // const history = useNavigate();
     const { token } = useParams();
 
     const handleSubmit = async (e) => {
@@ -17,7 +15,7 @@ const AuthReset = () => {
         setSuccess(null);
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError('Пароли не совпадают!');
             return;
         }
 
@@ -27,15 +25,15 @@ const AuthReset = () => {
             });
 
             if (response.data.success) {
-                setSuccess('Password reset successfully. Redirecting to login page...');
-                // setTimeout(() => {
-                //     history.push('/login');
-                // }, 3000);
+                setSuccess('Пароль успешно обновлен.\n\nПереходим на страницу входа...');
+                setTimeout(() => {
+                    window.location.href = '/auth/login';
+                }, 3000);
             } else {
                 setError(response.data.message);
             }
         } catch (err) {
-            setError('Failed to reset password');
+            setError('Ошибка обновления пароля.');
         }
     };
 
@@ -43,35 +41,35 @@ const AuthReset = () => {
         <section className="section" id="auth-reset">
             <div className="container">
                 <div className="page__login">
-                    <h1 className="page__login--title">Set Password</h1>
-                    <form className="form form--auth-reset" onSubmit={handleSubmit}>
+                    <h1 className="page__login--title">Задать пароль</h1>
+                    <form className="form form--auth" onSubmit={handleSubmit}>
                         <div className="form__group">
-                            <label className="form__label">New Password</label>
+                            <label className="form__label">Новый пароль</label>
                             <input 
                                 type="password" 
                                 name="password" 
                                 className="form__input" 
-                                placeholder="Enter New Password" 
+                                placeholder="Введите новый пароль" 
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)} 
                                 required 
                             />
                         </div>
                         <div className="form__group">
-                            <label className="form__label">Confirm Password</label>
+                            <label className="form__label">Подтверждение пароля</label>
                             <input 
                                 type="password" 
                                 name="confirmPassword" 
                                 className="form__input" 
-                                placeholder="Confirm Password" 
+                                placeholder="Повторите введенный пароль" 
                                 value={confirmPassword} 
                                 onChange={(e) => setConfirmPassword(e.target.value)} 
                                 required 
                             />
                         </div>
-                        {error && <div className="error-message">{error}</div>}
-                        {success && <div className="success-message">{success}</div>}
-                        <button type="submit" className="form__button button button--large">Confirm</button>
+                        <button type="submit" className="form__button button button--large">Подтвердить</button>
+                        {error && <div className="form__message form__message--red">{error}</div>}
+                        {success && <div className="form__message form__message--green">{success}</div>}
                     </form>
                 </div>
             </div>

@@ -171,6 +171,13 @@ input[type=number] {
         padding-bottom: 0;
     }
 
+    &#hero {
+        background-image: url('../../assets/img/pictures/Depo-cover.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
     &#contact-block {
         background-image: url('../../assets/img/pictures/contacts_bg.webp');
         background-repeat: no-repeat;

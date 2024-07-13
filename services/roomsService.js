@@ -72,6 +72,43 @@ async function getIdLiter() {
     }
 }
 
+async function getRoomsByTenant(id) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `
+        SELECT 
+            rooms.id, 
+            rooms.room, 
+            rooms.type, 
+            rooms.liter, 
+            rooms.id_liter, 
+            rooms.cost, 
+            rooms.area, 
+            rooms.floor, 
+            rooms.ceiling, 
+            rooms.promotion,
+            rooms.date_d
+        FROM rooms 
+        JOIN tenants 
+        ON rooms.tenant = tenants.outer_id 
+        WHERE tenants.id = ${sanitizedId} 
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getPage(data) {
     const conditions = [];
 
@@ -225,4 +262,5 @@ module.exports = {
     getIdLiter,
     getRoomById,
     getRecommended,
+    getRoomsByTenant,
 };

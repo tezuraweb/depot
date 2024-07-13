@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <Suspense fallback={<LoadingSpinner />}>
                                 <Routes>
                                     <Route path="/auth/reset/:token" element={<Component />} />
+                                    <Route path="/auth/verify/:token" element={<Component />} />
                                 </Routes>
                             </Suspense>
                         </Router>

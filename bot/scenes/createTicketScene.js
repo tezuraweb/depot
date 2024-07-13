@@ -9,30 +9,70 @@ const createTicketScene = () => {
             text: '',
             files: [],
             photos: [],
-            messages: []
+            messages: [],
         };
-        ctx.reply("Опишите ваше обращение. Вы также можете прикрепить файлы. Когда закончите, нажмите 'Подтвердить'.", 
+        ctx.reply("Введите сообщение. Вы также можете прикрепить файлы. Когда закончите, нажмите 'Подтвердить'.",
             Markup.keyboard(['Назад']).oneTime().resize());
     });
 
     createTicketScene.hears("Назад", (ctx) => {
-        return ctx.scene.enter('MAIN_MENU_SCENE');
+        if (ctx.session.user.status == 'admin') {
+            return ctx.scene.enter('ADMIN_MENU_SCENE');
+        } else {
+            return ctx.scene.enter('MAIN_MENU_SCENE');
+        }
     });
 
     createTicketScene.hears("Подтвердить", async (ctx) => {
         try {
-            const ticket = await db.insertTicketBot({
-                inquirer: ctx.from.id,
-                text: ctx.session.ticket.text,
-                files: ctx.session.ticket.files,
-                photos: ctx.session.ticket.photos,
-                messages: ctx.session.ticket.messages,
-                isNew: true,
-            });
+            const ticketData = ctx.session.ticket;
+            if (ctx.session.newTicketInquirer) {
+                ticketData.inquirer = ctx.session.newTicketInquirer;
+                ticketData.manager = ctx.from.id;
+            } else {
+                ticketData.inquirer = ctx.from.id;
+            }
+            if (ctx.session.newTicketNumber) {
+                ticketData.ticket_number = ctx.session.newTicketNumber;
+                ticketData.isNew = false;
+            } else {
+                ticketData.isNew = true;
+            }
+            if (ctx.session.newTicketInquirerUsername) {
+                ticketData.inquirer_username = ctx.session.newTicketInquirerUsername;
+            } else {
+                ticketData.inquirer_username = ctx.from.username;
+            }
 
-            ctx.reply("Ваше обращение зарегистрировано!");
-            ctx.session.ticket = null;
-            return ctx.scene.enter('MAIN_MENU_SCENE');
+            const ticket = await db.insertTicketBot(ticketData);
+
+            if (ctx.session.updateTicketStatus && ctx.session.newTicketNumber) {
+                await db.updateTicketStatusBot({ticket_number : ctx.session.newTicketNumber, status: 'in_process'});
+            }
+
+            if (ctx.session.newTicketNumber && ctx.session.newTicketInquirer) {
+                await ctx.telegram.sendMessage(ctx.session.newTicketInquirer, `Ответ на ваше обращение:\n\n${ctx.session.ticket.text}`);
+
+                for (const photoUrl of ctx.session.ticket.photos) {
+                    await ctx.telegram.sendPhoto(ctx.session.newTicketInquirer, photoUrl);
+                }
+    
+                for (const fileId of ctx.session.ticket.files) {
+                    await ctx.telegram.sendDocument(ctx.session.newTicketInquirer, fileId);
+                }
+            }
+
+            ctx.session.newTicketNumber = null;
+            ctx.session.newTicketInquirer = null;
+            ctx.session.updateTicketStatus = null;
+
+            if (ctx.session.user.status == 'admin') {
+                ctx.reply("Ваш ответ записан!");
+                return ctx.scene.enter('ADMIN_MENU_SCENE');
+            } else {
+                ctx.reply("Ваше обращение зарегистрировано!");
+                return ctx.scene.enter('MAIN_MENU_SCENE');
+            }
         } catch (e) {
             ctx.reply("Ошибка!");
             console.log(e.message);
@@ -65,7 +105,7 @@ const createTicketScene = () => {
         } catch (e) {
             ctx.reply("Ошибка!");
             console.log(e.message);
-            return ctx.scene.enter('MAIN_MENU_SCENE');
+            return ctx.scene.reenter();
         }
     });
 

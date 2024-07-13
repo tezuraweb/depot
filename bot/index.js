@@ -5,7 +5,6 @@ const createMainMenuScene = require('./scenes/mainMenuScene');
 const createAdminMenuScene = require('./scenes/adminMenuScene');
 const createTicketScene = require('./scenes/createTicketScene');
 const createTicketHistoryScene = require('./scenes/ticketHistoryScene');
-const createTicketHandlingScene = require('./scenes/ticketHandlingScene');
 const createReportScene = require('./scenes/createReportScene');
 
 class Bot {
@@ -27,7 +26,6 @@ class Bot {
                 createAdminMenuScene(),
                 createTicketScene(),
                 createTicketHistoryScene(),
-                createTicketHandlingScene(),
                 createReportScene(),
             ]);
 

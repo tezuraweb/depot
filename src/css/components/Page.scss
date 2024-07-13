@@ -73,6 +73,13 @@
             background-position-y: 85%;
         }
 
+        &__login {
+            &--title {
+                font-size: 24px;
+                margin-bottom: 50px;
+            }
+        }
+
         &__backoffice {
             &--sticky {
                 position: relative;

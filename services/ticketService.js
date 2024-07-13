@@ -39,6 +39,32 @@ async function getTicketById(id) {
     }
 }
 
+async function getTicketsByTenant(id) {
+    const sanitizedId = sqlstring.escape(id);
+    const query = `
+        SELECT ticket.text, ticket.ticket_number, ticket.status, ticket.date, ticket.manager
+        FROM ticket 
+        JOIN tenants 
+        ON ticket.inquirer_username = tenants.tg_id 
+        WHERE tenants.id = ${sanitizedId} 
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getTicketByUserTg(id, offset, limit) {
     const sanitizedId = sqlstring.escape(id);
     const sanitizedOffcet = sqlstring.escape(offset);
@@ -47,12 +73,13 @@ async function getTicketByUserTg(id, offset, limit) {
         SELECT * 
         FROM (
             SELECT *, 
-                row_number() OVER (PARTITION BY ticket_number ORDER BY date DESC) AS rn
+                row_number() OVER (PARTITION BY ticket_number ORDER BY date) AS rn
             FROM ticket 
             WHERE inquirer = ${sanitizedId}
+            AND status != 'closed'
         ) 
         WHERE rn = 1
-        ORDER BY date DESC
+        ORDER BY ticket_number
         LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffcet}
         FORMAT JSON
     `;
@@ -77,7 +104,7 @@ async function getTicketByNumber(number) {
     const sanitizedNumber = sqlstring.escape(number);
     const query = `
         SELECT * FROM ticket WHERE ticket_number = ${sanitizedNumber} ORDER BY date FORMAT JSON`;
-        
+
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -103,12 +130,12 @@ async function getTicketByStatusTg(status, offset, limit) {
         SELECT * 
         FROM (
             SELECT *, 
-                row_number() OVER (PARTITION BY ticket_number ORDER BY date DESC) AS rn
+                row_number() OVER (PARTITION BY ticket_number ORDER BY date) AS rn
             FROM ticket 
             WHERE status = ${sanitizedStatus}
         ) 
         WHERE rn = 1
-        ORDER BY date DESC
+        ORDER BY ticket_number
         LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffcet}
         FORMAT JSON
     `;
@@ -165,10 +192,34 @@ async function insertTicket(data) {
     }
 }
 
+async function updateTicketStatus(data) {
+    const sanitizedNumber = sqlstring.escape(data.ticket_number);
+    const sanitizedStatus = sqlstring.escape(data.status);
+    
+    const query = `
+        ALTER TABLE ticket
+        UPDATE status = ${sanitizedStatus}
+        WHERE ticket_number = ${sanitizedNumber}
+    `;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios.post(`/?${queryParams}`, null, dbOptions);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getTicketById,
     insertTicket,
     getTicketByUserTg,
     getTicketByStatusTg,
     getTicketByNumber,
+    updateTicketStatus,
+    getTicketsByTenant
 };

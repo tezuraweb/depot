@@ -92,7 +92,7 @@
                         {% if user %}
                             <a class="header__auth" href="/logout">Выйти</a>
                         {% elif not hideLogin %}
-                            <a class="header__auth" href="/login" aria-label="Войти в кабинет арендатора">
+                            <a class="header__auth" href="/auth/login" aria-label="Войти в кабинет арендатора">
                                 <div class="header__auth--icon">
                                     {% set includeIcon = 'authIcon' %}
                                     {% include "includes/svg.njk" %}

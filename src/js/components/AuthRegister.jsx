@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import { useNavigate } from 'react-router-dom';
 
 const AuthRegister = ({ mode = "signup" }) => {
     const [step, setStep] = useState(1);
     const [tin, setTin] = useState('');
     const [email, setEmail] = useState('');
+    const [message, setMessage] = useState(null);
     const [error, setError] = useState(null);
-    // const history = useNavigate();
 
     const handleTinCheck = async () => {
         try {
-            const response = await axios.post('api/signup/check', { tin });
+            const response = await axios.post('/api/signup/check', { tin });
             if (response.data.exists) {
-                setStep(2);
+                if (response.data.signedUp) {
+                    setError('Пользователь уже зарегистрирован!');
+                } else {
+                    setStep(2);
+                }
             } else {
-                setError('TIN does not exist');
+                setError('tin_error');
             }
         } catch (err) {
-            setError('Error checking TIN');
+            setError('tin_error');
         }
     };
 
@@ -30,8 +33,9 @@ const AuthRegister = ({ mode = "signup" }) => {
                 await axios.post('/api/password-reset/initiate', { tin, email });
             }
             setStep(3);
+            setMessage('На указанный адрес отправлено письмо с проверочной ссылкой.')
         } catch (err) {
-            setError('Error sending verification code');
+            setError('Ошибка при отправке проверочного письма.');
         }
     };
 
@@ -52,7 +56,7 @@ const AuthRegister = ({ mode = "signup" }) => {
 
     return (
         <div className="page__login">
-            <h1 className="page__login--title">{mode === 'signup' ? 'Sign Up' : 'Reset Password'}</h1>
+            <h1 className="page__login--title">{mode === 'signup' ? 'Регистрация' : 'Сброс пароля'}</h1>
             <form className="form form--auth" onSubmit={handleSubmit}>
                 {mode === 'signup' && step === 1 && (
                     <div className="form__group">
@@ -70,18 +74,6 @@ const AuthRegister = ({ mode = "signup" }) => {
                 )}
                 {(step === 2 || mode === 'password-reset') && (
                     <>
-                        <div className="form__group">
-                            <label className="form__label">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                className="form__input"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
                         {mode === 'password-reset' && (
                             <div className="form__group">
                                 <label className="form__label">ИНН</label>
@@ -96,12 +88,37 @@ const AuthRegister = ({ mode = "signup" }) => {
                                 />
                             </div>
                         )}
+                        <div className="form__group">
+                            <label className="form__label">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                className="form__input"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
                     </>
                 )}
-                {error && <div className="error-message">{error}</div>}
-                <button type="submit" className="form__button button button--large">
-                    {step === 1 ? 'Next' : 'Submit'}
-                </button>
+                {step !== 3 && (
+                    <button type="submit" className="form__button button button--large">
+                        {step === 1 ? 'Дальше' : 'Подтвердить'}
+                    </button>
+                )}
+                {error && (
+                    error === 'tin_error' ? (
+                        <div className="form__message form__message--red">
+                            Ваш ИНН не зарегистрирован в нашей базе данных.<br /><br />
+                            Пожалуйста, свяжитесь со своим менеджером или позвоните на горячую линию по телефону.<br /><br />
+                            <a href="tel:+79120557755" className="form__message--large">+7 (912) 055-77-55</a>
+                        </div>
+                    ) : (
+                        <div className="form__message form__message--red">{error}</div>
+                    )
+                )}
+                {message && <div className="form__message form__message--green">{message}</div>}
             </form>
         </div>
     );
