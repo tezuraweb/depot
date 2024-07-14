@@ -1,77 +1,34 @@
-{% set navs = [
-    {
-        link: '/search',
-        title: 'Помещения'
-    },
-    {
-        link: '/about',
-        title: 'О компании'
-    },
-    {
-        link: '/search',
-        title: 'Торговый центр'
-    },
-    {
-        link: '/lightindustrial',
-        title: 'Light Industrial'
-    },
-    {
-        link: '/search',
-        title: 'Объекты партнеров'
-    }
-] %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ pageTitle }}</title>
+        <meta name="title" content="{{ pageTitle|default('Депо') }}">
+        <meta name="description" content="{{ pageDescription|default('') }}">
+        <meta name="keywords" content="">
+        <meta name="robots" content="index, follow">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="language" content="Russian">
+        <meta name="theme-color" content="#000" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+        <link rel="manifest" href="/favicon/site.webmanifest">
+        <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
 
-{% set contacts = {
-    phone: {
-        link: 'tel:+79120557755',
-        title: '+7 (912) 055-77-55'
-    },
-    socials: [
-        {
-            link: '',
-            type: 'telegram',
-            icon: 'telegramIcon',
-            title: 'Telegram'
-        },
-        {
-            link: '',
-            type: 'whatsapp',
-            icon: 'whatsappIcon',
-            title: 'WhatsApp'
-        },
-        {
-            link: '',
-            type: 'viber',
-            icon: 'viberIcon',
-            title: 'Viber'
-        }
-    ],
-    channel: {
-        link: '',
-        type: 'telegram',
-        icon: 'telegramIcon',
-        title: 'Наш канал'
-    },
-    email: {
-        link: 'mailto:info@depoarenda.ru',
-        title: 'info@depoarenda.ru'
-    }
-} %}
+        {% block customCss %}{% endblock %}
 
-{% extends "layouts/default.njk" %}
+        {% include "includes/preload.njk" %}
+        {% include "includes/versionCss.njk" %}
+    </head>
 
-{% block bodyContent %}
+    <body class="page">
+        {% block bodyContent %}{% endblock %}
 
-    <header class="page__header">
-        {% include "includes/header.njk" %}
-    </header>
+        {% include "includes/svgSprite.njk" %}
 
-    <main class="page__main">
-        {% block mainContent %}{% endblock %}
-    </main>
-
-    <footer class="page__footer">
-        {% include "includes/footer.njk" %}
-    </footer>
-
-{% endblock %}
+        {% block customJs %}{% endblock %}
+        {% include "includes/versionJs.njk" %}
+    </body>
+</html>

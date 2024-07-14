@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const auth = require('../middlewares/auth');
 const cdnConfig = require('../config/cdnConfig');
 const jwtConfig = require('../config/jwtConfig');
+const bitrixConfig = require('../config/bitrixConfig');
 const dbController = require('../controllers/dbController');
 const { sendVerificationEmail, generateToken } = require('../services/emailService');
 
@@ -290,54 +291,6 @@ const yujnayaTenants = [
     },
 ]
 
-const tickets = [
-    {
-        "id": 1,
-        "status": "Новое",
-        "tgId": "privet.qq",
-        "inn": "0000000000",
-        "liter": "Литер А",
-        "place": "12",
-        "date": "1 июля 2024"
-    },
-    {
-        "id": 2,
-        "status": "В работе",
-        "tgId": "example.id",
-        "inn": "1234567890",
-        "liter": "Литер Б",
-        "place": "34",
-        "date": "2 июля 2024"
-    },
-    {
-        "id": 3,
-        "status": "Завершено",
-        "tgId": "hello.world",
-        "inn": "0987654321",
-        "liter": "Литер В",
-        "place": "56",
-        "date": "3 июля 2024"
-    },
-    {
-        "id": 4,
-        "status": "Новое",
-        "tgId": "user.test",
-        "inn": "1111111111",
-        "liter": "Литер Г",
-        "place": "78",
-        "date": "4 июля 2024"
-    },
-    {
-        "id": 5,
-        "status": "В работе",
-        "tgId": "sample.id",
-        "inn": "2222222222",
-        "liter": "Литер Д",
-        "place": "90",
-        "date": "5 июля 2024"
-    }
-]
-
 const docs = [
     {
         id: 1,
@@ -417,6 +370,10 @@ router
 router
     .route('/requests')
     .get(auth, dbController.getTicketsByTenant);
+
+router
+    .route('/request/create')
+    .post(auth, dbController.insertTicketFromBackoffice);
 
 router
     .route('/tenant/tg')
@@ -551,14 +508,35 @@ router
     });
 
 router
-    .route('/tickets')
-    .get(async (req, res) => {
-        if (tickets) {
-            res.json(tickets);
-        } else {
-            res.status(404).json({ error: 'Tickets not found' });
+    .route('/contact')
+    .post(async (req, res) => {
+        const { name, email, phone, url } = pick(req.body, ['name', 'email', 'phone', 'url']);
+
+        try {
+            const response = await axios.post(`${bitrixConfig.url}/crm.lead.add`, {
+                fields: {
+                    TITLE: `Заявка от ${name}`,
+                    NAME: name,
+                    EMAIL: [{ VALUE: email }],
+                    PHONE: [{ VALUE: phone }],
+                    WEB: [{ VALUE: url, VALUE_TYPE: "Депо" }],
+                }
+            });
+            res.json({ success: true, data: response.data });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
         }
     });
+
+// router
+//     .route('/tickets')
+//     .get(async (req, res) => {
+//         if (tickets) {
+//             res.json(tickets);
+//         } else {
+//             res.status(404).json({ error: 'Tickets not found' });
+//         }
+//     });
 
 router
     .route('/manager')

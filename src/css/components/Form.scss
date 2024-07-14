@@ -215,6 +215,79 @@
         &--large {
             font-size: 20px;
         }
+
+        &--icon {
+            position: relative;
+            opacity: 0;
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
+
+        &--success,
+        &--fail {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 35px;
+            height: 35px;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                border-radius: 2px;
+            }
+
+            &::before {
+                height: 3px;
+                transform-origin: left center;
+                transform: scaleX(0);
+                animation: scaleInX 0.5s forwards;
+                animation-delay: 0.3s;
+            }
+
+            &::after {
+                width: 3px;
+                height: 35px;
+                transform-origin: center bottom;
+                transform: scaleY(0);
+                animation: scaleInY 0.5s forwards;
+                animation-delay: 0.8s;
+            }
+        }
+
+        &--success {
+            transform: translate(-50%, -75%) rotate(45deg);
+
+            &::before {
+                width: 20px;
+                bottom: 0;
+                right: 0;
+                background-color: $green;
+            }
+
+            &::after {
+                bottom: 0;
+                right: 0;
+                background-color: $green;
+            }
+        }
+
+        &--fail {
+            transform: translate(-50%, -50%) rotate(45deg);
+
+            &::before {
+                top: 16px;
+                left: 0;
+                width: 35px;
+                background-color: $red;
+            }
+
+            &::after {
+                top: 0;
+                left: 16px;
+                background-color: $red;
+            }
+        }
     }
 
     // modifiers
@@ -323,6 +396,16 @@
         .form__button {
             margin: 0 auto;
         }
+
+        .form__message {
+            margin: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+        }
     }
 
     &--inline {
@@ -340,6 +423,16 @@
         .form__button {
             padding: 23px 61px;
             font-size: 20px;
+        }
+
+        .form__message {
+            margin: 0;
+            position: absolute;
+            bottom: 0;
+            right: 42px;
+            width: 150px;
+            height: 66px;
+            background-color: $yellow;
         }
     }
 
@@ -450,7 +543,13 @@
 
             .form__button {
                 padding: 23px 82px;
-                margin: 30px auto;
+                margin: 30px auto 0;
+            }
+
+            .form__message {
+                left: 0;
+                right: 0;
+                margin: 0 auto;
             }
         }
 
@@ -593,7 +692,8 @@
             .form__input {
                 margin-right: 15px;
                 min-width: auto;
-                max-width: 225px;;
+                max-width: 225px;
+                ;
             }
         }
     }
@@ -730,12 +830,19 @@
             }
         }
 
+        &--modal {
+            .form__input {
+                width: 280px;
+            }
+        }
+
         &--inline {
             flex-direction: column;
 
             .form__group {
                 flex-direction: column;
                 align-items: flex-start;
+                margin-bottom: 35px;
             }
 
             .form__label {
@@ -744,6 +851,7 @@
 
             .form__input {
                 width: 100%;
+                padding: 10px 20px;
             }
 
             .form__button {
@@ -751,6 +859,14 @@
                 margin: 0;
                 padding: 12px 20px;
                 font-size: 14px;
+            }
+
+            .form__message {
+                height: 38px;
+
+                &--success {
+                    transform: translate(-50%, -80%) rotate(45deg);
+                }
             }
         }
 
@@ -855,5 +971,43 @@
                 width: 100%;
             }
         }
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes scaleInX {
+    0% {
+        transform: scaleX(0);
+    }
+
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes scaleInY {
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
     }
 }

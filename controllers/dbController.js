@@ -5,28 +5,6 @@ const ticketService = require('../services/ticketService');
 
 // Tenants
 
-// async function getTenantById(req, res, next) {
-//     try {
-//         const userId = req.params.id;
-//         const user = await tenantService.getTenantById(userId);
-//         res.json(user.data);
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-
-// async function alterTenantById(req, res, next) {
-//     try {
-//         const userId = req.params.id;
-//         const name = req.query.name;
-//         const status = req.query.status;
-//         const user = await tenantService.alterTenantById(userId, { name, status });
-//         res.json(user.data);
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-
 async function getTenantByParam(params) {
     try {
         const user = await tenantService.getTenantByParam(params);
@@ -238,6 +216,17 @@ async function getTicketsByTenant(req, res, next) {
     }
 }
 
+async function insertTicketFromBackoffice(req, res, next) {
+    try {
+        const userId = req.user.id;
+        const { text } = pick(req.body, ['text']);
+        const rooms = await ticketService.insertTicketBackoffice({ userId, text });
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getTenantByParam,
     setTenantEmail,
@@ -259,4 +248,5 @@ module.exports = {
     getTicketsByUserBot,
     getTicketsByStatusBot,
     updateTicketStatusBot,
+    insertTicketFromBackoffice,
 };

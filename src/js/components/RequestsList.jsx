@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import TicketModal from '../includes/TicketModal';
 
 const RequestsList = () => {
     const [requests, setRequests] = useState({});
     const [telegramUsername, setTelegramUsername] = useState('');
     const [selectedRequest, setSelectedRequest] = useState(null);
+    const [hasTg, setHasTg] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [showTicketModal, setShowTicketModal] = useState(false);
 
     const statusNames = {
         closed: 'Закрыто',
@@ -38,20 +41,21 @@ const RequestsList = () => {
         axios.get('/api/tenant/tg')
             .then(response => {
                 setTelegramUsername(response.data.username);
+                if (response.data.username) setHasTg(true);
             })
             .catch(error => console.error('Error fetching telegram username:', error));
     }, []);
 
     const handleTelegramSubmit = (e) => {
         e.preventDefault();
-    
+
         let username = telegramUsername.trim();
         if (username.startsWith('@')) {
             username = username.slice(1);
         } else if (username.startsWith('t.me/')) {
             username = username.slice(5);
         }
-    
+
         const usernameRegex = /^[a-zA-Z0-9_]{5,32}$/;
         if (!username) {
             setError('Имя пользователя не может быть пустым.');
@@ -66,10 +70,11 @@ const RequestsList = () => {
             }, 5000);
             return;
         }
-    
+
         axios.post('/api/tenant/tg', { tg_id: username })
             .then(response => {
                 setTelegramUsername(username);
+                setHasTg(true);
                 setSuccess('Имя пользователя успешно обновлено!');
                 setTimeout(() => {
                     setSuccess('');
@@ -82,7 +87,7 @@ const RequestsList = () => {
                 }, 5000);
                 console.error('Error updating telegram username:', error);
             });
-    };    
+    };
 
     const handleRequestClick = (ticketNumber) => {
         setSelectedRequest(requests[ticketNumber]);
@@ -92,7 +97,7 @@ const RequestsList = () => {
         <div className="requests">
             <h2 className="requests__title">Ваши обращения</h2>
             <div className="requests__summary">
-                Создать обращение можно с помощью Telegram-бота, для этого нужно перейти в соответствующий раздел меню и нажать /start. Если по какой-то причине вы не видите эту кнопку, скопируйте команду и введите ее вручную.
+                Создать обращение можно с помощью Telegram-бота, для этого задайте ваше имя пользователя Telegram и перейдите в бота. Для запуска бота введите команду /start.
             </div>
 
             <form className="form form--tg" onSubmit={handleTelegramSubmit}>
@@ -108,6 +113,12 @@ const RequestsList = () => {
                 {error && <div className="form__message form__message--red">{error}</div>}
                 {success && <div className="form__message form__message--green">{success}</div>}
             </form>
+
+            {hasTg && (
+                <div className="requests__form">
+                    <button className="button animate--pulse" onClick={() => setShowTicketModal(true)}>Создать новое обращение</button>
+                </div>
+            )}
 
             <div className="requests__line">
                 <div className="requests__title">История обращений</div>
@@ -142,6 +153,7 @@ const RequestsList = () => {
             <div className="requests__desc requests__desc--new">Ваше обращение находится в очереди на рассмотрение</div>
             <div className="requests__desc requests__desc--in_process">По вашему обращению есть ответ от менеджера, пожалуйста, проверьте свой телеграм.</div>
             <div className="requests__desc requests__desc--closed">По вашему обращению было принято решение</div>
+            {showTicketModal && <TicketModal onClose={() => setShowTicketModal(false)} />}
         </div>
     );
 };

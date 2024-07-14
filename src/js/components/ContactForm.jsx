@@ -11,6 +11,8 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
         email: ''
     });
     const [modalVisible, setModalVisible] = useState(false);
+    const [error, setError] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const popupClick = (e) => {
         if (e.target != e.currentTarget) return;
@@ -29,12 +31,20 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/contact', formData);
-            alert('Заявка отправлена успешно!');
+            const requestData = formData;
+            requestData.url = window.location.href;
+            const response = await axios.post('/api/contact', requestData);
             setFormData({ name: '', phone: '', email: '' });
+            setSuccess(true);
+            setTimeout(() => {
+                setSuccess(false);
+            }, 3000);
         } catch (error) {
             console.error('Error submitting form:', error);
-            alert('Ошибка при отправке заявки.');
+            setError(true);
+            setTimeout(() => {
+                setError(false);
+            }, 3000);
         }
     };
 
@@ -109,6 +119,16 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
                             />
                         </div>
                         <button type="submit" className="form__button button animate--pulse">Отправить</button>
+                        {error && (
+                            <div className="form__message form__message--icon">
+                                <div className="form__message--fail"></div>
+                            </div>
+                        )}
+                        {success && (
+                            <div className="form__message form__message--icon">
+                                <div className="form__message--success"></div>
+                            </div>
+                        )}
                     </form>
                 </div>
             )}

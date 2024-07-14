@@ -156,6 +156,28 @@ async function getTicketByStatusTg(status, offset, limit) {
     }
 }
 
+async function updateTicketStatus(data) {
+    const sanitizedNumber = sqlstring.escape(data.ticket_number);
+    const sanitizedStatus = sqlstring.escape(data.status);
+    
+    const query = `
+        ALTER TABLE ticket
+        UPDATE status = ${sanitizedStatus}
+        WHERE ticket_number = ${sanitizedNumber}
+    `;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios.post(`/?${queryParams}`, null, dbOptions);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function insertTicket(data) {
     if (data.isNew) {
         data.ticket_number = generateUniqueTicketNumber();
@@ -192,15 +214,23 @@ async function insertTicket(data) {
     }
 }
 
-async function updateTicketStatus(data) {
-    const sanitizedNumber = sqlstring.escape(data.ticket_number);
-    const sanitizedStatus = sqlstring.escape(data.status);
-    
-    const query = `
-        ALTER TABLE ticket
-        UPDATE status = ${sanitizedStatus}
-        WHERE ticket_number = ${sanitizedNumber}
-    `;
+async function insertTicketBackoffice(data) {
+    data.ticket_number = generateUniqueTicketNumber();
+    data.status = 'new';
+    data.date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    const inquirerUsername = `(SELECT tg_id FROM tenants WHERE id = ${sqlstring.escape(data.userId)} LIMIT 1)`;
+
+    const keys = ['ticket_number', 'status', 'date', 'text', 'inquirer_username'];
+    const values = [
+        sqlstring.escape(data.ticket_number),
+        sqlstring.escape(data.status),
+        sqlstring.escape(data.date),
+        sqlstring.escape(data.text),
+        inquirerUsername
+    ];
+
+    const query = `INSERT INTO ticket (${keys.join(', ')}) VALUES (${values.join(', ')})`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -217,6 +247,7 @@ async function updateTicketStatus(data) {
 module.exports = {
     getTicketById,
     insertTicket,
+    insertTicketBackoffice,
     getTicketByUserTg,
     getTicketByStatusTg,
     getTicketByNumber,
