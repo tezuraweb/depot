@@ -10,7 +10,6 @@ const loadComponent = (componentName) => {
         case 'mainFilter':
             return lazy(() => import('./components/MainFilter'));
         case 'contactForm':
-            return lazy(() => import('./components/ContactForm'));
         case 'contactFormModal':
             return lazy(() => import('./components/ContactForm'));
         case 'partnerCardList':
@@ -47,6 +46,9 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/AuthRegister'));
         case 'resetPassword':
             return lazy(() => import('./components/AuthReset'));
+        case 'promotionsCardList':
+            return lazy(() => import('./components/PromotionsCardList'));
+
         default:
             return null;
     }
@@ -55,64 +57,43 @@ const loadComponent = (componentName) => {
 document.addEventListener('DOMContentLoaded', () => {
     const containers = document.querySelectorAll('[data-react-component]');
 
-    containers.forEach((container) => {
-        const componentName = container.getAttribute('data-react-component');
+    const renderApp = (componentName, container) => {
         const Component = loadComponent(componentName);
 
-        if (Component) {
-            if (componentName == 'premises') {
-                ReactDOM.render(
-                    <ViewportProvider>
-                        <Router>
-                            <Suspense fallback={<LoadingSpinner />}>
-                                <Routes>
-                                    <Route path="/premises/:id" element={<Component />} />
-                                </Routes>
-                            </Suspense>
-                        </Router>
-                    </ViewportProvider>,
-                    container
-                );
-            } else if (componentName == 'signup') {
-                ReactDOM.render(
-                    <ViewportProvider>
-                        <Router>
-                            <Suspense fallback={<LoadingSpinner />}>
-                                <Routes>
+        if (!Component) return;
+
+        ReactDOM.render(
+            <ViewportProvider>
+                <Router>
+                    <Suspense fallback={<LoadingSpinner />}>
+                        <Routes>
+                            {componentName === 'premises' && <Route path="/premises/:id" element={<Component />} />}
+                            {componentName === 'signup' && (
+                                <>
                                     <Route path="/auth/signup" element={<Component mode="signup" />} />
                                     <Route path="/auth/password-reset" element={<Component mode="password-reset" />} />
-                                </Routes>
-                            </Suspense>
-                        </Router>
-                    </ViewportProvider>,
-                    container
-                );
-            } else if (componentName == 'resetPassword') {
-                ReactDOM.render(
-                    <ViewportProvider>
-                        <Router>
-                            <Suspense fallback={<LoadingSpinner />}>
-                                <Routes>
+                                </>
+                            )}
+                            {componentName === 'resetPassword' && (
+                                <>
                                     <Route path="/auth/reset/:token" element={<Component />} />
                                     <Route path="/auth/verify/:token" element={<Component />} />
-                                </Routes>
-                            </Suspense>
-                        </Router>
-                    </ViewportProvider>,
-                    container
-                );
-            } else {
-                ReactDOM.render(
-                    <ViewportProvider>
-                        <Suspense fallback={<LoadingSpinner />}>
-                            <Component {...(componentName === 'contactFormModal' && { modal: true })} />
-                        </Suspense>
-                    </ViewportProvider>,
-                    container
-                );
-            }
+                                </>
+                            )}
+                            {(componentName !== 'premises' && componentName !== 'signup' && componentName !== 'resetPassword') && (
+                                <Route path="*" element={<Component {...(componentName === 'contactFormModal' && { modal: true })} />} />
+                            )}
+                        </Routes>
+                    </Suspense>
+                </Router>
+            </ViewportProvider>,
+            container
+        );
+    };
 
-        }
+    containers.forEach((container) => {
+        const componentName = container.getAttribute('data-react-component');
+        renderApp(componentName, container);
     });
 });
 
@@ -129,17 +110,7 @@ ymaps
                 zoom: 7
             });
 
-            // var myPlacemark = new ymaps.Placemark(map.getCenter(), {
-            //     hintContent: 'Custom marker',
-            //     balloonContent: 'This is a custom marker'
-            // }, {
-            //     iconLayout: 'default#image',
-            //     iconImageHref: '/img/icons/geoIcon.svg',
-            //     iconImageSize: [30, 42],
-            //     iconImageOffset: [-15, -42]
-            // });
-
-            var myPlacemark = new maps.Placemark(map.getCenter(), {
+            const myPlacemark = new maps.Placemark(map.getCenter(), {
                 hintContent: 'Default marker',
                 balloonContent: 'This is a default marker'
             });

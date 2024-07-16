@@ -85,6 +85,12 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx'],
     },
+
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    },
     
     plugins: [
         new CleanWebpackPlugin(),

@@ -41,10 +41,10 @@ async function getTenantByParam(params) {
         .join(' AND ');
 
     let fields = '*';
-    if (params.hasOwnProperty('tg_id')) {
-        fields = 'id, name, tg_id, status, base';
+    if (params.hasOwnProperty('tg_user')) {
+        fields = 'id, name, tg_user, tg_id, status, base';
     } else {
-        fields = 'id, name, email, tin, password, status, base, tg_id';
+        fields = 'id, name, email, tin, password, status, base, tg_user, tg_id';
     }
 
     const query = `SELECT ${fields} FROM tenants WHERE ${conditions} LIMIT 1 FORMAT JSON`;

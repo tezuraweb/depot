@@ -154,6 +154,13 @@
         margin-top: 25px;
     }
 
+    &__button {
+        &--promotion {
+            color: $white;
+            background-color: $green;
+        }
+    }
+
     // modifiers
 
     &--main {
@@ -169,7 +176,8 @@
         }
     }
 
-    &--rented {
+    &--rented,
+    &--promotions {
         .card__wrapper {
             border: 2px solid $darkGrey;
         }

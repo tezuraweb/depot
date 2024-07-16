@@ -45,7 +45,7 @@ async function getTicketsByTenant(id) {
         SELECT ticket.text, ticket.ticket_number, ticket.status, ticket.date, ticket.manager
         FROM ticket 
         JOIN tenants 
-        ON ticket.inquirer_username = tenants.tg_id 
+        ON ticket.inquirer_username = tenants.tg_user 
         WHERE tenants.id = ${sanitizedId} 
         FORMAT JSON`;
     const queryParams = querystring.stringify({
@@ -218,16 +218,19 @@ async function insertTicketBackoffice(data) {
     data.ticket_number = generateUniqueTicketNumber();
     data.status = 'new';
     data.date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const userId = sqlstring.escape(data.userId);
 
-    const inquirerUsername = `(SELECT tg_id FROM tenants WHERE id = ${sqlstring.escape(data.userId)} LIMIT 1)`;
+    const inquirerUsernameSubquery = `(SELECT tg_user FROM tenants WHERE id = ${userId} LIMIT 1)`;
+    const inquirerSubquery = `(SELECT tg_id FROM tenants WHERE id = ${userId} LIMIT 1)`;
 
-    const keys = ['ticket_number', 'status', 'date', 'text', 'inquirer_username'];
+    const keys = ['ticket_number', 'status', 'date', 'text', 'inquirer_username', 'inquirer'];
     const values = [
         sqlstring.escape(data.ticket_number),
         sqlstring.escape(data.status),
         sqlstring.escape(data.date),
         sqlstring.escape(data.text),
-        inquirerUsername
+        inquirerUsernameSubquery,
+        inquirerSubquery
     ];
 
     const query = `INSERT INTO ticket (${keys.join(', ')}) VALUES (${values.join(', ')})`;
@@ -243,6 +246,7 @@ async function insertTicketBackoffice(data) {
         throw error;
     }
 }
+
 
 module.exports = {
     getTicketById,

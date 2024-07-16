@@ -31,6 +31,15 @@ router
     });
 
 router
+    .route('/promotions')
+    .get(auth, (req, res) => {
+        if (req.user.status && req.user.status === 'tenant') {
+            return res.redirect('/backoffice/profile');
+        }
+        res.render('nodes/promotions', { user: req.user, page: 'promotions' });
+    });
+
+router
     .route('/editor')
     .get(auth, (req, res) => {
         if (req.user.status && req.user.status === 'tenant') {

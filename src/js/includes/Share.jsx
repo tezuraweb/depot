@@ -3,7 +3,6 @@ import IconSprite from './IconSprite';
 import ContactForm from '../components/ContactForm';
 
 const Share = ({ activeCard, modifier }) => {
-
     const copyToClipboard = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -15,7 +14,7 @@ const Share = ({ activeCard, modifier }) => {
 
     const generateSocialLink = (platform) => {
         if (activeCard) {
-            const message = `Интересует лот артикул ${activeCard.article}`;
+            const message = `Интересует лот ${link}`;
             const encodedMessage = encodeURIComponent(message);
 
             switch (platform) {
@@ -51,12 +50,14 @@ const Share = ({ activeCard, modifier }) => {
         window.open(link, '_blank');
     };
 
+    const link = activeCard ? window.location.origin + '/premises/' + activeCard.id : '';
+
     return (
         <div className={`share ${modifier ? 'share--' + modifier : ''}`}>
             <ul className="share__list">
                 {modifier == 'phoneSmall' && (
                     <li className="share__item">
-                        <ContactForm modal={true} modifier="share" buttonView="icon" />
+                        <ContactForm modal={true} modifier="share" buttonView="icon" url={link} />
                     </li>
                 )}
                 <li className="share__item">
@@ -92,7 +93,7 @@ const Share = ({ activeCard, modifier }) => {
                             <a href="tel:+79120557755" className="share__phone">+7 (912) 055-77-55</a>
                         </li>
                         <li className="share__item">
-                            <ContactForm modal={true} modifier="share" />
+                            <ContactForm modal={true} modifier="share" url={link} />
                         </li>
                     </>
                 )}

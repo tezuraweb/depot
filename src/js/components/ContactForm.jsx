@@ -3,7 +3,7 @@ import axios from 'axios';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
+const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null }) => {
     const deviceType = useViewportContext();
     const [formData, setFormData] = useState({
         name: '',
@@ -32,7 +32,7 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '' }) => {
         e.preventDefault();
         try {
             const requestData = formData;
-            requestData.url = window.location.href;
+            requestData.url = url ? url : window.location.href;
             const response = await axios.post('/api/contact', requestData);
             setFormData({ name: '', phone: '', email: '' });
             setSuccess(true);

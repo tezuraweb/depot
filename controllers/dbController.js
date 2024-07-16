@@ -18,8 +18,9 @@ async function getTenantTgUsername(req, res, next) {
     try {
         const id = req.user.id;
         const user = await tenantService.getTenantByParam({ id });
-        const username = user && user.data?.length > 0 ? user.data[0].tg_id : '';
-        res.json({ username });
+        const username = user && user.data?.length > 0 ? user.data[0].tg_user : '';
+        const tg_id = user && user.data?.length > 0 ? parseInt(user.data[0].tg_id) : 0;
+        res.json({ username, tg_id });
     } catch (error) {
         next(error);
     }
@@ -43,13 +44,21 @@ async function setTenantPassword(id, password) {
     }
 }
 
+async function setTenantTgId(id, tg_id) {
+    try {
+        const user = await tenantService.alterTenantById(id, { tg_id });
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function setTenantTgUsername(req, res, next) {
     try {
         const id = req.user.id;
-        const { tg_id } = pick(req.body, ['tg_id']);
-        const user = await tenantService.alterTenantById(id, { tg_id });
-        const username = user && user.data?.length > 0 ? user.data[0].tg_id : '';
-        res.json({ username });
+        const { tg_user } = pick(req.body, ['tg_user']);
+        const user = await tenantService.alterTenantById(id, { tg_user });
+        return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
         next(error);
     }
@@ -151,6 +160,16 @@ async function getRoomsRecommended(req, res, next) {
     }
 }
 
+async function setRoomsPromotions(req, res, next) {
+    try {
+        const { data } = pick(req.body, ['data']);
+        const rooms = await roomsService.setPromotions(data);
+        res.json({ success: rooms.success });
+    } catch (error) {
+        next(error);
+    }
+}
+
 // Tickets
 
 async function getTicketByIdBot(id) {
@@ -233,6 +252,7 @@ module.exports = {
     getTenantTgUsername,
     setTenantPassword,
     setTenantTgUsername,
+    setTenantTgId,
     getAllRooms,
     getRoomsSearch,
     getRoomsTypes,
@@ -241,6 +261,7 @@ module.exports = {
     getRoomsById,
     getRoomsRecommended,
     getRoomsByTenant,
+    setRoomsPromotions,
     getTicketByIdBot,
     getTicketByNumberBot,
     getTicketsByTenant,

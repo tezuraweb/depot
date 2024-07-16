@@ -6,7 +6,7 @@ const createAuthScene = () => {
 
     authScene.enter(async (ctx) => {
         try {
-            const user = await db.getTenantByParam({ 'tg_id': ctx.from.username });
+            const user = await db.getTenantByParam({ 'tg_user': ctx.from.username });
             ctx.session.user = user;
 
             if (user) {
@@ -14,6 +14,14 @@ const createAuthScene = () => {
                     ctx.reply("Вам отказано в доступе!");
                 } else {
                     ctx.reply("Добро пожаловать, " + user.name + "!");
+
+                    console.log(user)
+
+                    const userId = parseInt(user.tg_id);
+                    if (isNaN(userId) || userId === 0) {
+                        console.log('lol')
+                        await db.setTenantTgId(user.id, ctx.from.id);
+                    }
 
                     if (user.status == 'admin') {
                         return ctx.scene.enter('ADMIN_MENU_SCENE');

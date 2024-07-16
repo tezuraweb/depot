@@ -4,7 +4,7 @@ import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false }) => {
+const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false, togglePromotion = null }) => {
     const deviceType = useViewportContext();
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
@@ -32,7 +32,7 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
 
     const title = titleMap[modifier];
     const showTabs = modifier === 'main';
-    const showPagination = modifier === 'main' && deviceType !== 'tablet' && deviceType !== 'mobile' || modifier === 'search';
+    const showPagination = modifier === 'main' && deviceType !== 'tablet' && deviceType !== 'mobile' || modifier === 'search' || modifier === 'promotions';
     const showRedirect = modifier === 'main' && (deviceType === 'tablet' || deviceType === 'mobile');
     const showShareSide = modifier === 'main' && (deviceType === 'desktop' || deviceType === 'laptop');
     const showShareBottom = modifier === 'main' && (deviceType === 'tablet' || deviceType === 'mobile') || modifier === 'search';
@@ -68,6 +68,7 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
                                     card={card}
                                     onClick={() => handleCardClick(card, index)}
                                     isActive={index === activeCardIndex}
+                                    togglePromotion={togglePromotion}
                                     modifier={modifier}
                                 />
                             ))}

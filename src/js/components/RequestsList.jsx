@@ -38,13 +38,20 @@ const RequestsList = () => {
                 console.error('Error fetching requests:', error)
             });
 
+            fetchTgData();
+    }, []);
+
+    const fetchTgData = () => {
         axios.get('/api/tenant/tg')
             .then(response => {
                 setTelegramUsername(response.data.username);
-                if (response.data.username) setHasTg(true);
+                console.log(response.data.username, response.data.tg_id)
+                if (response.data.username && response.data.tg_id !== 0) {
+                    setHasTg(true);
+                }
             })
             .catch(error => console.error('Error fetching telegram username:', error));
-    }, []);
+    }
 
     const handleTelegramSubmit = (e) => {
         e.preventDefault();
@@ -71,10 +78,10 @@ const RequestsList = () => {
             return;
         }
 
-        axios.post('/api/tenant/tg', { tg_id: username })
+        axios.post('/api/tenant/tg', { tg_user: username })
             .then(response => {
                 setTelegramUsername(username);
-                setHasTg(true);
+                fetchTgData();
                 setSuccess('Имя пользователя успешно обновлено!');
                 setTimeout(() => {
                     setSuccess('');

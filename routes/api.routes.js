@@ -384,6 +384,10 @@ router
     .post(auth, dbController.setTenantTgUsername);
 
 router
+    .route('/promotions')
+    .post(auth, dbController.setRoomsPromotions);
+
+router
     .route('/login')
     .post(async (req, res) => {
         try {

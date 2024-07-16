@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import IconSprite from './IconSprite';
 
-const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
+const Card = ({ card, onClick = null, isActive, togglePromotion = null, modifier = '' }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [loading, setLoading] = useState(true);
 
@@ -19,14 +19,23 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
         }
     };
 
+    const handleTogglePromotion = () => {
+        const newVal = !card.promotion;
+        card.promotion = newVal;
+        if (togglePromotion !== null) {
+            togglePromotion(card.id, newVal);
+        }
+    };
+
     const isExternal = modifier === 'external';
-    const showPromotion = card.promotion && modifier !== 'rented';
+    const showPromotion = card.promotion && (modifier !== 'rented' && modifier !== 'promotions');
     const showType = card.type !== undefined;
     const showLocation = card.liter !== undefined;
     const showArea = card.area !== undefined;
     const showStorey = !isExternal && card.floor !== undefined;
     const showPrice = card.cost !== undefined || isExternal;
-    const showDetailsButton = !isExternal && modifier !== 'rented';
+    const showDetailsButton = !isExternal && (modifier !== 'rented' && modifier !== 'promotions');
+    const showPromotionsButton = modifier === 'promotions';
     const showRentedUntil = modifier === 'rented' && card.date_d;
     const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
@@ -116,6 +125,10 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
 
                         {showDetailsButton && (
                             <a href={`/premises/${card.id}`} className="card__button button animate--pulse">Подробнее</a>
+                        )}
+
+                        {showPromotionsButton && (
+                            <button className={`card__button ${card.promotion ? 'card__button--promotion' : ''} button button--grey`} onClick={handleTogglePromotion} type="button">Акция</button>
                         )}
                     </div>
 

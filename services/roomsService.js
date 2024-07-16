@@ -254,6 +254,28 @@ async function getRecommended(id) {
     }
 }
 
+async function setPromotions(data) {
+    const setTrue = Object.keys(data).filter(key => data[key]).map(id => sqlstring.escape(id)).join(', ');
+    const setFalse = Object.keys(data).filter(key => !data[key]).map(id => sqlstring.escape(id)).join(', ');
+
+    const query1 = `ALTER TABLE rooms UPDATE promotion = true WHERE id IN (${setTrue})`;
+    const query2 = `ALTER TABLE rooms UPDATE promotion = false WHERE id IN (${setFalse})`;
+
+    try {
+        const response1 = await axios({
+            ...dbOptions,
+            url: `/?${querystring.stringify({ database: config.database, query: query1 })}`,
+        });
+        const response2 = await axios({
+            ...dbOptions,
+            url: `/?${querystring.stringify({ database: config.database, query: query2 })}`,
+        });
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getAll,
     getReport,
@@ -263,4 +285,5 @@ module.exports = {
     getRoomById,
     getRecommended,
     getRoomsByTenant,
+    setPromotions,
 };
