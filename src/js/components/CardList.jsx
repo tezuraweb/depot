@@ -4,7 +4,7 @@ import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false, togglePromotion = null }) => {
+const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false, setActiveCardOuter = null }) => {
     const deviceType = useViewportContext();
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
@@ -14,9 +14,20 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
         }
     }, []);
 
+    useEffect(() => {
+        if (deviceType !== 'desktop' && deviceType !== 'laptop' && modifier === 'main') {
+            setActiveCardIndex(0);
+        } else {
+            setActiveCardIndex(null);
+        }
+    }, [currentPage]);
+
     const handleCardClick = (card, index) => {
         if (modifier === 'recommend' || modifier === 'rented') return;
         setActiveCardIndex(index);
+        if (setActiveCardOuter) {
+            setActiveCardOuter(index);
+        }
     };
 
     const handleTabClick = (type) => {
@@ -68,7 +79,6 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
                                     card={card}
                                     onClick={() => handleCardClick(card, index)}
                                     isActive={index === activeCardIndex}
-                                    togglePromotion={togglePromotion}
                                     modifier={modifier}
                                 />
                             ))}

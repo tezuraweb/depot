@@ -54,7 +54,7 @@ async function getTypes() {
 }
 
 async function getIdLiter() {
-    const query = `SELECT DISTINCT id_liter, liter FROM rooms FORMAT JSON`;
+    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization = 'ДЕПО АО' FORMAT JSON`; //where status == vacant
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -113,7 +113,7 @@ async function getPage(data) {
     const conditions = [];
 
     if (data.type) conditions.push(`type = ${sqlstring.escape(data.type)}`);
-    if (data.id_liter) conditions.push(`id_liter = ${sqlstring.escape(data.id_liter)}`);
+    if (data.id_liter) conditions.push(`key_liter_id = ${sqlstring.escape(data.id_liter)}`);
     if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
     if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
     if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
@@ -145,7 +145,7 @@ async function getPage(data) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion
+        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion, promotion_price
         FROM rooms 
         ${whereClause} 
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -201,9 +201,37 @@ async function getReport() {
 async function getRoomById(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, text, promotion
+        SELECT id, room, type, liter, id_liter, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, complex_id, kode_text
         FROM rooms
         WHERE id = ${sanitizedId}
+        LIMIT 1
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getRoomsByParam(params) {
+    const conditions = Object.keys(params)
+        .map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(params[key])}`)
+        .join(' AND ');
+
+    const query = `
+        SELECT id, kode_text AS code, complex_id AS complex
+        FROM rooms
+        WHERE ${conditions}
         FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
@@ -254,22 +282,16 @@ async function getRecommended(id) {
     }
 }
 
-async function setPromotions(data) {
-    const setTrue = Object.keys(data).filter(key => data[key]).map(id => sqlstring.escape(id)).join(', ');
-    const setFalse = Object.keys(data).filter(key => !data[key]).map(id => sqlstring.escape(id)).join(', ');
-
-    const query1 = `ALTER TABLE rooms UPDATE promotion = true WHERE id IN (${setTrue})`;
-    const query2 = `ALTER TABLE rooms UPDATE promotion = false WHERE id IN (${setFalse})`;
+async function alterRoomById(id, data) {
+    const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
+    const query = `ALTER TABLE rooms UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
 
     try {
-        const response1 = await axios({
-            ...dbOptions,
-            url: `/?${querystring.stringify({ database: config.database, query: query1 })}`,
-        });
-        const response2 = await axios({
-            ...dbOptions,
-            url: `/?${querystring.stringify({ database: config.database, query: query2 })}`,
-        });
+        await axios.post(`/?${queryParams}`, null, dbOptions);
         return { success: true };
     } catch (error) {
         throw error;
@@ -285,5 +307,6 @@ module.exports = {
     getRoomById,
     getRecommended,
     getRoomsByTenant,
-    setPromotions,
+    getRoomsByParam,
+    alterRoomById,
 };

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import IconSprite from './IconSprite';
 
-const Card = ({ card, onClick = null, isActive, togglePromotion = null, modifier = '' }) => {
+const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
 
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % card.images.length);
@@ -19,26 +18,19 @@ const Card = ({ card, onClick = null, isActive, togglePromotion = null, modifier
         }
     };
 
-    const handleTogglePromotion = () => {
-        const newVal = !card.promotion;
-        card.promotion = newVal;
-        if (togglePromotion !== null) {
-            togglePromotion(card.id, newVal);
-        }
-    };
-
     const isExternal = modifier === 'external';
-    const showPromotion = card.promotion && (modifier !== 'rented' && modifier !== 'promotions');
+    const isPromotion = modifier === 'promotions';
+    const showPromotion = card.promotion && modifier !== 'rented';
     const showType = card.type !== undefined;
     const showLocation = card.liter !== undefined;
     const showArea = card.area !== undefined;
     const showStorey = !isExternal && card.floor !== undefined;
     const showPrice = card.cost !== undefined || isExternal;
     const showDetailsButton = !isExternal && (modifier !== 'rented' && modifier !== 'promotions');
-    const showPromotionsButton = modifier === 'promotions';
     const showRentedUntil = modifier === 'rented' && card.date_d;
     const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
+    const showPromotionPrice = card.promotion && card.promotion_price > 0;
     const coverPlaceholder = card.type == 'Офис' ? '/img/pics/officePlaceholder.webp' : '/img/pics/warehousePlaceholder.webp';
 
     return (
@@ -117,7 +109,20 @@ const Card = ({ card, onClick = null, isActive, togglePromotion = null, modifier
                                         />
                                     </span>
                                     <span className="card__value">
-                                        {isExternal && !card.cost ? 'По запросу' : `${card.cost}₽ / мес.`}
+                                        {isExternal && !card.cost ? (
+                                            'По запросу'
+                                        ) : showPromotionPrice ? (
+                                            isPromotion ? (
+                                                <>
+                                                    <span className="card__value--green">{`${card.promotion_price}₽ / мес.`}</span>
+                                                    <span>{` (${card.cost}₽ / мес.)`}</span>
+                                                </>
+                                            ) : (
+                                                <span className="card__value--red">{`${card.promotion_price}₽ / мес.`}</span>
+                                            )
+                                        ) : (
+                                            `${card.cost}₽ / мес.`
+                                        )}
                                     </span>
                                 </div>
                             )}
@@ -125,10 +130,6 @@ const Card = ({ card, onClick = null, isActive, togglePromotion = null, modifier
 
                         {showDetailsButton && (
                             <a href={`/premises/${card.id}`} className="card__button button animate--pulse">Подробнее</a>
-                        )}
-
-                        {showPromotionsButton && (
-                            <button className={`card__button ${card.promotion ? 'card__button--promotion' : ''} button button--grey`} onClick={handleTogglePromotion} type="button">Акция</button>
                         )}
                     </div>
 

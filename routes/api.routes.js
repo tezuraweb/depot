@@ -352,6 +352,14 @@ router
 router
     .route('/premises/:id')
     .get(dbController.getRoomsById);
+    
+router
+    .route('/premises/floormap/:id')
+    .get(dbController.getRoomsByBuilding);
+
+router
+    .route('/premises/complex/:id')
+    .get(dbController.getRoomsByComplex);
 
 router
     .route('/recommendations/:id')

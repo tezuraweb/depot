@@ -33,7 +33,7 @@ router
 router
     .route('/promotions')
     .get(auth, (req, res) => {
-        if (req.user.status && req.user.status === 'tenant') {
+        if (req.user.status && req.user.status === 'admin') {
             return res.redirect('/backoffice/profile');
         }
         res.render('nodes/promotions', { user: req.user, page: 'promotions' });

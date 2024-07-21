@@ -34,17 +34,17 @@ const MainForm = ({ types = [], onSubmit, formData, setFormData }) => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit({ ...formData, priceDesc });
-    };
-
     const togglePriceOrder = () => {
-        setPriceDesc(prevState => !prevState);
         setFormData({
             ...formData,
             priceDesc: !priceDesc
         });
+        setPriceDesc(prevState => !prevState);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit();
     };
 
     return (

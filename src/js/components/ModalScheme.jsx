@@ -1,30 +1,17 @@
-// const buildingFloors = {
-//     'depot-building-1': [Building1Floor0, Building1Floor1, Building1Floor2],
-//     'depot-building-2': [Building1Floor0, Building1Floor0],
-//     'depot-building-3': [Building1Floor1, Building1Floor2],
-//     'depot-building-4': [Building1Floor1, Building1Floor2],
-//     'depot-building-5': [Building1Floor1, Building1Floor2],
-//     'depot-building-6': [Building1Floor1, Building1Floor2],
-//     'depot-building-7': [Building1Floor1, Building1Floor2],
-//     'depot-building-8': [Building1Floor1, Building1Floor2],
-//     'depot-building-9': [Building1Floor1, Building1Floor2],
-//     'depot-building-10': [Building1Floor1, Building1Floor2],
-//     'depot-building-11': [Building1Floor1, Building1Floor2],
-//     'depot-building-12': [Building1Floor1, Building1Floor2],
-//     'depot-building-13': [Building1Floor1, Building1Floor2],
-// };
-
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import LoadingSpinner from '../includes/LoadingSpinner';
 import Territory from '../includes/maps/Territory';
 import FloorMap from '../includes/maps/FloorMap';
 
-const Scheme = ({ activeElements = [] }) => {
+const Scheme = ({ buildings = [], selectedElement = null }) => {
     const [elements, setElements] = useState([]);
     const [selectedBuilding, setSelectedBuilding] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [floors, setFloors] = useState([]);
+    const [buildingData, setBuildingData] = useState(null);
     const svgRef = useRef(null);
+
+    const activeElements = buildings.map(item => item.key_liter_id);
 
     useEffect(() => {
         const svg = svgRef.current;
@@ -37,9 +24,14 @@ const Scheme = ({ activeElements = [] }) => {
 
     useEffect(() => {
         elements.forEach((element) => {
-            const id = element.dataset.id;
+            const id = parseInt(element.dataset.id);
 
-            if (activeElements.includes(id)) {
+            if (!isNaN(id) && activeElements.includes(id)) {
+                if (selectedElement && selectedElement == id) {
+                    element.classList.add('selected');
+                } else {
+                    element.classList.remove('selected');
+                }
                 element.classList.add('active');
                 element.addEventListener('click', handleClick);
             } else {
@@ -53,7 +45,11 @@ const Scheme = ({ activeElements = [] }) => {
                 element.removeEventListener('click', handleClick);
             });
         };
-    }, [elements, activeElements]);
+    }, [elements, activeElements, selectedElement]);
+
+    useEffect(() => {
+        setBuildingData(buildings.find((el) => el.key_liter_id == selectedBuilding))
+    }, [selectedBuilding]);
 
     const handleClick = async (event) => {
         const { dataset } = event.target;
@@ -67,7 +63,7 @@ const Scheme = ({ activeElements = [] }) => {
 
     const loadFloors = async (buildingId) => {
         switch (buildingId) {
-            case 'depot-building-1':
+            case '1':
                 return [
                     React.lazy(() => import('../includes/maps/P/Floor0')),
                     React.lazy(() => import('../includes/maps/P/Floor1')),
@@ -83,7 +79,6 @@ const Scheme = ({ activeElements = [] }) => {
                     React.lazy(() => import('../includes/maps/P/Floor1')),
                     React.lazy(() => import('../includes/maps/P/Floor2'))
                 ];
-            // Добавьте остальные здания здесь...
             default:
                 return [];
         }
@@ -100,12 +95,16 @@ const Scheme = ({ activeElements = [] }) => {
             {showModal && selectedBuilding && (
                 <div className="scheme__popup">
                     <div className="flex flex--sb flex--center">
-                        <div className="scheme__title">Литер <span className="scheme__title--large">Б</span></div>
+                        <div className="scheme__title">Литер <span className="scheme__title--large">{buildingData.key_liter}</span></div>
                         <button className="scheme__close button button--close" onClick={closeModal}></button>
                     </div>
-                    <Suspense fallback={<LoadingSpinner />}>
-                        <FloorMap floors={floors} controls={true} />
-                    </Suspense>
+                    {floors.length > 0 ? (
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <FloorMap floors={floors} controls={true} buildingId={buildingData.key_liter_id} />
+                        </Suspense>
+                    ) : (
+                        <div className="scheme__disclaimer">План этажей будет добавлен в скором времени.<br /> Приносим извинения за доставленные неудобства.</div>
+                    )}
                 </div>
             )}
         </div>

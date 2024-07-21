@@ -135,7 +135,7 @@ const Premises = () => {
                         <div className="premises__header">
                             <div className="premises__header--block">
                                 <div className="premises__heading premises__heading--uppercase">Литер</div>
-                                <div className="premises__heading premises__heading--large">{premisesData.liter}</div>
+                                <div className="premises__heading premises__heading--large">{premisesData.key_liter}</div>
                             </div>
                             <div className="premises__header--block">
                                 <div className="premises__heading premises__heading--uppercase">{premisesData.type}</div>
@@ -238,8 +238,7 @@ const Premises = () => {
 
                                 <div className="premises__scheme">
                                     <Scheme
-                                        activeElement={premisesData.liter_id}
-                                        floor={premisesData.floor}
+                                        activeElement={premisesData}
                                     />
                                 </div>
                             </>

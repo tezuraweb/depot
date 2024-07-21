@@ -155,8 +155,8 @@
             top: 3px;
             width: 8px;
             height: 15px;
-            border-right: 2px solid $white;
-            border-bottom: 2px solid $white;
+            border-right: 2px solid $red;
+            border-bottom: 2px solid $red;
             transform: rotate(45deg);
         }
     }
@@ -342,6 +342,7 @@
                 top: 38px;
                 width: 16px;
                 height: 28px;
+                border-color: $white;
             }
         }
     }
@@ -366,12 +367,6 @@
 
             &--arrow.active {
                 color: $red;
-            }
-        }
-
-        .form__checkbox {
-            &+label::after {
-                border-color: $red;
             }
         }
 
@@ -496,10 +491,14 @@
         }
     }
 
-    &--tg {
+    &--small {
         display: flex;
         align-items: center;
         margin-bottom: 50px;
+
+        .form__group {
+            margin-right: 25px;
+        }
 
         .form__input {
             color: $black;
@@ -612,7 +611,7 @@
             }
         }
 
-        &--tg {
+        &--small {
             flex-wrap: wrap;
 
             .form__message {
@@ -688,12 +687,15 @@
             }
         }
 
-        &--tg {
+        &--small {
+            .form__group {
+                margin-right: 15px;
+            }
+
             .form__input {
                 margin-right: 15px;
                 min-width: auto;
                 max-width: 225px;
-                ;
             }
         }
     }
@@ -956,9 +958,15 @@
             }
         }
 
-        &--tg {
+        &--small {
             flex-direction: column;
             margin-bottom: 35px;
+
+            .form__group {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+            }
 
             .form__input {
                 margin-right: 0;

@@ -34,6 +34,23 @@
         }
     }
 
+    &__disclaimer {
+        margin-top: 20%;
+        text-align: center;
+        color: $black;
+        text-transform: uppercase;
+        line-height: 2;
+    }
+
+    &__controls {
+        display: flex;
+        margin: 50px 0;
+    }
+
+    &__button {
+        margin-right: 25px;
+    }
+
     .icon {
         max-width: 100%;
         width: 100%;

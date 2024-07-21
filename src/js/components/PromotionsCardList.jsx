@@ -8,9 +8,13 @@ const PromotionsCardList = () => {
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [promotionsToChange, setPromotionsToChange] = useState({});
+    const [activeCardIndex, setActiveCardIndex] = useState(null);
+    const [isPromotion, setIsPromotion] = useState(false);
+    const [promotionPrice, setPromotionPrice] = useState('');
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
-    const cardsPerPage = 3;
+    const cardsPerPage = 6;
 
     useEffect(() => {
         if (cards.length == 0) {
@@ -44,23 +48,27 @@ const PromotionsCardList = () => {
     const handlePageChange = (page) => {
         const startIdx = (page - 1) * cardsPerPage;
         const endIdx = page * cardsPerPage;
+        setActiveCardIndex(null);
         fetchCards(startIdx, endIdx);
     };
 
-    const togglePromotion = (id, value) => {
-        setPromotionsToChange({
-            ...promotionsToChange,
-            [id]: value,
-        });
-    };
+    const setCardIndex = (index) => {
+        const globalIndex = (currentPage - 1) * cardsPerPage + index;
+        console.log(cards[globalIndex])
+        setActiveCardIndex(globalIndex);
+        setIsPromotion(cards[globalIndex]?.promotion);
+        setPromotionPrice(cards[globalIndex]?.promotion_price);
+    }
 
-    const savePromotions = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         try {
-            const response = await axios.post('/api/promotions', { data: promotionsToChange });
-            setPromotionsToChange({});
-            setCards([]);
-            setCurrentPage(1);
-            fetchCards(0, cardsPerPage);
+            const id = cards[activeCardIndex].id;
+            const response = await axios.post('/api/promotions', { id, promotion: isPromotion, price: promotionPrice });
+            // setCards([]);
+            // setCurrentPage(1);
+            // fetchCards(0, cardsPerPage);
         } catch (error) {
             console.error('Error updating promotions:', error);
         }
@@ -75,11 +83,30 @@ const PromotionsCardList = () => {
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
                 totalCards={totalCards}
-                togglePromotion={togglePromotion}
+                setActiveCardOuter={setCardIndex}
             />
 
-            {Object.keys(promotionsToChange).length > 0 && (
-                <button className="button" type="button" onClick={savePromotions}>Сохранить изменения</button>
+            {activeCardIndex !== null && (
+                <form className="form form--small" onSubmit={handleSubmit}>
+                     <div className="form__group">
+                        <input type="checkbox" name="promotions" id="promotionCheckbox" checked={isPromotion} onChange={(e) => setIsPromotion(e.target.checked)} className="form__checkbox" />
+                        <label className="form__label" htmlFor="promotionCheckbox">Акции</label>
+                    </div>
+                    
+                    <input
+                        type="text"
+                        name="telegramUsername"
+                        placeholder="Имя пользователя Telegram"
+                        value={promotionPrice}
+                        onChange={(e) => setPromotionPrice(e.target.value)}
+                        className="form__input"
+                        required={isPromotion}
+                    />
+
+                    <button type="submit" className="form__button button">Сохранить</button>
+                    {error && <div className="form__message form__message--red">{error}</div>}
+                    {success && <div className="form__message form__message--green">{success}</div>}
+                </form>
             )}
         </>
     );

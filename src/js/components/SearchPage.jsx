@@ -16,7 +16,7 @@ const SearchPage = () => {
     const [noResults, setNoResults] = useState(false);
     const [formData, setFormData] = useState({
         type: '',
-        building: '',
+        building: null,
         areaFrom: '',
         areaTo: '',
         priceFrom: '',
@@ -25,6 +25,8 @@ const SearchPage = () => {
         rooms: '',
         ceilingHeight: '',
         promotions: false,
+        priceDesc: false,
+        priceType: 'total',
     });
 
     const cardsPerPage = deviceType === 'desktop' ? 6 : deviceType === 'laptop' ? 4 : 2;
@@ -39,7 +41,8 @@ const SearchPage = () => {
 
         try {
             const response = await axios.get('/api/search/buildings');
-            setBuildings(response.data);
+            const data = response.data.filter((item) => item.key_liter != '');
+            setBuildings(data);
         } catch (error) {
             console.error('Error fetching buildings:', error);
         }
@@ -64,8 +67,8 @@ const SearchPage = () => {
         }
     }, [deviceType]);
 
-    const handleFormSubmit = async (data) => {
-        setFormData(data);
+    const handleFormSubmit = async () => {
+        // setFormData(data);
         setCards([]);
     };
 
@@ -103,13 +106,20 @@ const SearchPage = () => {
                     <h1 className="search__heading section__title">Подобрать помещение</h1>
                     <div className="search__row">
                         <div className="search__column">
-                            <SearchForm onSubmit={handleFormSubmit} types={types} buildings={buildings}/>
+                            <SearchForm
+                                formData={formData}
+                                setFormData={setFormData}
+                                onSubmit={handleFormSubmit}
+                                types={types}
+                                buildings={buildings}
+                            />
                         </div>
                         {(deviceType === 'desktop' || deviceType === 'laptop') && (
                             <div className="search__column search__column--flex">
                                 <div className="search__map">
                                     <Scheme
-                                        activeElements={['depot-building-1', 'depot-building-12', 'depot-building-5', 'depot-building-2']}
+                                        buildings={buildings}
+                                        selectedElement={formData.building}
                                         isModal={true}
                                     />
                                 </div>

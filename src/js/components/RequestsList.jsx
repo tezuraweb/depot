@@ -107,7 +107,7 @@ const RequestsList = () => {
                 Создать обращение можно с помощью Telegram-бота, для этого задайте ваше имя пользователя Telegram и перейдите в бота. Для запуска бота введите команду /start.
             </div>
 
-            <form className="form form--tg" onSubmit={handleTelegramSubmit}>
+            <form className="form form--small" onSubmit={handleTelegramSubmit}>
                 <input
                     type="text"
                     name="telegramUsername"

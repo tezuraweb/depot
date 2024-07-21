@@ -496,20 +496,6 @@ input[type=number] {
     }
 }
 
-.map__building {
-    fill: $grey;
-    transition: fill .3s;
-    cursor: pointer;
-
-    &.active {
-        fill: $yellow;
-    }
-
-    &:hover {
-        fill: $red;
-    }
-}
-
 .animate {
     &--pulse {
         &:hover {

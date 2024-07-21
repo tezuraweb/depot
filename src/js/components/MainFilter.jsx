@@ -53,9 +53,9 @@ const MainFilter = () => {
         }
     }, [deviceType]);
 
-    const handleFormSubmit = async (data) => {
-        setFormData(data);
-        setActiveType(data.type);
+    const handleFormSubmit = async () => {
+        // setFormData(data);
+        setActiveType(formData.type);
         setCards([]);
     };
 

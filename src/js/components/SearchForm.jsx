@@ -1,19 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchForm = ({ onSubmit, types = [], buildings = [] }) => {
-    const [formData, setFormData] = useState({
-        type: '',
-        building: '',
-        areaFrom: '',
-        areaTo: '',
-        priceFrom: '',
-        priceTo: '',
-        storey: '',
-        rooms: '',
-        ceilingHeight: '',
-        promotions: false,
-        priceType: 'total',
-    });
+const SearchForm = ({ onSubmit, types = [], buildings = [], formData, setFormData }) => {
     const [priceDesc, setPriceDesc] = useState(false);
 
     const priceRanges = {
@@ -65,13 +52,17 @@ const SearchForm = ({ onSubmit, types = [], buildings = [] }) => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit({ ...formData, priceDesc });
+    const togglePriceOrder = () => {
+        setFormData({
+            ...formData,
+            priceDesc: !priceDesc
+        });
+        setPriceDesc(prevState => !prevState);
     };
 
-    const togglePriceOrder = () => {
-        setPriceDesc(prevState => !prevState);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit();
     };
 
     return (
@@ -92,7 +83,7 @@ const SearchForm = ({ onSubmit, types = [], buildings = [] }) => {
                     <select name="building" value={formData.building} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
                         {buildings.map(building => (
-                            <option value={building.id_liter}>{building.liter}</option>
+                            <option value={building.key_liter_id}>{building.key_liter}</option>
                         ))}
                     </select>
                 </div>

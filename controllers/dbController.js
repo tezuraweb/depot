@@ -150,6 +150,26 @@ async function getRoomsById(req, res, next) {
     }
 }
 
+async function getRoomsByBuilding(req, res, next) {
+    try {
+        const id = req.params.id;
+        const rooms = await roomsService.getRoomsByParam({ key_liter_id: id});
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsByComplex(req, res, next) {
+    try {
+        const id = req.params.id;
+        const rooms = await roomsService.getRoomsByParam({ complex_id: id });
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function getRoomsRecommended(req, res, next) {
     try {
         const id = req.params.id;
@@ -162,8 +182,8 @@ async function getRoomsRecommended(req, res, next) {
 
 async function setRoomsPromotions(req, res, next) {
     try {
-        const { data } = pick(req.body, ['data']);
-        const rooms = await roomsService.setPromotions(data);
+        const { id, promotion, price } = pick(req.body, ['id', 'promotion', 'price']);
+        const rooms = await roomsService.alterRoomById(id, { promotion, promotion_price: price });
         res.json({ success: rooms.success });
     } catch (error) {
         next(error);
@@ -259,6 +279,8 @@ module.exports = {
     getRoomsLiters,
     getRoomsReport,
     getRoomsById,
+    getRoomsByBuilding,
+    getRoomsByComplex,
     getRoomsRecommended,
     getRoomsByTenant,
     setRoomsPromotions,

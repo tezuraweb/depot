@@ -1,25 +1,9 @@
-// const buildingFloors = {
-//     'depot-building-1': [Building1Floor0, Building1Floor1, Building1Floor2],
-//     'depot-building-2': [Building1Floor0, Building1Floor0],
-//     'depot-building-3': [Building1Floor1, Building1Floor2],
-//     'depot-building-4': [Building1Floor1, Building1Floor2],
-//     'depot-building-5': [Building1Floor1, Building1Floor2],
-//     'depot-building-6': [Building1Floor1, Building1Floor2],
-//     'depot-building-7': [Building1Floor1, Building1Floor2],
-//     'depot-building-8': [Building1Floor1, Building1Floor2],
-//     'depot-building-9': [Building1Floor1, Building1Floor2],
-//     'depot-building-10': [Building1Floor1, Building1Floor2],
-//     'depot-building-11': [Building1Floor1, Building1Floor2],
-//     'depot-building-12': [Building1Floor1, Building1Floor2],
-//     'depot-building-13': [Building1Floor1, Building1Floor2],
-// };
-
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import LoadingSpinner from '../includes/LoadingSpinner';
 import Territory from '../includes/maps/Territory';
 import FloorMap from '../includes/maps/FloorMap';
 
-const Scheme = ({ activeElement, floor }) => {
+const Scheme = ({ activeElement = null }) => {
     const [floors, setFloors] = useState([]);
     const svgRef = useRef(null);
 
@@ -27,7 +11,7 @@ const Scheme = ({ activeElement, floor }) => {
         const svg = svgRef.current;
 
         if (svg) {
-            const element = svg.querySelector(`[data-id="${activeElement}"]`);
+            const element = svg.querySelector(`[data-id="${activeElement.key_liter_id}"]`);
             if (element) {
                 element.classList.add('active');
             }
@@ -36,7 +20,7 @@ const Scheme = ({ activeElement, floor }) => {
 
     useEffect(() => {
         const loadFloor = async () => {
-            const floors = await loadFloors(activeElement);
+            const floors = await loadFloors(activeElement.key_liter_id, activeElement.floor);
             setFloors(floors);
         };
 
@@ -45,25 +29,20 @@ const Scheme = ({ activeElement, floor }) => {
         }
     }, [activeElement]);
 
-    const loadFloors = async (buildingId) => {
+    const loadFloors = async (buildingId, floor) => {
         switch (buildingId) {
-            case 'depot-building-1':
-                return [
-                    React.lazy(() => import('../includes/maps/P/Floor0')),
-                    React.lazy(() => import('../includes/maps/P/Floor1')),
-                    React.lazy(() => import('../includes/maps/P/Floor2'))
-                ];
+            case 1:
+                if (floor === 0) return [React.lazy(() => import('../includes/maps/P/Floor0'))];
+                if (floor === 1) return [React.lazy(() => import('../includes/maps/P/Floor1'))];
+                if (floor === 2) return [React.lazy(() => import('../includes/maps/P/Floor2'))];
+                break;
             case 'depot-building-2':
-                return [
-                    React.lazy(() => import('../includes/maps/P/Floor0')),
-                    React.lazy(() => import('../includes/maps/P/Floor0'))
-                ];
+                if (floor === 0) return [React.lazy(() => import('../includes/maps/P/Floor0'))];
+                break;
             case 'depot-building-3':
-                return [
-                    React.lazy(() => import('../includes/maps/P/Floor1')),
-                    React.lazy(() => import('../includes/maps/P/Floor2'))
-                ];
-            // Добавьте остальные здания здесь...
+                if (floor === 1) return [React.lazy(() => import('../includes/maps/P/Floor1'))];
+                if (floor === 2) return [React.lazy(() => import('../includes/maps/P/Floor2'))];
+                break;
             default:
                 return [];
         }
@@ -74,7 +53,14 @@ const Scheme = ({ activeElement, floor }) => {
             <div className="scheme__row">
                 <div className="scheme__column">
                     <Suspense fallback={<LoadingSpinner />}>
-                        <FloorMap floors={floors} floor={floor}/>
+                        <FloorMap
+                            floors={floors}
+                            selectedRoomData={{
+                                id: activeElement.id,
+                                code: activeElement.kode_text,
+                                complex: activeElement.complex_id,
+                            }}
+                        />
                     </Suspense>
                 </div>
                 <div className="scheme__column">
