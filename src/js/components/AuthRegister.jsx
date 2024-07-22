@@ -28,9 +28,9 @@ const AuthRegister = ({ mode = "signup" }) => {
     const handleEmailVerification = async () => {
         try {
             if (mode === 'signup') {
-                await axios.post('/api/signup/verify-email', { tin, email });
+                await axios.post('/api/signup/verify-email', { tin: tin.trim(), email: email.trim() });
             } else {
-                await axios.post('/api/password-reset/initiate', { tin, email });
+                await axios.post('/api/password-reset/initiate', { tin: tin.trim(), email: email.trim() });
             }
             setStep(3);
             setMessage('На указанный адрес отправлено письмо с проверочной ссылкой.')

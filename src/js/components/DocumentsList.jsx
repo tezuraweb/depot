@@ -9,21 +9,10 @@ const DocumentsList = () => {
     const [signingDoc, setSigningDoc] = useState(null);
     const [successMessage, setSuccessMessage] = useState(false);
     const [failMessage, setFailMessage] = useState(false);
+    const [docType, setDocType] = useState('');
+    const [customRequest, setCustomRequest] = useState('');
 
-    const docTypes = [
-        {
-            id: 'act',
-            name: 'Акт'
-        },
-        {
-            id: 'spravka',
-            name: 'Спарвка'
-        },
-        {
-            id: 'klauza',
-            name: 'Кляуза'
-        },
-    ];
+    const docTypes = ['Акт', 'Справка'];
 
     useEffect(() => {
         axios.get('/api/docs')
@@ -45,8 +34,7 @@ const DocumentsList = () => {
 
     const handleRequestSubmit = (event) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        axios.post('/api/docs/request', formData)
+        axios.post('/api/docs/request', { docType, customRequest })
             .then(response => setSuccessMessage(true))
             .catch(error => setFailMessage(true));
 
@@ -60,13 +48,13 @@ const DocumentsList = () => {
         <div className="editor">
             <h2 className="editor__title">Договоры</h2>
             <div className="editor__list">
-                {documents.filter(doc => doc.type === 'contract').map(doc => (
+                {documents.filter(doc => doc.doctype === 'Договор аренды').map(doc => (
                     <div className="editor__item" key={doc.id}>
                         <div className="editor__line">
-                            <div className="editor__name">{doc.title}</div>
+                            <div className="editor__name">{doc.docname}</div>
                             <div className="editor__buttons">
                                 <button className="editor__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
-                                <IconSprite
+                                    <IconSprite
                                         selector="PrinterIcon"
                                         width="18"
                                         height="18"
@@ -89,7 +77,7 @@ const DocumentsList = () => {
                             </div>
                         </div>
 
-                        {!doc.signed && (
+                        {doc.status === 'Не действующий' && (
                             <div className="editor__line">
                                 <button className="button animate--pulse" onClick={() => handleSign(doc)}>Подписать</button>
                             </div>
@@ -100,10 +88,10 @@ const DocumentsList = () => {
 
             <h2 className="editor__title">Документы</h2>
             <div className="editor__list">
-                {documents.filter(doc => doc.type !== 'contract').map(doc => (
+                {documents.filter(doc => doc.doctype !== 'Договор аренды').map(doc => (
                     <div className="editor__item" key={doc.id}>
                         <div className="editor__line">
-                            <div className="editor__name">{doc.title}</div>
+                            <div className="editor__name">{doc.docname}</div>
                             <div className="editor__buttons">
                                 <button className="editor__button button button--icon button--smallIcon" onClick={() => handlePrint(doc.link)}>
                                     <IconSprite
@@ -134,16 +122,22 @@ const DocumentsList = () => {
             <h2 className="editor__title">Запросить документы</h2>
             <form className="form form--admin" onSubmit={handleRequestSubmit}>
                 <div className="form__group">
-                    <select className="form__input form__input--black" name="documentType">
+                    <select className="form__input form__input--black" name="documentType" onChange={(e) => setDocType(e.target.value)}>
                         <option value="" disabled>Выберите документ</option>
-                        {docTypes.map(type => (
-                            <option key={type.id} value={type.id}>{type.name}</option>
+                        {docTypes.map((type, index) => (
+                            <option key={index} value={type}>{type}</option>
                         ))}
                     </select>
                 </div>
                 <div className="form__group">
                     <div className="form__label">Другой запрос</div>
-                    <input className="form__input form__input--black" type="text" name="otherRequest" placeholder="Введите название необходимого документа" />
+                    <input
+                        className="form__input form__input--black"
+                        type="text"
+                        name="otherRequest"
+                        placeholder="Введите название необходимого документа"
+                        onChange={(e) => setCustomRequest(e.target.value)}
+                    />
                 </div>
                 <button className="button animate--pulse" type="submit">Запросить</button>
             </form>

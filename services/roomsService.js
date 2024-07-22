@@ -89,7 +89,7 @@ async function getRoomsByTenant(id) {
             rooms.date_d
         FROM rooms 
         JOIN tenants 
-        ON rooms.tenant = tenants.outer_id 
+        ON rooms.tenant = tenants.id 
         WHERE tenants.id = ${sanitizedId} 
         FORMAT JSON`;
     const queryParams = querystring.stringify({
@@ -168,7 +168,8 @@ async function getPage(data) {
     }
 }
 
-async function getReport() {
+async function getReport(base) {
+    const sanitizedBase = base.map(item => sqlstring.escape(item)).join(', ');
     const query = `
         SELECT 
             type,
@@ -178,6 +179,8 @@ async function getReport() {
             ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM rooms), 2) as type_percentage
         FROM 
             rooms
+        WHERE
+            organization IN (${sanitizedBase})
         GROUP BY 
             type
         FORMAT JSON`;
@@ -231,7 +234,7 @@ async function getRoomsByParam(params) {
     const query = `
         SELECT id, kode_text AS code, complex_id AS complex
         FROM rooms
-        WHERE ${conditions}
+        WHERE ${conditions} AND kode_text != ''
         FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,

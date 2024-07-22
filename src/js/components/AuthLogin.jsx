@@ -19,7 +19,7 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post('/api/login', { login, password }, {
+            const response = await axios.post('/api/login', { login: login.trim(), password }, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'application/json' }
             });

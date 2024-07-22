@@ -38,13 +38,16 @@
 
                         <div class="footer__group">
                             <div class="footer__label">Социальные сети</div>
-                            <a class="socials__link socials__link--container" href="{{ contacts.channel.link }}" target="_blank" rel="nofollow noopener" aria-label="{{ contacts.channel.title }}">
-                                <span class="socials__link--icon">
-                                    {% set includeIcon = 'telegramIcon' %}
-                                    {% include "includes/svg.njk" %}
-                                </span>
-                                <span class="socials__link--text">{{ contacts.channel.title }}</span>
-                            </a>
+                            <ul class="footer__socials socials">
+                                {% for item in contacts.channels %}
+                                    <li class="socials__item">
+                                        <a class="socials__link" href="{{ item.link }}" target="_blank" rel="nofollow noopener" aria-label="{{ item.title }}">
+                                            {% set includeIcon = item.icon %}
+                                            {% include "includes/svg.njk" %}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
 
                         <div class="footer__group">

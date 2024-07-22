@@ -33,7 +33,7 @@ const upload = multer({
 const manager = {
     id: 1,
     name: "Ладыгин Сергей Александрович",
-    text: "В нашем торгово-складском комплекс созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами!",
+    text: "В нашем ТСК созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами! 24/7 я на связи по номеру +79128566785. Обращайтесь, помогу решить любые вопросы!",
     photo: "/img/pics/depo_manager.webp",
 };
 
@@ -291,48 +291,6 @@ const yujnayaTenants = [
     },
 ]
 
-const docs = [
-    {
-        id: 1,
-        type: 'contract',
-        title: 'Договор аренды',
-        link: '/test/unique_BB.pdf',
-        signed: false,
-    },
-    {
-        id: 2,
-        type: 'act',
-        title: 'Акт 1',
-        link: '/test/unique_BB.pdf',
-        signed: false,
-    },
-    {
-        id: 3,
-        type: 'klyauza',
-        title: 'Справка 1',
-        link: '/test/unique_BB.pdf',
-        signed: false,
-    }
-]
-
-const requests = [
-    {
-        id: 1,
-        date: '2024-05-03T10:00:00Z',
-        status: 'closed'
-    },
-    {
-        id: 2,
-        date: '2024-06-10T14:30:00Z',
-        status: 'pending'
-    },
-    {
-        id: 3,
-        date: '2024-07-15T09:00:00Z',
-        status: 'active'
-    }
-];
-
 router
     .route('/search')
     .post(dbController.getRoomsSearch);
@@ -346,13 +304,13 @@ router
     .get(dbController.getRoomsLiters);
 
 router
-    .route('/report')
+    .route('/report/:base')
     .get(dbController.getRoomsReport);
 
 router
     .route('/premises/:id')
     .get(dbController.getRoomsById);
-    
+
 router
     .route('/premises/floormap/:id')
     .get(dbController.getRoomsByBuilding);
@@ -366,7 +324,7 @@ router
     .get(dbController.getRoomsRecommended);
 
 router
-    .route('/report/print')
+    .route('/report/print/:id')
     .get((req, res) => {
         res.render('nodes/report-print');
     });
@@ -394,6 +352,10 @@ router
 router
     .route('/promotions')
     .post(auth, dbController.setRoomsPromotions);
+
+router
+    .route('/docs')
+    .get(auth, dbController.getDocsByUser);
 
 router
     .route('/login')
@@ -540,15 +502,45 @@ router
         }
     });
 
-// router
-//     .route('/tickets')
-//     .get(async (req, res) => {
-//         if (tickets) {
-//             res.json(tickets);
-//         } else {
-//             res.status(404).json({ error: 'Tickets not found' });
-//         }
-//     });
+router
+    .route('/docs/sign')
+    .post(auth, async (req, res) => {
+        const { docId, docName, signType, operator } = pick(req.body, ['docId', 'docName', 'signType', 'operator']);
+        const user = req.user;
+
+        try {
+            const response = await axios.post(`${bitrixConfig.url}/crm.lead.add`, {
+                fields: {
+                    TITLE: `Заявка на подпись договора ${docName}`,
+                    NAME: user.name,
+                    COMMENTS: `${docName} (ID: ${docId}), подписание ${signType} ${(operator ? operator : '')}`
+                }
+            });
+            res.json({ success: true, data: response.data });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
+
+router
+    .route('/docs/request')
+    .post(auth, async (req, res) => {
+        const { docType, customRequest } = pick(req.body, ['docType', 'customRequest']);
+        const user = req.user;
+
+        try {
+            const response = await axios.post(`${bitrixConfig.url}/crm.lead.add`, {
+                fields: {
+                    TITLE: `Заказ документа ${customRequest ? customRequest : docType}`,
+                    NAME: user.name,
+                    COMMENTS: `Заказан документ ${(customRequest ? customRequest : docType)}`
+                }
+            });
+            res.json({ success: true, data: response.data });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
 
 router
     .route('/manager')
@@ -579,16 +571,6 @@ router
             res.json(depotTenants);
         } else {
             res.status(404).json({ error: 'Tenants not found' });
-        }
-    });
-
-router
-    .route('/docs')
-    .get(async (req, res) => {
-        if (docs) {
-            res.json(docs);
-        } else {
-            res.status(404).json({ error: 'Documents not found' });
         }
     });
 

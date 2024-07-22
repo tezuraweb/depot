@@ -22,8 +22,8 @@ const Share = ({ activeCard, modifier }) => {
                     return `https://t.me/langbey?text=${encodedMessage}`;
                 case 'Whatsapp':
                     return `https://api.whatsapp.com/send?phone=+8618717766242&text=${encodedMessage}`;
-                case 'Viber':
-                    return `viber://pa?chatURI=test_bot&text=${encodedMessage}`;
+                case 'Vk':
+                    return `https://vk.me/depoizh&text=${encodedMessage}`;
                 default:
                     return '#';
             }
@@ -33,8 +33,8 @@ const Share = ({ activeCard, modifier }) => {
                     return `https://t.me/langbey`;
                 case 'Whatsapp':
                     return `https://api.whatsapp.com/send?phone=+8618717766242&text=`;
-                case 'Viber':
-                    return `viber://pa?chatURI=test_bot&text=`;
+                case 'Vk':
+                    return `https://vk.me/depoizh`;
                 default:
                     return '#';
             }
@@ -78,19 +78,10 @@ const Share = ({ activeCard, modifier }) => {
                         />
                     </a>
                 </li>
-                <li className="share__item">
-                    <a onClick={() => handleSocialClick('Viber')} className="share__link">
-                        <IconSprite
-                            selector="ViberIcon"
-                            width="30"
-                            height="30"
-                        />
-                    </a>
-                </li>
                 {modifier == 'phoneLarge' && (
                     <>
                         <li className="share__item">
-                            <a href="tel:+79120557755" className="share__phone">+7 (912) 055-77-55</a>
+                            <a href="tel:+73412794040" className="share__phone">+7 (3412) 79-40-40</a>
                         </li>
                         <li className="share__item">
                             <ContactForm modal={true} modifier="share" url={link} />

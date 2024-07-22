@@ -80,7 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <Route path="/auth/verify/:token" element={<Component />} />
                                 </>
                             )}
-                            {(componentName !== 'premises' && componentName !== 'signup' && componentName !== 'resetPassword') && (
+                            {componentName === 'webReport' && (
+                                <>
+                                    <Route path="/api/report/print/depot" element={<Component base="depot" />} />
+                                    <Route path="/api/report/print/gagarinsky" element={<Component base="gagarinsky" />} />
+                                    <Route path="/api/report/print/yujnaya" element={<Component base="yujnaya" />} />
+                                    <Route path="/backoffice/report" element={<Component />} />
+                                </>
+                            )}
+                            {(componentName !== 'premises' && componentName !== 'signup' && componentName !== 'resetPassword' && componentName !== 'webReport') && (
                                 <Route path="*" element={<Component {...(componentName === 'contactFormModal' && { modal: true })} />} />
                             )}
                         </Routes>
@@ -106,13 +114,18 @@ ymaps
             mapContainer.style.width = "100%";
 
             const map = new maps.Map(mapContainer, {
-                center: [-8.369326, 115.166023],
-                zoom: 7
+                center: [56.881433, 53.230957],
+                zoom: 15,
+                controls: [],
             });
 
             const myPlacemark = new maps.Placemark(map.getCenter(), {
-                hintContent: 'Default marker',
-                balloonContent: 'This is a default marker'
+                hintContent: 'Торгово-складской комплекс «Депо»',
+                balloonContent: 'Торгово-складской комплекс «Депо»'
+            }, {
+                iconLayout: 'default#image',
+                iconImageHref: '/img/icons/geoIcon.svg',
+                iconImageSize: [40, 40],
             });
 
             map.geoObjects.add(myPlacemark);

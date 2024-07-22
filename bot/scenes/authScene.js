@@ -15,11 +15,8 @@ const createAuthScene = () => {
                 } else {
                     ctx.reply("Добро пожаловать, " + user.name + "!");
 
-                    console.log(user)
-
                     const userId = parseInt(user.tg_id);
                     if (isNaN(userId) || userId === 0) {
-                        console.log('lol')
                         await db.setTenantTgId(user.id, ctx.from.id);
                     }
 

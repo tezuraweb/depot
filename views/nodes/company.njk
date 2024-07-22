@@ -54,12 +54,12 @@
 
     <section class="section about__section about--black" id="about-block">
         <div class="container">
-            <h1 class="about__title about__title--main">Акционерное общество «ДЕПО»</h1>
+            <h1 class="about__title about__title--main">Торгово-складской комплекс «Депо»</h1>
             <div class="about__subtitle">сдан в эксплуатацию в 2021 году</div>
             <ul class="about__info">
-                <li class="about__info--list"><span class="about__info--number">157</span><span class="about__info--text">офисов</span></li>
-                <li class="about__info--list"><span class="about__info--number">117</span><span class="about__info--text about__info--lg">производственно-складских помещений</span></li>
-                <li class="about__info--list"><span class="about__info--number">10</span><span class="about__info--text about__info--md">земельных участков</span></li>
+                <li class="about__info--list"><span class="about__info--number">37000</span><span class="about__info--text">м² площадей</span></li>
+                <li class="about__info--list"><span class="about__info--number">5000</span><span class="about__info--text about__info--lg">посетителей каждый день</span></li>
+                <li class="about__info--list"><span class="about__info--number">75</span><span class="about__info--text about__info--md">резидентов</span></li>
             </ul>
             <div class="about__info--address">Ижевск, Буммашевская, 5</div>
         </div>
@@ -99,7 +99,7 @@
                             {% set includeIcon = 'locImg' %}
                             {% include "includes/svg.njk" %}
                         </span>
-                        <a href="tel:+79092776242" class="about__logistics--call">
+                        <a href="{{ contacts.phone.link }}" class="about__logistics--call">
                             {% set includeIcon = 'phoneIcon' %}
                             {% include "includes/svg.njk" %}
                         </a>
@@ -138,7 +138,7 @@
 
     <section class="section about__section">
         <div class="container">
-            <h2 class="about--black about__title about__manager--title">Управляющий ТСК "Депо"</h2>
+            <h2 class="about--black about__title about__manager--title">Управляющий торгово-складского комплекса "Депо"</h2>
             <div data-react-component="manager"></div>
         </div>
     </section>

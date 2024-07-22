@@ -38,7 +38,7 @@
                     {% set includeIcon = 'phoneNoBackground' %}
                     {% include "includes/svg.njk" %}
                 </div>
-                <div class="contact__phone--number">+7 (912) 055-77-55</div>
+                <a href="{{ contacts.phone.link }}" class="contact__phone--number">{{ contacts.phone.title }}</a>
             </div>
             <div class="contact__form">
                 <div class="contact__form--text">или</div>

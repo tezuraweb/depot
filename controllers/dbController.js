@@ -2,6 +2,7 @@ const pick = require('lodash/pick');
 const tenantService = require('../services/tenantService');
 const roomsService = require('../services/roomsService');
 const ticketService = require('../services/ticketService');
+const docsService = require('../services/docsService');
 
 // Tenants
 
@@ -133,7 +134,17 @@ async function getRoomsLiters(req, res, next) {
 
 async function getRoomsReport(req, res, next) {
     try {
-        const rooms = await roomsService.getReport();
+        const base = req.params.base;
+        let baseArr = [];
+        if (base == 'depot') {
+            baseArr.push('ДЕПО АО');
+        } else if (base == 'gagarinsky') {
+            baseArr.push('ГАГАРИНСКИЙ ПКЦ ООО');
+        } else if (base == 'yujnaya') {
+            baseArr.push('База Южная ООО');
+            baseArr.push('Строительная База "Южная" ООО');
+        }
+        const rooms = await roomsService.getReport(baseArr);
         res.json(rooms.data);
     } catch (error) {
         next(error);
@@ -248,8 +259,8 @@ async function updateTicketStatusBot(data) {
 
 async function getTicketsByTenant(req, res, next) {
     try {
-        const rooms = await ticketService.getTicketsByTenant(req.user.id);
-        res.json(rooms.data);
+        const ticket = await ticketService.getTicketsByTenant(req.user.id);
+        res.json(ticket.data);
     } catch (error) {
         next(error);
     }
@@ -259,8 +270,19 @@ async function insertTicketFromBackoffice(req, res, next) {
     try {
         const userId = req.user.id;
         const { text } = pick(req.body, ['text']);
-        const rooms = await ticketService.insertTicketBackoffice({ userId, text });
-        res.json(rooms.data);
+        const ticket = await ticketService.insertTicketBackoffice({ userId, text });
+        res.json(ticket.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// Docs
+
+async function getDocsByUser(req, res, next) {
+    try {
+        const docs = await docsService.getDocsByTenant(req.user.id);
+        res.json(docs.data);
     } catch (error) {
         next(error);
     }
@@ -292,4 +314,5 @@ module.exports = {
     getTicketsByStatusBot,
     updateTicketStatusBot,
     insertTicketFromBackoffice,
+    getDocsByUser,
 };

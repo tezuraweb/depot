@@ -1,4 +1,4 @@
-const { Scenes } = require('telegraf');
+const { Scenes, Markup } = require('telegraf');
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
@@ -7,11 +7,32 @@ const createReportScene = () => {
     const createReportScene = new Scenes.BaseScene('CREATE_REPORT_SCENE');
 
     createReportScene.enter((ctx) => {
-        ctx.reply("Создание отчета, подождите...");
-        generateAndSendReport(ctx);
+        ctx.reply(
+            "Выберите базу для формирования отчета:",
+            Markup.inlineKeyboard([
+                [Markup.button.callback('Депо', 'base1')],
+                [Markup.button.callback('Гагаринский', 'base2')],
+                [Markup.button.callback('Южная', 'base3')],
+            ]).oneTime().resize(),
+        );
     });
 
-    const generateAndSendReport = async (ctx) => {
+    createReportScene.action('base1', async (ctx) => {
+        ctx.reply("Создание отчета, подождите...");
+        generateAndSendReport(ctx, 'depot');
+    });
+
+    createReportScene.action('base2', async (ctx) => {
+        ctx.reply("Создание отчета, подождите...");
+        generateAndSendReport(ctx, 'gagarinsky');
+    });
+
+    createReportScene.action('base3', async (ctx) => {
+        ctx.reply("Создание отчета, подождите...");
+        generateAndSendReport(ctx, 'yujnaya');
+    });
+
+    const generateAndSendReport = async (ctx, base) => {
         try {
             const reportsDir = path.join(__dirname, '..', 'reports');
             if (!fs.existsSync(reportsDir)) {
@@ -20,7 +41,7 @@ const createReportScene = () => {
 
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
-            await page.goto('http://localhost:3000/api/report/print', { waitUntil: 'networkidle2' });
+            await page.goto(`http://localhost:3000/api/report/print/${base}`, { waitUntil: 'networkidle2' });
 
             const pdfPath = path.join(reportsDir, `report-${ctx.from.id}.pdf`);
 

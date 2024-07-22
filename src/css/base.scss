@@ -172,10 +172,11 @@ input[type=number] {
     }
 
     &#hero {
-        background-image: url('../../assets/img/pictures/Depo-cover.webp');
+        background-image: url('../../assets/img/pictures/main_cover.webp');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
+        padding-top: 50px;
     }
 
     &#contact-block {
@@ -271,6 +272,10 @@ input[type=number] {
     }
 
     @media (max-width: ($desktop-breakpoint - 1)) {
+        &#hero {
+            padding-top: 80px;
+        }
+
         &#about-logistics {
             &::before {
                 bottom: -110px;
@@ -290,6 +295,10 @@ input[type=number] {
 
     @media (max-width: ($laptop-breakpoint - 1)) {
         padding: 70px 0;
+
+        &#hero {
+            padding-top: 70px;
+        }
 
         &#about-logistics {
             background-position-x: 45%;
@@ -323,6 +332,10 @@ input[type=number] {
 
     @media (max-width: ($mobile-breakpoint - 1)) {
         padding: 50px 0;
+
+        &#hero {
+            padding-top: 50px;
+        }
 
         &#search-block {
             padding-bottom: 0;
@@ -494,6 +507,10 @@ input[type=number] {
             height: 40px;
         }
     }
+}
+
+[class*="ground-pane"] {
+    filter: grayscale(1);
 }
 
 .animate {

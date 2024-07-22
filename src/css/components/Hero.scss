@@ -2,11 +2,13 @@
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding-bottom: 230px;
+    flex-direction: column;
+    padding-bottom: 160px;
 
     &__column {
-        &--left {
-            flex-basis: 75%;
+        &--right {
+            order: -1;
+            margin-bottom: 50px;
         }
     }
 
@@ -18,13 +20,19 @@
     }
 
     &__title {
-        margin-bottom: 30px;
+        max-width: 700px;
+        line-height: 1.1;
+        margin-bottom: 100px;
+    }
+
+    &__features {
+        display: flex;
     }
 
     &__feature {
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+        margin-right: 45px;
 
         &--icon {
             margin-right: 25px;
@@ -34,31 +42,24 @@
     // media
 
     @media (max-width: ($desktop-breakpoint - 1)) {
-        padding-bottom: 170px;
+        padding-bottom: 100px;
 
         &__column {
             &--right {
-                position: absolute;
-                right: 0;
-                top: 50%;
-                transform: translateY(-40%);
+                display: none;
             }
+        }
+
+        &__title {
+            max-width: 540px;
         }
     }
 
     @media (max-width: ($laptop-breakpoint - 1)) {
-        flex-direction: column;
-        padding-bottom: 150px;
+        padding-bottom: 250px;
 
-        &__column {
-            &--left {
-                margin-bottom: 60px;
-            }
-
-            &--right {
-                position: relative;
-                transform: none;
-            }
+        &__title {
+            margin-bottom: 0;
         }
 
         &__features {
@@ -103,17 +104,15 @@
     }
 
     @media (max-width: ($mobile-breakpoint - 1)) {
-        padding-bottom: 130px;
+        padding-bottom: 140px;
+
+        &__title {
+            max-width: 270px;
+        }
 
         &__desc {
             font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        &__column {
-            &--left {
-                margin-bottom: 30px;
-            }
+            margin-bottom: 20px;
         }
 
         &__contactForm {

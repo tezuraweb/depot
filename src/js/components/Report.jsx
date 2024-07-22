@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import IconSprite from '../includes/IconSprite';
 
-const Report = () => {
+const Report = ({ base = '' }) => {
     const [data, setData] = useState({
         total: 0,
         rented: 0,
@@ -15,7 +15,8 @@ const Report = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/api/report');
+                const url = base !== '' ? `/api/report/${base}` : `/api/report/depot`
+                const response = await axios.get(url);
                 if (response.data?.length > 0) {
                     const list = response.data.map(item => {
                         const total = parseInt(item.total);

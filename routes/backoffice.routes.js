@@ -33,7 +33,7 @@ router
 router
     .route('/promotions')
     .get(auth, (req, res) => {
-        if (req.user.status && req.user.status === 'admin') {
+        if (req.user.status && req.user.status === 'tenant') {
             return res.redirect('/backoffice/profile');
         }
         res.render('nodes/promotions', { user: req.user, page: 'promotions' });
@@ -48,14 +48,14 @@ router
         res.render('nodes/editor', { user: req.user, page: 'editor' });
     });
 
-router
-    .route('/feedback')
-    .get(auth, (req, res) => {
-        if (req.user.status && req.user.status === 'tenant') {
-            return res.redirect('/backoffice/profile');
-        }
-        res.render('nodes/feedback', { user: req.user, page: 'feedback' });
-    });
+// router
+//     .route('/feedback')
+//     .get(auth, (req, res) => {
+//         if (req.user.status && req.user.status === 'tenant') {
+//             return res.redirect('/backoffice/profile');
+//         }
+//         res.render('nodes/feedback', { user: req.user, page: 'feedback' });
+//     });
 
 router
     .route('/report')
