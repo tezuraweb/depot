@@ -15,8 +15,10 @@ const dbOptions = {
     }),
 };
 
+const organization = 'ДЕПО АО';
+
 async function getAll() {
-    const query = `SELECT * FROM rooms FORMAT JSON`;
+    const query = `SELECT * FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -35,7 +37,7 @@ async function getAll() {
 }
 
 async function getTypes() {
-    const query = `SELECT DISTINCT type FROM rooms FORMAT JSON`;
+    const query = `SELECT DISTINCT type FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -54,7 +56,7 @@ async function getTypes() {
 }
 
 async function getIdLiter() {
-    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization = 'ДЕПО АО' FORMAT JSON`; //where status == vacant
+    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`; //where status == vacant
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -117,12 +119,19 @@ async function getPage(data) {
     if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
     if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
     if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
+
     if (data.areaFrom !== undefined && data.areaTo !== undefined) {
         conditions.push(`area BETWEEN ${sqlstring.escape(data.areaFrom)} AND ${sqlstring.escape(data.areaTo)}`);
     } else if (data.areaFrom !== undefined) {
         conditions.push(`area >= ${sqlstring.escape(data.areaFrom)}`);
     } else if (data.areaTo !== undefined) {
         conditions.push(`area <= ${sqlstring.escape(data.areaTo)}`);
+    }
+
+    if (data.organization !== undefined && Array.isArray(data.organization) && data.organization.length > 0) {
+        conditions.push(`organization IN (${data.organization.map(item => sqlstring.escape(item)).join(', ')})`);
+    } else {
+        conditions.push(`organization = ${sqlstring.escape(organization)}`);
     }
 
     if (data.priceType === 'total') {
@@ -147,7 +156,7 @@ async function getPage(data) {
     const query = `
         SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion, promotion_price
         FROM rooms 
-        ${whereClause} 
+        ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
         LIMIT ${data.limit}
         OFFSET ${data.offset}
@@ -176,7 +185,7 @@ async function getReport(base) {
             COUNT(*) as total,
             SUM(CASE WHEN status = 'В аренде' THEN 1 ELSE 0 END) as rented,
             ROUND(100.0 * SUM(CASE WHEN status = 'В аренде' THEN 1 ELSE 0 END) / COUNT(*), 2) as rented_percentage,
-            ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM rooms), 2) as type_percentage
+            ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM rooms WHERE organization IN (${sanitizedBase})), 2) as type_percentage
         FROM 
             rooms
         WHERE
@@ -234,7 +243,7 @@ async function getRoomsByParam(params) {
     const query = `
         SELECT id, kode_text AS code, complex_id AS complex
         FROM rooms
-        WHERE ${conditions} AND kode_text != ''
+        WHERE ${conditions} AND kode_text != '' AND organization = ${sqlstring.escape(organization)}
         FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': config.database,
@@ -264,7 +273,7 @@ async function getRecommended(id) {
             WHERE id = ${sanitizedId}
         ) AS subquery
         ON rooms.type = subquery.type
-        WHERE rooms.id != ${sanitizedId}
+        WHERE rooms.id != ${sanitizedId} AND organization = ${sqlstring.escape(organization)}
         ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
         LIMIT 3
         FORMAT JSON`;

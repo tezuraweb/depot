@@ -31,18 +31,6 @@ const Scheme = ({ activeElement = null }) => {
 
     const loadFloors = async (buildingId, floor) => {
         switch (buildingId) {
-            case 1:
-                if (floor === 0) return [React.lazy(() => import('../includes/maps/P/Floor0'))];
-                if (floor === 1) return [React.lazy(() => import('../includes/maps/P/Floor1'))];
-                if (floor === 2) return [React.lazy(() => import('../includes/maps/P/Floor2'))];
-                break;
-            case 'depot-building-2':
-                if (floor === 0) return [React.lazy(() => import('../includes/maps/P/Floor0'))];
-                break;
-            case 'depot-building-3':
-                if (floor === 1) return [React.lazy(() => import('../includes/maps/P/Floor1'))];
-                if (floor === 2) return [React.lazy(() => import('../includes/maps/P/Floor2'))];
-                break;
             default:
                 return [];
         }

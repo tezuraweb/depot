@@ -87,7 +87,7 @@ async function getRoomsByTenant(req, res, next) {
 
 async function getRoomsSearch(req, res, next) {
     try {
-        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions']);
+        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions', 'organization']);
         const dbData = {};
 
         if (data.startIdx !== undefined && data.startIdx !== null) dbData.offset = data.startIdx || 0;
@@ -146,6 +146,26 @@ async function getRoomsReport(req, res, next) {
         }
         const rooms = await roomsService.getReport(baseArr);
         res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsReportMiddleware(req, res, next) {
+    try {
+        const base = req.params.base;
+        let baseArr = [];
+        if (base == 'depot') {
+            baseArr.push('ДЕПО АО');
+        } else if (base == 'gagarinsky') {
+            baseArr.push('ГАГАРИНСКИЙ ПКЦ ООО');
+        } else if (base == 'yujnaya') {
+            baseArr.push('База Южная ООО');
+            baseArr.push('Строительная База "Южная" ООО');
+        }
+        const rooms = await roomsService.getReport(baseArr);
+        req.rooms = rooms.data;
+        next();
     } catch (error) {
         next(error);
     }
@@ -300,6 +320,7 @@ module.exports = {
     getRoomsTypes,
     getRoomsLiters,
     getRoomsReport,
+    getRoomsReportMiddleware,
     getRoomsById,
     getRoomsByBuilding,
     getRoomsByComplex,
