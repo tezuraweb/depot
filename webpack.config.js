@@ -4,6 +4,8 @@ const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const config = require('./config/appConfig');
+
 
 const PreloadFontPlugin = require("./plugins/preloadFontPlugin");
 const generatePreloadLinks = require('./plugins/generatePreloadLinks');
@@ -112,6 +114,9 @@ module.exports = {
         new PreloadFontPlugin(),
         new MiniCssExtractPlugin({
             filename: 'bundle.[contenthash].css',
+        }),
+        new webpack.DefinePlugin({
+            'process.env.REACT_APP_SITE_NAME': JSON.stringify(config.base),
         }),
     ],
 };

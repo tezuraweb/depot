@@ -1,21 +1,61 @@
+{% set baseName = '' %}
+{% set baseDesc = '' %}
+{% set mainLogo = '' %}
+{% set mainLogoMobile = '' %}
+{% set authIcon = '' %}
+
+{% if activeBase == 'depo' %}
+    {% set baseName = 'Депо' %}
+    {% set baseDesc = 'Торгово-складской комплекс «Депо»' %}
+    {% set mainLogo = 'depotLogo' %}
+    {% set mainLogoMobile = 'depotLogoMobile' %}
+    {% set authIcon = 'depotAuthIcon' %}
+{% elif activeBase == 'gagarinsky' %}
+    {% set baseName = 'Гагаринский' %}
+    {% set baseDesc = 'Торгово-складской комплекс «Гагаринский»' %}
+    {% set mainLogo = 'gagarinskyLogo' %}
+    {% set mainLogoMobile = 'gagarinskyLogoMobile' %}
+    {% set authIcon = 'gagarinskyAuthIcon' %}
+{% elif activeBase == 'yujnaya' %}
+    {% set baseName = 'База Южная' %}
+    {% set baseDesc = 'База «Южная»' %}
+    {% set mainLogo = 'yujnayaLogo' %}
+    {% set mainLogoMobile = 'yujnayaLogoMobile' %}
+    {% set authIcon = 'yujnayaAuthIcon' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="ru">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ pageTitle }}</title>
-        <meta name="title" content="{{ pageTitle|default('Депо') }}">
-        <meta name="description" content="{{ pageDescription|default('') }}">
+        <title>{{ pageTitle ~ ' - ' ~ baseName }}</title>
+        <meta name="title" content="{{ pageTitle ~ ' - ' ~ baseName }}">
+        <meta name="description" content="{{ pageDescription|default('') ~ ' - ' ~ baseDesc }}">
         <meta name="keywords" content="">
         <meta name="robots" content="index, follow">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="language" content="Russian">
         <meta name="theme-color" content="#000" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-        <link rel="manifest" href="/favicon/site.webmanifest">
-        <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+        {% if activeBase == 'depo' %}
+            <link rel="apple-touch-icon" sizes="180x180" href="/favicon/depot/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon/depot/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon/depot/favicon-16x16.png">
+            <link rel="manifest" href="/favicon/depot/site.webmanifest">
+            <link rel="mask-icon" href="/favicon/depot/safari-pinned-tab.svg" color="#5bbad5">
+        {% elif activeBase == 'gagarinsky' %}
+            <link rel="apple-touch-icon" sizes="180x180" href="/favicon/gagarinsky/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon/gagarinsky/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon/gagarinsky/favicon-16x16.png">
+            <link rel="manifest" href="/favicon/gagarinsky/site.webmanifest">
+            <link rel="mask-icon" href="/favicon/gagarinsky/safari-pinned-tab.svg" color="#5bbad5">
+        {% elif activeBase == 'yujnaya' %}
+            <link rel="apple-touch-icon" sizes="180x180" href="/favicon/yujnaya/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon/yujnaya/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/favicon/yujnaya/favicon-16x16.png">
+            <link rel="manifest" href="/favicon/yujnaya/site.webmanifest">
+            <link rel="mask-icon" href="/favicon/yujnaya/safari-pinned-tab.svg" color="#5bbad5">
+        {% endif %}
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
 

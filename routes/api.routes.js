@@ -7,8 +7,10 @@ const multer = require('multer');
 const FormData = require('form-data');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const auth = require('../middlewares/auth');
-const cdnConfig = require('../config/cdnConfig');
+const appConfig = require('../config/appConfig');
 const jwtConfig = require('../config/jwtConfig');
 const bitrixConfig = require('../config/bitrixConfig');
 const dbController = require('../controllers/dbController');
@@ -28,13 +30,27 @@ const upload = multer({
     limits: {
         fileSize: 10485760,
     },
-});
+}).single('file');
 
-const manager = {
+const depotManager = {
     id: 1,
     name: "Ладыгин Сергей Александрович",
     text: "В нашем ТСК созданы все условия для эффективного ведения бизнеса! Мы работаем для Вас и всегда строим доверительные отношения с нашими клиентами и партнерами! 24/7 я на связи по номеру +79128566785. Обращайтесь, помогу решить любые вопросы!",
     photo: "/img/pics/depo_manager.webp",
+};
+
+const gagarinskyManager = {
+    id: 1,
+    name: "Пивоваров Денис Олегович",
+    text: "Мы знаем, как важно создавать условия для комфортной работы наших клиентов и партнеров. И работаем над этим ежедневно. Я всегда на связи по номеру +79124492233, открыт для предложений и готов помочь.",
+    photo: "/img/pics/gagarinskii_manager.webp",
+};
+
+const yujnayaManager = {
+    id: 1,
+    name: "Пичугин Федор Юрьевич",
+    text: "Выгодные условия для ведения бизнеса вы всегда сможете найти на Базе “Южной”! Мы с уважением относимся к каждому клиенту и готовы предоставить лучшие условия. Обращайтесь ко мне по номеру +79127655400 - всегда помогу и решу любые вопросы!",
+    photo: "/img/pics/manager.png",
 };
 
 const depotTenants = [
@@ -159,6 +175,152 @@ const depotTenants = [
     }
 ];
 
+const gagarinskyTenants = [
+    {
+        id: 1,
+        logo: "/img/pics/gagarinski_tenants/gaz.webp",
+        title: "ГАЗ автосервис",
+        link: "https://avtogaz18.ru/service-and-spareparts/",
+        text: "Предприятие ООО «АвтоГазСервис», является официальным дилером Горьковского автомобильного завода, по обслуживанию и ремонту автомобилей марки ГАЗ. Сервисный центр произведет как глубокий ремонт с пересборкой, так и плановое обслуживание дизельного или бензинового двигателя коммерческого, некоммерческого и легкового транспорта. Современное оборудование в паре с профессионализмом команды сервиса позволяет производить ремонт двигателей даже иностранного производства. Что мы предлагаем нашим клиентам? Подъемники и пост диагностики, смотровые ямы (в том числе для удлиненных автомобилей до 10 м), моторный участок, агрегатный участок.",
+    },
+    {
+        id: 2,
+        logo: "/img/pics/gagarinski_tenants/musorovoz.webp",
+        title: "Мусоровозов",
+        link: "https://xn--18-dlcay2aoabbrkz.xn--p1ai/",
+        text: "ООО «Мусоровозов» осуществляет деятельность по обращению с отходами с 2010 года и является одним из крупнейших транспортировщиков отходов на территории Удмуртской Республики, а также оператором по обращению с твердыми коммунальными отходами (ТКО).",
+    },
+    {
+        id: 3,
+        logo: "/img/pics/gagarinski_tenants/sereb_kluchi.webp",
+        title: "Серебряные ключи +",
+        link: "https://voda18.ru/",
+        text: "АО «Серебряные ключи» - единственное предприятие в Удмуртии, которое производит минеральные воды всех групп: лечебные, лечебно-столовые, минерализованные, безалкогольные воды, квасные и сокосодержащие напитки. Вся продукция производится из чистейшей артезианской воды. «Серебряные ключи +» это сеть автоматизированных киосков по продаже артезианской воды в розлив «Серебряные ключи +» в городе Ижевске.",
+    },
+    {
+        id: 4,
+        logo: "/img/pics/gagarinski_tenants/rmt.webp",
+        title: "РМТ Волга",
+        link: "https://www.coppertubes.ru/",
+        text: "Компания «Русские Медные Трубы» занимает лидирующие  позиции на рынке России и стран Таможенного Союза по поставкам комплектующих и расходных материалов для систем охлаждения, вентиляции, кондиционирования и отопления. Огромный опыт в поставках медной трубы, фитингов и хладагентов позволяет закрывать потребности любых производственных, торговых и монтажных организаций в качественных и доступных материалах. Сеть складов на всей территории России позволяет ускорить процесс получения товара конечным потребителем. В настоящее время у компании 15 региональных складов и распределительных центров в наиболее экономически-активных регионах страны.",
+    },
+    {
+        id: 5,
+        logo: "/img/pics/gagarinski_tenants/nahodka.webp",
+        title: "Находка",
+        link: "https://nahodka-magazin.ru/",
+        text: "«НАХОДКА» -  это сеть магазинов низких  цен, для  покупателей, которые хотят и любят экономить, ценят лучшее соотношение ассортимента, цены и качества. Цены в магазинах нашей сети на 15% ниже среднерыночных цен, за счет минимальной торговой надбавки. Оптимальный ассортимент товара, гарантированного качества и свежести, 85% которого приходится на товары ежедневного спроса, исключает незапланированные покупки, а значит и лишние траты. Работа напрямую с федеральными и местными производителями качественных товаров, позволяет покупателю не переплачивать за «раскрученный» бренд и красочную упаковку.",
+    },
+    {
+        id: 6,
+        logo: "/img/pics/gagarinski_tenants/food_service.webp",
+        title: "Food Сервис",
+        link: "https://food-s.ru/",
+        text: "Компания «FOOD-Сервис» предлагает крупнейший выбор профессионального кухонного, холодильного оборудования и инвентаря, а также проектирование и сопутствующие сервисные услуги. Компания более 8 лет успешно занимается покупкой и продажей б/у оборудования, а также поставкой нового оборудования для кафе, ресторанов, предприятий общественного питания и магазинов.",
+    },
+    {
+        id: 7,
+        logo: "/img/pics/gagarinski_tenants/borsch.webp",
+        title: "Сеть столовых Борщ",
+        link: "https://borshch18.ru/",
+        text: "Сеть столовых «Борщ» предлагает широкий выбор полноценных завтраков и обедов с разнообразным меню на каждый день. Компания имеет собственное производство с соблюдением всех стандартов и требований. Мы готовим только из свежих и качественных продуктов. Привезём обеды на дом, в офис, организуем корпоративное питание. Мы экономим ваше время, чтобы Вы провели его с близкими.",
+    },
+    {
+        id: 8,
+        logo: "/img/pics/gagarinski_tenants/nash_garazh.webp",
+        title: "Наш Гараж",
+        link: "https://nashgarazh-rf.ru/",
+        text: "Компания НАШ ГАРАЖ официальный дилер ведущих производителей ворот и автоматики HORMANN, ALUTECH, DoorHan, а также итальянских производителей BFt, Nice и CAMEt.На рынке с 2015 года. Оснащаем ваши дома оборудованием, которое делает жизнь комфортной и безопасной. ГАРАНТИЯ до 10 ЛЕТ. Продаем и устанавливаем: ворота, автоматику к воротам, шлагбаумы, калитки, рольставни.",
+    },
+    {
+        id: 9,
+        logo: "/img/pics/gagarinski_tenants/tis.webp",
+        title: "Транспортные информационные системы",
+        link: "https://www.strizh18.ru/",
+        text: "Транспортные информационные системы. Оборудование для автоматизации промышленных предприятий",
+    },
+    {
+        id: 10,
+        logo: "/img/pics/gagarinski_tenants/kued_myaso.webp",
+        title: "Куединский мясокомбинат",
+        link: "https://xn--80abidqabgedcxbiilb1ce2ac7y.xn--p1ai/",
+        text: "Фирменный магазин Куединского мясокомбината. Магазин предлагает широкий ассортимент продукции, включая различные виды мяса, колбасы, копчености и деликатесы. Куединские мясопродукты – это экологичность, высокое качество, красивый товарный вид и доступные цены. Все продукты изготавливаются из качественных натуральных ингредиентов.",
+    },
+    {
+        id: 11,
+        logo: "/img/pics/gagarinski_tenants/zolot_tabak.webp",
+        title: "Золотая Табакерка",
+        link: "https://vk.com/goldtabakerka",
+        text: "Компания «Золотая табакерка» основана в 2002 году. На сегодняшний день  компания единственная на территории Удмуртской Республики, работающая в формате «Есть всё» по ассортименту табачной продукции.",
+    },
+    {
+        id: 12,
+        logo: "/img/pics/gagarinski_tenants/svoya_koleya.webp",
+        title: "Сервисный центр Своя Колея",
+        link: "https://skoleya.ru/",
+        text: "Внедорожная Мастерская «Своя Колея» специализируется на доработке и тюнинге внедорожников. Мы подготавливаем технику к экстремальному бездорожью, охоте и рыбалке.",
+    }
+];
+
+const yujnayaTenants = [
+    {
+        id: 1,
+        logo: "/img/pics/yujnaya_tenants/upravdom.webp",
+        title: "УправДом",
+        link: "https://izhevsk.upravdom.com/",
+        text: "Профессиональная сеть магазинов напольных покрытий. Оптово-розничная компания «Управдом» основана в 2002 году и сегодня является лидером по продаже напольных покрытий. Магазин «Управдом» — крупнейший в городе центр продаж напольных покрытий. Здесь можно приобрести: линолеум, ламинат, кварцвиниловый и SPC ламинат, паркетную и инженерную доску, ПВХ-плитку, пробковое покрытие и многое другое! Представляем ведущие бренды: Quick Step, Kronospan, Krono Original, Classen, Upofloor, Polarwood и другие. Компания предоставляет полный комплекс дополнительных услуг: замер помещения, доставку товара, подъем на этаж, демонтаж старых покрытий, укладку напольных покрытий.",
+    },
+    {
+        id: 2,
+        logo: "/img/pics/yujnaya_tenants/mnogo_mebeli.webp",
+        title: "Много Мебели",
+        link: "https://mnogomebeli.com/",
+        text: "«Много Мебели» — российская компания, производящая и реализующая мягкую и корпусную мебель для дома. Крупнейший российский производитель диванов и диван-кроватей, мебель реализуется через розничную сеть, а также через интернет-магазин. Наши цены – самые доступные, потому что мы продаём мебель огромными объёмами, а производством, доставкой, хранением и сервисным обслуживанием занимаются только проверенные и надёжные партнёры, выполняющие свою работу профессионально, быстро и без лишних затрат.",
+    },
+    {
+        id: 3,
+        logo: "/img/pics/yujnaya_tenants/ariva.webp",
+        title: "Арива",
+        link: "https://a-pricep.ru/",
+        text: "С момента основания компания Арива занимается легковыми прицепами и всем, что с ними связано, а это: 1. продажа прицепов марки МЗСА 2. продажа и установка фаркопов (ТСУ), электрики для фаркопов, смарт-коннектов 3. продажа запчастей для легковых прицепов 4. прокат прицепов 5. изготовление, продажа и установка тентов и каркасов для легковых прицепов 6. ремонт прицепов, фаркопов, электрики фаркопов 7. модернизация и тюнинг легковых прицепов. Мы имеем постоянно пополняемый большой склад прицепов, фаркопов и запчастей. Организуем Доставку в любой город по России.",
+    },
+    {
+        id: 4,
+        logo: "/img/pics/yujnaya_tenants/keramo_market.webp",
+        title: "Керамо-Маркет",
+        link: "https://yandex.ru/profile/1091094439",
+        text: "Основной ассортимент компании: керамическая плитка, затирка, керамогранит, уголки на ванну керамические, грунтовка, мозаика, плиточный клей.",
+    },
+    {
+        id: 5,
+        logo: "/img/pics/yujnaya_tenants/ametist.webp",
+        title: "Аметист",
+        link: "https://ametist-store.ru/",
+        text: "Компания АМЕТИСТ работает на российском рынке уже более 28 лет и входит в число лидеров мебельной отрасли. Компания является надежным бизнес-партнером и поставщиком качественных комплектующих и тканей, которые используются для изготовления удобной и современной мебели. В перечне предлагаемого ассортимента насчитывается более 5000 наименований продукции от известных производителей из стран Европы и юго-восточной Азии. Вся продукция представлена в широком ценовом диапазоне. Партнерами компании являются более 3000 различных производителей корпусной и мягкой мебели из десятков регионов по всей территории России. Компания предлагает следующий ассортимент продукции: мебельные ткани, кожа (натуральная и искусственная), внутренняя и лицевая фурнитура для мягкой и корпусной мебели, различные виды наполнителей, мебельный клей, механизмы трансформации, алюминиевые и пластиковые системы, различные виды аксессуаров и гаджетов для мебели, светильники, материалы для контрактных проектов, товары для дома.",
+    },
+    {
+        id: 6,
+        logo: "/img/pics/yujnaya_tenants/hollmart.webp",
+        title: "HOLLmart",
+        link: "https://hollmart.me/",
+        text: "Мебельмаркет Hollmart – сеть магазинов мебели, которые позволят вам обустроить дом и сэкономить деньги. Hollmart – это: удобная и функциональная мебель, широкий ассортимент товаров, идеи для создания уютного интерьера, доступные цены! Мы предлагаем выгодные (экономичные) решения для вашего интерьера.",
+    },
+];
+
+if (appConfig.base === 'depo') {
+    var baseName = 'ДЕПО АО';
+    var manager = depotManager;
+    var tenants = depotTenants;
+} else if (appConfig.base === 'gagarinsky') {
+    var baseName = 'ГАГАРИНСКИЙ ПКЦ';
+    var manager = gagarinskyManager;
+    var tenants = gagarinskyTenants;
+} else if (appConfig.base === 'yujnaya') {
+    var baseName = 'База Южная';
+    var manager = yujnayaManager;
+    var tenants = yujnayaTenants;
+}
+
 router
     .route('/search')
     .post(dbController.getRoomsSearch);
@@ -218,6 +380,14 @@ router
 router
     .route('/docs')
     .get(auth, dbController.getDocsByUser);
+
+router
+    .route('/residents')
+    .get(dbController.getResidents);
+
+router
+    .route('/residents/backoffice')
+    .get(auth, dbController.getResidents);
 
 router.route('/report/print/:base')
     .get(dbController.getRoomsReportMiddleware, async (req, res) => {
@@ -412,7 +582,7 @@ router
                     NAME: name,
                     EMAIL: [{ VALUE: email }],
                     PHONE: [{ VALUE: phone }],
-                    WEB: [{ VALUE: url, VALUE_TYPE: "Депо" }],
+                    WEB: [{ VALUE: url, VALUE_TYPE: baseName }],
                 }
             });
             res.json({ success: true, data: response.data });
@@ -473,65 +643,95 @@ router
 
 router
     .route('/manager/update')
-    .post(async (req, res) => {
+    .post(auth, async (req, res) => {
         try {
             const data = pick(req.body, 'name', 'text', 'photo');
-            console.log(data);
-            res.status(200);
+            res.status(200).json({ success: true });;
         } catch (error) {
             res.status(404).json({ error: 'Manager not updated' });
         }
     });
 
 router
-    .route('/tenants')
-    .get(async (req, res) => {
-        if (depotTenants) {
-            res.json(depotTenants);
-        } else {
-            res.status(404).json({ error: 'Tenants not found' });
-        }
+    .route('/photo')
+    .post(auth, async (req, res) => {
+        upload(req, res, async (err) => {
+            if (err) {
+                if (err instanceof multer.MulterError) {
+                    if (err.code === 'LIMIT_FILE_SIZE') {
+                        return res.status(400).json({ code: 'FILE_SIZE_LIMIT', message: 'Файл превышает максимальный размер 10 МБ' });
+                    }
+                    return res.status(400).json({ code: 'MULTER_ERROR', message: 'Ошибка при загрузке файла', error: err.message });
+                } else {
+                    return res.status(500).json({ code: 'SERVER_ERROR', message: 'Ошибка сервера', error: err.message });
+                }
+            }
+
+            const file = req.file;
+            const { id } = pick(req.body, ['id']);
+
+            if (!file) {
+                return res.status(400).json({ code: 'NO_FILES', message: 'Файл не найден' });
+            }
+
+            try {
+                const metadata = await sharp(file.buffer).metadata();
+                if (metadata.width < 550 || metadata.height < 309) {
+                    return res.status(400).json({ code: 'FILE_TOO_SMALL', message: 'Изображение слишком маленькое. Минимальные размеры: 550x309' });
+                }
+
+                const webpBuffer = await sharp(file.buffer)
+                    .resize({
+                        width: 550,
+                        height: Math.round(550 * 9 / 16),
+                        fit: sharp.fit.cover,
+                    })
+                    .webp()
+                    .toBuffer();
+
+                const filename = crypto.randomBytes(10).toString('hex').substr(0, 10) + '.webp';
+                const uploadDir = path.join(__dirname, '..', `static/uploads/${id}`);
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                const outputPath = path.join(uploadDir, filename);
+                const filePath = `/uploads/${id}/${filename}`;
+
+                await fs.promises.writeFile(outputPath, webpBuffer);
+                await dbController.setRoomsPhotoById(id, filePath);
+
+                res.json({ message: 'Файл успешно загружен', fileUrl: filePath });
+            } catch (error) {
+                // console.log('Error uploading photo:', error.message);
+                res.status(500).json({ code: 'UPLOAD_ERROR', message: 'Ошибка при загрузке фотографии' });
+            }
+        });
     });
 
 router
-    .route('/upload')
-    .post(upload.single('file'), async (req, res) => {
-        const file = req.file;
-
-        if (!file) {
-            return res.status(400).json({ message: 'Файл не найден' });
-        }
+    .route('/photo')
+    .delete(auth, async (req, res) => {
+        const { id, photoUrl } = pick(req.body, ['id', 'photoUrl']);
 
         try {
-            const filename = crypto.randomBytes(10).toString('hex').substr(0, 10);
-
-            const webpBuffer = await sharp(file.buffer)
-                .webp()
-                .toBuffer();
-
-            const formData = new FormData();
-            formData.append('file', webpBuffer, {
-                filename: `${filename}.webp`,
-                contentType: 'image/webp'
-            });
-
-            const headers = {
-                'Authorization': `Bearer ${cdnConfig.token}`,
-                ...formData.getHeaders()
-            };
-
-            const response = await axios.post(
-                `https://api.cloudflare.com/client/v4/accounts/${cdnConfig.acc}/images/v1`,
-                formData,
-                { headers }
-            );
-
-            res.json(response.data);
-        }
-
-        catch (error) {
-            console.log('Error uploading photo:', error.response ? error.response.data : error.message);
-            res.status(500).json({ message: 'Ошибка при загрузке фотографии' });
+            const fullPath = path.join(__dirname, '..', `static${photoUrl}`);
+            
+            if (fs.existsSync(fullPath)) {
+                await fs.promises.unlink(fullPath);
+            } else {
+                return res.status(404).json({ code: 'FILE_NOT_FOUND', message: 'Файл не найден' });
+            }
+    
+            const success = await dbController.setRoomsDeletePhotoById(id, photoUrl);
+    
+            if (success) {
+                res.json({ message: 'Фотография успешно удалена' });
+            } else {
+                res.status(500).json({ code: 'DB_ERROR', message: 'Ошибка при обновлении базы данных' });
+            }
+        } catch (error) {
+            console.error('Error deleting photo:', error);
+            res.status(500).json({ code: 'DELETE_ERROR', message: 'Ошибка при удалении фотографии' });
         }
     });
 

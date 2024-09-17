@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import usePhotoManager from '../utils/usePhotoManager';
 
 const SiteEditor = () => {
+    const { uploadPhoto } = usePhotoManager();
     const [managerData, setManagerData] = useState({
         name: '',
         text: '',
@@ -17,7 +19,7 @@ const SiteEditor = () => {
         title: '',
         link: '',
         text: '',
-        photo: ''
+        logo: ''
     });
     const [tenantSuccessMessage, setTenantSuccessMessage] = useState('');
     const [tenantFailMessage, setTenantFailMessage] = useState('');
@@ -34,9 +36,9 @@ const SiteEditor = () => {
     };
 
     const fetchTenants = () => {
-        axios.get('/api/tenants')
+        axios.get('/api/residents/backoffice')
             .then(response => setTenants(response.data))
-            .catch(error => console.error('Error fetching tenants list:', error));
+            .catch(error => console.error('Error fetching residents list:', error));
     };
 
     const handleManagerChange = (e) => {
@@ -50,12 +52,12 @@ const SiteEditor = () => {
     };
 
     const handleTenantSelect = (e) => {
-        const tenantId = e.target.value;
-        setSelectedTenant(tenantId);
-        if (tenantId === '') {
-            setTenantData({ id: '', title: '', link: '', text: '', photo: '' });
+        const tenantInd = e.target.value;
+        setSelectedTenant(tenantInd);
+        if (tenantInd === '') {
+            setTenantData({ id: '', title: '', link: '', text: '', logo: '' });
         } else {
-            const selected = tenants.find(tenant => tenant.id === tenantId);
+            const selected = tenants[tenantInd];
             setTenantData(selected);
         }
     };
@@ -64,14 +66,13 @@ const SiteEditor = () => {
         e.preventDefault();
         try {
             if (managerData.photoFile) {
-                const photoUrl = await uploadPhoto(managerData.photoFile);
-                console.log('here', photoUrl);
+                const photoUrl = await uploadPhoto(managerData.photoFile, 'manager');
                 setManagerData(prevData => ({ ...prevData, photo: photoUrl }));
-            }
+            }//переделать чтобы обновлялся managerdata
             await axios.post('/api/manager/update', managerData);
             showMessage('Данные успешно сохранены', setManagerSuccessMessage);
         } catch (error) {
-            showMessage('Ошибка при сохранении данных', setManagerFailMessage);
+            showMessage(`Ошибка при сохранении данных: ${error.message}`, setManagerFailMessage);
         }
     };
 
@@ -83,9 +84,9 @@ const SiteEditor = () => {
                 setTenantData(prevData => ({ ...prevData, photo: photoUrl }));
             }
             if (selectedTenant === '') {
-                await axios.put('/api/tenants/create', tenantData);
+                await axios.put('/api/residents/create', tenantData);
             } else {
-                await axios.post('/api/tenants/update', tenantData);
+                await axios.post('/api/residents/update', tenantData);
             }
             showMessage('Данные успешно сохранены', setTenantSuccessMessage);
             fetchTenants();
@@ -107,35 +108,28 @@ const SiteEditor = () => {
         }
     };
 
-    const uploadPhoto = async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
+    // const uploadPhoto = async (file, id) => {
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //     formData.append('id', id);
 
-        try {
-            const response = await axios.post('/api/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(response.data)
-            console.log(response.data.result)
-            console.log(response.data.result.variants)
-            return response.data.result.variants[0];
-        } catch (error) {
-            console.error('Ошибка при загрузке фотографии:', error);
-            throw new Error('Ошибка при загрузке фотографии');
-        }
-    };
+    //     try {
+    //         const response = await axios.post('/api/upload', formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         });
+    //         return response.data.fileUrl;
+    //     } catch (error) {
+    //         console.error('Ошибка при загрузке фотографии:', error);
+    //     }
+    // };
 
     const handlePhotoChange = (e, setData) => {
         const file = e.target.files[0];
         if (!file) return;
         setData(prevData => ({ ...prevData, photoFile: file }));
     };
-
 
     const showMessage = (message, msgSetter) => {
         msgSetter(message);
@@ -197,8 +191,8 @@ const SiteEditor = () => {
                             onChange={handleTenantSelect}
                         >
                             <option value="">Не выбрано</option>
-                            {tenants.map(tenant => (
-                                <option key={tenant.id} value={tenant.id}>{tenant.name}</option>
+                            {tenants.map((tenant, index) => (
+                                <option key={index} value={index}>{tenant.title}</option>
                             ))}
                         </select>
                     </div>

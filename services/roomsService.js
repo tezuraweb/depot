@@ -1,26 +1,33 @@
 const axios = require('axios');
 const querystring = require('querystring');
 const sqlstring = require('sqlstring');
-const config = require('../config/dbConfig');
+const appConfig = require('../config/appConfig');
+const dbConfig = require('../config/dbConfig');
 
 const dbOptions = {
-    baseURL: `https://${config.host}:8443`,
+    baseURL: `https://${dbConfig.host}:8443`,
     method: 'POST',
     headers: {
-        'X-ClickHouse-User': config.user,
-        'X-ClickHouse-Key': config.password,
+        'X-ClickHouse-User': dbConfig.user,
+        'X-ClickHouse-Key': dbConfig.password,
     },
     httpsAgent: new (require('https').Agent)({
-        ca: config.ca,
+        ca: dbConfig.ca,
     }),
 };
 
-const organization = 'ДЕПО АО';
+if (appConfig.base === 'depo') {
+    var sanitizedOrg = ['ДЕПО АО'].map(item => sqlstring.escape(item)).join(', ');
+} else if (appConfig.base === 'gagarinsky') {
+    var sanitizedOrg = ['ГАГАРИНСКИЙ ПКЦ ООО'].map(item => sqlstring.escape(item)).join(', ');
+} else if (appConfig.base === 'yujnaya') {
+    var sanitizedOrg = ['База Южная ООО', 'Строительная База "Южная" ООО'].map(item => sqlstring.escape(item)).join(', ');
+}
 
 async function getAll() {
-    const query = `SELECT * FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`;
+    const query = `SELECT * FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -37,9 +44,9 @@ async function getAll() {
 }
 
 async function getTypes() {
-    const query = `SELECT DISTINCT type FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`;
+    const query = `SELECT DISTINCT type FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -56,9 +63,9 @@ async function getTypes() {
 }
 
 async function getIdLiter() {
-    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization = ${sqlstring.escape(organization)} FORMAT JSON`; //where status == vacant
+    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`; //where status == vacant
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -88,14 +95,15 @@ async function getRoomsByTenant(id) {
             rooms.floor, 
             rooms.ceiling, 
             rooms.promotion,
-            rooms.date_d
+            rooms.date_d,
+            rooms.images
         FROM rooms 
         JOIN tenants 
         ON rooms.tenant = tenants.id 
         WHERE tenants.id = ${sanitizedId} 
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -119,6 +127,7 @@ async function getPage(data) {
     if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
     if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
     if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
+    if (data.code) conditions.push(`kode_text LIKE '%${sqlstring.escape(data.code).replace(/^'|'$/g, "")}%'`);
 
     if (data.areaFrom !== undefined && data.areaTo !== undefined) {
         conditions.push(`area BETWEEN ${sqlstring.escape(data.areaFrom)} AND ${sqlstring.escape(data.areaTo)}`);
@@ -131,7 +140,7 @@ async function getPage(data) {
     if (data.organization !== undefined && Array.isArray(data.organization) && data.organization.length > 0) {
         conditions.push(`organization IN (${data.organization.map(item => sqlstring.escape(item)).join(', ')})`);
     } else {
-        conditions.push(`organization = ${sqlstring.escape(organization)}`);
+        conditions.push(`organization IN (${sanitizedOrg})`);
     }
 
     if (data.priceType === 'total') {
@@ -154,7 +163,7 @@ async function getPage(data) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion, promotion_price
+        SELECT id, room, type, liter, id_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images
         FROM rooms 
         ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -162,7 +171,7 @@ async function getPage(data) {
         OFFSET ${data.offset}
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -194,7 +203,7 @@ async function getReport(base) {
             type
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -213,13 +222,13 @@ async function getReport(base) {
 async function getRoomById(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, complex_id, kode_text
+        SELECT id, room, type, liter, id_liter, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, complex_id, kode_text, images
         FROM rooms
         WHERE id = ${sanitizedId}
         LIMIT 1
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -243,10 +252,10 @@ async function getRoomsByParam(params) {
     const query = `
         SELECT id, kode_text AS code, complex_id AS complex
         FROM rooms
-        WHERE ${conditions} AND kode_text != '' AND organization = ${sqlstring.escape(organization)}
+        WHERE ${conditions} AND kode_text != '' AND organization IN (${sanitizedOrg})
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -265,7 +274,7 @@ async function getRoomsByParam(params) {
 async function getRecommended(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion
+        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion, images
         FROM rooms
         JOIN (
             SELECT type, cost, area
@@ -273,12 +282,12 @@ async function getRecommended(id) {
             WHERE id = ${sanitizedId}
         ) AS subquery
         ON rooms.type = subquery.type
-        WHERE rooms.id != ${sanitizedId} AND organization = ${sqlstring.escape(organization)}
+        WHERE rooms.id != ${sanitizedId} AND organization IN (${sanitizedOrg})
         ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
         LIMIT 3
         FORMAT JSON`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -298,7 +307,45 @@ async function alterRoomById(id, data) {
     const updates = Object.keys(data).map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(data[key])}`).join(', ');
     const query = `ALTER TABLE rooms UPDATE ${updates} WHERE id = ${sqlstring.escape(id)}`;
     const queryParams = querystring.stringify({
-        'database': config.database,
+        'database': dbConfig.database,
+        'query': query,
+    });
+
+    try {
+        await axios.post(`/?${queryParams}`, null, dbOptions);
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function addPhotoById(id, fileUrl) {
+    const query = `
+        ALTER TABLE rooms
+        UPDATE images = arrayConcat(images, ['${sqlstring.escape(fileUrl).replace(/'/g, '')}'])
+        WHERE id = ${sqlstring.escape(id)}
+    `;
+    const queryParams = querystring.stringify({
+        'database': dbConfig.database,
+        'query': query,
+    });
+
+    try {
+        await axios.post(`/?${queryParams}`, null, dbOptions);
+        return { success: true };
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function deletePhotoById(id, fileUrl) {
+    const query = `
+        ALTER TABLE rooms 
+        UPDATE images = arrayFilter(x -> x != '${sqlstring.escape(fileUrl).replace(/'/g, '')}', images)
+        WHERE id = ${sqlstring.escape(id)}
+    `;
+    const queryParams = querystring.stringify({
+        'database': dbConfig.database,
         'query': query,
     });
 
@@ -321,4 +368,6 @@ module.exports = {
     getRoomsByTenant,
     getRoomsByParam,
     alterRoomById,
+    addPhotoById,
+    deletePhotoById,
 };

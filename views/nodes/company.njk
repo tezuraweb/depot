@@ -1,121 +1,217 @@
-{% set pageTitle = 'Акционерное общество «ДЕПО»' %}
-{% set pageDescription = 'О компании «ДЕПО»' %}
+{% set pageTitle = '' %}
+{% if activeBase == 'depo' %}
+    {% set pageTitle = 'Акционерное общество «ДЕПО»' %}
+{% elif activeBase == 'gagarinsky' %}
+    {% set pageTitle = 'Торгово-складской комплекс «Гагаринский»' %}
+{% elif activeBase == 'yujnaya' %}
+    {% set pageTitle = 'База «Южная»' %}
+{% endif %}
 
-{% set logistics = [
-    {
-        id: 'docs',
-        title: 'Отправка посылок и документов',
-        iconId: 'docs'
-    },
-    {
-        id: 'attorney',
-        title: 'Получение грузов по доверенности',
-        iconId: 'attorney'
-    },
-    {
-        id: 'goods',
-        title: 'Выкуп товаров в магазинах',
-        iconId: 'goods'
-    },
-    {
-        id: 'gifts',
-        title: 'Доставка подарков',
-        iconId: 'gifts'
-    }
-] %}
+{% set pageDescription = 'О компании' %}
+{% set companyData = {} %}
+{% set logistics = [] %}
+{% set advantages = [] %}
 
-{% set advantages = [
-    {
-        id: 'loc',
-        title: 'Удобная локация в центральной части города',
-        iconId: 'locIcon'
-    },
-    {
-        id: 'transport',
-        title: 'Отличная транспортная развязка',
-        text: 'ул. Удмуртская, ул. Воткинское Шоссе, ул. Буммашевская',
-        iconId: 'transportIcon'
-    },
-    {
-        id: 'bus',
-        title: 'Остановки общественного транспорта поблизости',
-        iconId: 'busIcon'
-    },
-    {
-        id: 'parking',
-        title: 'Благоустроенная территория с парковкой и доступом 24/7',
-        iconId: 'parkingIcon'
-    }
-] %}
+{% if activeBase == 'depo' %}
+    {% set companyData = {
+        name: 'Торгово-складской комплекс «Депо»',
+        area: '37000',
+        visitors: '5000',
+        residents: '75',
+        subtitle: 'сдан в эксплуатацию в 2021 году',
+        managerTitle: 'Управляющий торгово-складского комплекса «Депо»'
+    } %}
+
+    {% set logistics = [
+        {
+            id: 'docs',
+            title: 'Отправка посылок и документов',
+            iconId: 'docs'
+        },
+        {
+            id: 'attorney',
+            title: 'Получение грузов по доверенности',
+            iconId: 'attorney'
+        },
+        {
+            id: 'goods',
+            title: 'Выкуп товаров в магазинах',
+            iconId: 'goods'
+        },
+        {
+            id: 'gifts',
+            title: 'Доставка подарков',
+            iconId: 'gifts'
+        }
+    ] %}
+
+    {% set advantages = [
+        {
+            id: 'loc',
+            title: 'Удобная локация в центральной части города',
+            iconId: 'locIcon'
+        },
+        {
+            id: 'transport',
+            title: 'Отличная транспортная развязка',
+            text: 'ул. Удмуртская, ул. Воткинское Шоссе, ул. Буммашевская',
+            iconId: 'transportIcon'
+        },
+        {
+            id: 'bus',
+            title: 'Остановки общественного транспорта поблизости',
+            iconId: 'busIcon'
+        },
+        {
+            id: 'parking',
+            title: 'Благоустроенная территория с парковкой и доступом 24/7',
+            iconId: 'parkingIcon'
+        }
+    ] %}
+{% elif activeBase == 'gagarinsky' %}
+    {% set companyData = {
+        name: 'Торгово-складской комплекс «Гагаринский»',
+        area: '20000',
+        visitors: '3000',
+        residents: '70',
+        subtitle: '',
+        managerTitle: 'Управляющий торгово-складского комплекса «Гагаринский»'
+    } %}
+
+    {% set advantages = [
+        {
+            id: 'loc',
+            title: 'Удобная локация в центральной части города',
+            iconId: 'locIcon'
+        },
+        {
+            id: 'transport',
+            title: 'Отличная транспортная развязка',
+            iconId: 'transportIcon'
+        },
+        {
+            id: 'bus',
+            title: 'Остановки общественного транспорта поблизости',
+            iconId: 'busIcon'
+        },
+        {
+            id: 'parking',
+            title: 'Благоустроенная территория с парковкой и доступом 24/7',
+            iconId: 'parkingIcon'
+        }
+    ] %}
+{% elif activeBase == 'yujnaya' %}
+    {% set companyData = {
+        name: 'База «Южная»',
+        area: '11000',
+        visitors: '2500',
+        residents: '75',
+        subtitle: '',
+        managerTitle: 'Управляющий комплекса База «Южная»'
+    } %}
+    
+    {% set advantages = [
+        {
+            id: 'loc',
+            title: 'Удобная локация в центральной части города',
+            iconId: 'locIcon'
+        },
+        {
+            id: 'transport',
+            title: 'Отличная транспортная развязка',
+            iconId: 'transportIcon'
+        },
+        {
+            id: 'bus',
+            title: 'Остановки общественного транспорта поблизости',
+            iconId: 'busIcon'
+        },
+        {
+            id: 'parking',
+            title: 'Благоустроенная территория с парковкой и доступом 24/7',
+            iconId: 'parkingIcon'
+        }
+    ] %}
+{% endif %}
 
 {% extends "layouts/default.njk" %}
 
 {% block mainContent %}
 
-    <section class="section about__section about--black" id="about-block">
-        <div class="container">
-            <h1 class="about__title about__title--main">Торгово-складской комплекс «Депо»</h1>
-            <div class="about__subtitle">сдан в эксплуатацию в 2021 году</div>
-            <ul class="about__info">
-                <li class="about__info--list"><span class="about__info--number">37000</span><span class="about__info--text">м² площадей</span></li>
-                <li class="about__info--list"><span class="about__info--number">5000</span><span class="about__info--text about__info--lg">посетителей каждый день</span></li>
-                <li class="about__info--list"><span class="about__info--number">75</span><span class="about__info--text about__info--md">резидентов</span></li>
-            </ul>
-            <div class="about__info--address">Ижевск, Буммашевская, 5</div>
-        </div>
-    </section>
-
-    <section class="section about__section" id="about-logistics">
-        <div class="container flex flex--sb flex--center about__title--logistics">
-            <h2 class="about--black about__title">Особое предложение</h2>
-            <span class="about__logo--standard">
-                {% set includeIcon = 'depoLogistics' %}
-                {% include "includes/svg.njk" %}
-            </span>
-        </div>
-        <div class="container--fixed">
-            <div class="about__subtitle--styling flex flex--sb flex--center">
-                <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
-                <span class="about__carIcon">
-                    {% set includeIcon = 'carIcon' %}
-                    {% include "includes/svg.njk" %}
-                </span>
-                <span class="about__logo--yellow">
-                    {% set includeIcon = 'depoLogisticsYellow' %}
+    {% if companyData %}
+        <section class="section about__section about--black" id="about-block">
+            <div class="container">
+                <h1 class="about__title about__title--main">{{ companyData.name }}</h1>
+                {% if companyData.subtitle %}
+                    <div class="about__subtitle">{{ companyData.subtitle }}</div>
+                {% endif %}
+                
+                <ul class="about__info">
+                    <li class="about__info--list"><span class="about__info--number">{{ companyData.area }}</span><span class="about__info--text">м² площадей</span></li>
+                    <li class="about__info--list"><span class="about__info--number">{{ companyData.visitors }}</span><span class="about__info--text about__info--lg">посетителей каждый день</span></li>
+                    <li class="about__info--list"><span class="about__info--number">{{ companyData.residents }}</span><span class="about__info--text about__info--md">резидентов</span></li>
+                </ul>
+                {% if companyInfo and companyInfo.address %}
+                    <div class="about__info--address">{{ companyInfo.address }}</div>
+                {% endif %}
+                
+            </div>
+        </section>
+    {% endif %}
+    
+    {% if logistics and logistics|length > 0 %}
+        <section class="section about__section" id="about-logistics">
+            <div class="container flex flex--sb flex--center about__title--logistics">
+                <h2 class="about--black about__title">Особое предложение</h2>
+                <span class="about__logo--standard">
+                    {% set includeIcon = 'depoLogistics' %}
                     {% include "includes/svg.njk" %}
                 </span>
             </div>
-            <div class="about__container flex">
-                <div class="about__container--left"> 
-                    <ul>
-                        {% for item in logistics %}
-                            <li class="about__item about__item--{{ item.id }}">{{ item.title }}</li>
-                        {% endfor %}
-                    </ul>
+            <div class="container--fixed">
+                <div class="about__subtitle--styling flex flex--sb flex--center">
+                    <h3 class="about--black about__subtitle about__subtitle--custom">Курьерская служба для вашего бизнеса</h3>
+                    <span class="about__carIcon">
+                        {% set includeIcon = 'carIcon' %}
+                        {% include "includes/svg.njk" %}
+                    </span>
+                    <span class="about__logo--yellow">
+                        {% set includeIcon = 'depoLogisticsYellow' %}
+                        {% include "includes/svg.njk" %}
+                    </span>
                 </div>
-                <div class="about__container--right">
-                    <div class="about__logistics">
-                        <span class="about__logistics--location">
-                            {% set includeIcon = 'locImg' %}
-                            {% include "includes/svg.njk" %}
-                        </span>
-                        <a href="{{ contacts.phone.link }}" class="about__logistics--call">
-                            {% set includeIcon = 'phoneIcon' %}
-                            {% include "includes/svg.njk" %}
-                        </a>
+                <div class="about__container flex">
+                    <div class="about__container--left"> 
+                        <ul>
+                            {% for item in logistics %}
+                                <li class="about__item about__item--{{ item.id }}">{{ item.title }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    <ul class="about__list">
-                        {% for item in logistics %}
-                            <li class="about__icon about__icon--{{ item.id }}">
-                                {% set includeIcon = item.iconId %}
+                    <div class="about__container--right">
+                        <div class="about__logistics">
+                            <span class="about__logistics--location">
+                                {% set includeIcon = 'locImg' %}
                                 {% include "includes/svg.njk" %}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                            </span>
+                            <a href="{{ contacts.phone.link }}" class="about__logistics--call">
+                                {% set includeIcon = 'phoneIcon' %}
+                                {% include "includes/svg.njk" %}
+                            </a>
+                        </div>
+                        <ul class="about__list">
+                            {% for item in logistics %}
+                                <li class="about__icon about__icon--{{ item.id }}">
+                                    {% set includeIcon = item.iconId %}
+                                    {% include "includes/svg.njk" %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
 
     <section class="section about__section--black">
         <div class="container">
@@ -138,7 +234,7 @@
 
     <section class="section about__section">
         <div class="container">
-            <h2 class="about--black about__title about__manager--title">Управляющий торгово-складского комплекса "Депо"</h2>
+            <h2 class="about--black about__title about__manager--title">{{ companyData.managerTitle }}</h2>
             <div data-react-component="manager"></div>
         </div>
     </section>

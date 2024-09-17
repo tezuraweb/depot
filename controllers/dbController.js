@@ -3,6 +3,7 @@ const tenantService = require('../services/tenantService');
 const roomsService = require('../services/roomsService');
 const ticketService = require('../services/ticketService');
 const docsService = require('../services/docsService');
+const residentsService = require('../services/residentsService');
 
 // Tenants
 
@@ -11,7 +12,7 @@ async function getTenantByParam(params) {
         const user = await tenantService.getTenantByParam(params);
         return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -27,12 +28,21 @@ async function getTenantTgUsername(req, res, next) {
     }
 }
 
+async function getTenantManager(organization) {
+    try {
+        const user = await tenantService.getTenantByParam({ organization });
+        return user && user.data?.length > 0 ? user.data[0] : null;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function setTenantEmail(id, email) {
     try {
         const user = await tenantService.alterTenantById(id, { email });
         return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -41,7 +51,7 @@ async function setTenantPassword(id, password) {
         const user = await tenantService.alterTenantById(id, { password });
         return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -50,7 +60,7 @@ async function setTenantTgId(id, tg_id) {
         const user = await tenantService.alterTenantById(id, { tg_id });
         return user && user.data?.length > 0 ? user.data[0] : null;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -87,7 +97,7 @@ async function getRoomsByTenant(req, res, next) {
 
 async function getRoomsSearch(req, res, next) {
     try {
-        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions', 'organization']);
+        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions', 'organization', 'code']);
         const dbData = {};
 
         if (data.startIdx !== undefined && data.startIdx !== null) dbData.offset = data.startIdx || 0;
@@ -106,6 +116,7 @@ async function getRoomsSearch(req, res, next) {
         if (data.ceilingHeight && data.ceilingHeight !== '') dbData.ceiling = parseFloat(data.ceilingHeight);
         if (data.promotions !== undefined) dbData.promotion = data.promotions;
         if (data.organization && data.organization !== '') dbData.organization = data.organization;
+        if (data.code && data.code !== '') dbData.code = data.code;
 
         const rooms = await roomsService.getPage(dbData);
         res.json({ rows: rooms.data, total: rooms.rows_before_limit_at_least });
@@ -221,6 +232,24 @@ async function setRoomsPromotions(req, res, next) {
     }
 }
 
+async function setRoomsPhotoById(id, fileUrl) {
+    try {
+        const rooms = await roomsService.addPhotoById(id, fileUrl);
+        return rooms.success;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function setRoomsDeletePhotoById(id, fileUrl) {
+    try {
+        const rooms = await roomsService.deletePhotoById(id, fileUrl);
+        return rooms.success;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // Tickets
 
 async function getTicketByIdBot(id) {
@@ -228,7 +257,7 @@ async function getTicketByIdBot(id) {
         const ticket = await ticketService.getTicketById(id);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -237,7 +266,7 @@ async function getTicketByNumberBot(number) {
         const ticket = await ticketService.getTicketByNumber(number);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -246,16 +275,17 @@ async function getTicketsByUserBot(id, offset, limit) {
         const ticket = await ticketService.getTicketByUserTg(id, offset, limit);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
-async function getTicketsByStatusBot(status, offset, limit) {
+async function getTicketsByStatusBot(status, offset, limit, base) {
     try {
-        const ticket = await ticketService.getTicketByStatusTg(status, offset, limit);
+        
+        const ticket = await ticketService.getTicketByStatusTg(status, offset, limit, base);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -264,7 +294,7 @@ async function insertTicketBot(data) {
         const ticket = await ticketService.insertTicket(data);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -273,7 +303,7 @@ async function updateTicketStatusBot(data) {
         const ticket = await ticketService.updateTicketStatus(data);
         return ticket.data;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
@@ -308,10 +338,22 @@ async function getDocsByUser(req, res, next) {
     }
 }
 
+// Residents
+
+async function getResidents(req, res, next) {
+    try {
+        const residents = await residentsService.getAll();
+        res.json(residents.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getTenantByParam,
     setTenantEmail,
     getTenantTgUsername,
+    getTenantManager,
     setTenantPassword,
     setTenantTgUsername,
     setTenantTgId,
@@ -327,6 +369,8 @@ module.exports = {
     getRoomsRecommended,
     getRoomsByTenant,
     setRoomsPromotions,
+    setRoomsPhotoById,
+    setRoomsDeletePhotoById,
     getTicketByIdBot,
     getTicketByNumberBot,
     getTicketsByTenant,
@@ -336,4 +380,5 @@ module.exports = {
     updateTicketStatusBot,
     insertTicketFromBackoffice,
     getDocsByUser,
+    getResidents,
 };

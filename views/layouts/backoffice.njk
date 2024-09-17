@@ -1,31 +1,79 @@
 {% set hideLogin = true %}
+{% set contacts = {} %}
 
-{% set contacts = {
-    phone: {
-        link: 'tel:+79120557755',
-        title: '+7 (912) 055-77-55'
-    },
-    socials: [
-        {
-            link: '',
-            type: 'telegram',
-            icon: 'telegramIcon',
-            title: 'Telegram'
+{% if activeBase == 'depo' %}
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412794040',
+            title: '+7 (3412) 79-40-40'
         },
-        {
-            link: '',
-            type: 'whatsapp',
-            icon: 'whatsappIcon',
-            title: 'WhatsApp'
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79120557755',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            },
+            {
+                link: 'https://vk.me/depoizh',
+                type: 'vk',
+                icon: 'vkIcon',
+                title: 'Vk'
+            }
+        ],
+        bot: '/'
+    } %}
+{% elif activeBase == 'gagarinsky' %}
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412794100',
+            title: '+7 (3412) 79-41-00'
         },
-        {
-            link: '',
-            type: 'viber',
-            icon: 'viberIcon',
-            title: 'Viber'
-        }
-    ]
-} %}
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79120203331',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            }
+        ],
+        bot: '/'
+    } %}
+{% elif activeBase == 'yujnaya' %}
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412311077',
+            title: '+7 (3412) 31-10-77'
+        },
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79128559133',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            }
+        ],
+        bot: '/'
+    } %}
+{% endif %}
 
 {% extends "layouts/body.njk" %}
 

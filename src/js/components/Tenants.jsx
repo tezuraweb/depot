@@ -10,7 +10,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchTenants = async () => {
             try {
-                const response = await axios.get('/api/tenants');
+                const response = await axios.get('/api/residents');
                 setData(response.data);
             } catch (error) {
                 setData([]);

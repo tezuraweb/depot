@@ -4,7 +4,7 @@ import Card from '../includes/Card';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const PartnerCardList = () => {
+const PartnerCardList = ({ siteName }) => {
     const deviceType = useViewportContext();
     const [cards, setCards] = useState([]);
     const [totalCards, setTotalCards] = useState(0);
@@ -14,6 +14,12 @@ const PartnerCardList = () => {
 
     const cardsPerPage = deviceType === 'desktop' ? 3 : deviceType === 'laptop' ? 2 : 1;
     const deviceIsDesktop = deviceType === 'desktop' || deviceType === 'laptop';
+
+    const orgs = {
+        'depo': ['База Южная ООО', 'Строительная База "Южная" ООО', 'ГАГАРИНСКИЙ ПКЦ ООО'],
+        'yujnaya': ['ДЕПО АО', 'ГАГАРИНСКИЙ ПКЦ ООО'],
+        'gagarinsky': ['ДЕПО АО', 'База Южная ООО', 'Строительная База "Южная" ООО'],
+    }
 
     useEffect(() => {
         fetchCards(0, cardsPerPage);
@@ -31,23 +37,13 @@ const PartnerCardList = () => {
         }
     }, [deviceType]);
 
-    // const fetchTotalCards = async () => {
-    //     try {
-    //         const response = await axios.get('/api/partners/count');
-    //         setTotalCards(response.data.total);
-    //         setTotalPages(Math.ceil(response.data.total / cardsPerPage));
-    //     } catch (error) {
-    //         console.error('Error fetching total cards:', error);
-    //     }
-    // };
-
     const fetchCards = async (startIdx, endIdx) => {
         if (cards.length > startIdx) {
             setCurrentPage(Math.floor(startIdx / cardsPerPage) + 1);
             return;
         }
         try {
-            const requestData = { startIdx, endIdx, organization: 'ДЕПО АО' };
+            const requestData = { startIdx, endIdx, organization: orgs[siteName] || [] };
             const response = await axios.post('/api/search', requestData);
             setTotalCards(response.data.total);
             setTotalPages(Math.ceil(response.data.total / cardsPerPage));

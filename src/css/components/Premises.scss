@@ -152,6 +152,10 @@
         }
     }
 
+    &__carousel {
+        max-width: 550px;
+    }
+
     @media (max-width: ($laptop-breakpoint - 1)) {
         &__header {
             flex-direction: column;

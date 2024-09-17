@@ -1,6 +1,7 @@
 node_modules/
 certs/
 static/dist/
+static/uploads
 static/test/
 .env
 .eslintrc

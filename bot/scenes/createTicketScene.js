@@ -60,6 +60,8 @@ const createTicketScene = () => {
                 for (const fileId of ctx.session.ticket.files) {
                     await ctx.telegram.sendDocument(ctx.session.newTicketInquirer, fileId);
                 }
+            } else if (ctx.session.manager) {
+                await ctx.telegram.sendMessage(ctx.session.manager.tg_id, `Получено новое обращение`);
             }
 
             ctx.session.newTicketNumber = null;

@@ -122,10 +122,11 @@ async function getTicketByNumber(number) {
     }
 }
 
-async function getTicketByStatusTg(status, offset, limit) {
+async function getTicketByStatusTg(status, offset, limit, base) {
     const sanitizedStatus = sqlstring.escape(status);
     const sanitizedOffcet = sqlstring.escape(offset);
     const sanitizedLimit = sqlstring.escape(limit);
+    const sanitizedDase = sqlstring.escape(base);
     const query = `
         SELECT
             t.id AS id,
@@ -146,7 +147,7 @@ async function getTicketByStatusTg(status, offset, limit) {
             WHERE status = ${sanitizedStatus}
         ) AS t
         JOIN tenants AS u ON t.inquirer_username = u.tg_user
-        WHERE rn = 1
+        WHERE rn = 1 AND u.organization = ${sanitizedDase}
         ORDER BY ticket_number
         LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffcet}
         FORMAT JSON

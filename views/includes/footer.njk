@@ -6,12 +6,16 @@
             <div class="footer__column footer__column--first">
                 <div class="footer__company">
                     <div class="footer__company--icon">
-                        {% set includeIcon = 'authIcon' %}
+                        {% set includeIcon = authIcon %}
                         {% include "includes/svg.njk" %}
                     </div>
                     <div class="footer__company--info">
-                        <div class="footer__company--name">АО "ДЕПО"</div>
-                        <div class="footer__company--workhours">ПН-ПТ: 09:00 - 18:00</div>
+                        {% if companyInfo and companyInfo.name %}
+                            <div class="footer__company--name">{{ companyInfo.name }}</div>
+                        {% endif %}
+                        {% if companyInfo and companyInfo.workHours %}
+                            <div class="footer__company--workhours">{{ companyInfo.workHours }}</div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -61,7 +65,9 @@
             <div class="footer__column footer__column--second">
                 <div class="footer__location">
                     <div class="footer__location--title">Расположение</div>
-                    <div class="footer__location--address">Ижевск, Буммашевская, 5</div>
+                    {% if companyInfo and companyInfo.address %}
+                            <div class="footer__location--address">{{ companyInfo.address }}</div>
+                    {% endif %}
                 </div>
                 <div class="footer__map">
                     <div id="map"></div>
@@ -73,9 +79,12 @@
              <div class="footer__privacy">
                 <a href="">Политика конфиденциальности</a>
             </div>
-            <div class="footer__copyright">
-                © 2024 АО «ДЕПО». Все права защищены
-            </div>
+            {% if companyInfo and companyInfo.name %}
+                <div class="footer__copyright">
+                    © 2024 {{ companyInfo.name }}. Все права защищены
+                </div>
+            {% endif %}
+            
         </div>
     </div>
 </div>

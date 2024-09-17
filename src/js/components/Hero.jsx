@@ -2,15 +2,21 @@ import React from 'react';
 import ContactForm from './ContactForm';
 import IconSprite from '../includes/IconSprite';
 
-const Hero = () => {
+const Hero = ({ siteName }) => {
+    const desc = {
+        'depo': 'Торгово-складской комплекс Депо',
+        'yujnaya': 'Торгово-складской комплекс База «Южная»',
+        'gagarinsky': 'Торгово-складской комплекс Гагаринский',
+    }
+
     return (
         <div className="hero">
             <div className="hero__column hero__column--left">
-                <div className="hero__desc">ТОРГОВО-СКЛАДСКОЙ КОМПЛЕКС ДЕПО</div>
+                <div className="hero__desc">{ desc[siteName] }</div>
                 <h1 className="hero__title">Аренда помещений в Ижевске</h1>
                 <ContactForm modal={true} modifier="hero"/>
             </div>
-            <div className="hero__column hero__column--right">
+            {/* <div className="hero__column hero__column--right">
                 <div className="hero__features">
                     <div className="hero__feature">
                         <div className="hero__feature--icon button button--icon">
@@ -45,7 +51,7 @@ const Hero = () => {
                         <div className="hero__feature--text">12 корпусов 66 000 м²</div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

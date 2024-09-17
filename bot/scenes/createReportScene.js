@@ -60,7 +60,7 @@ const createReportScene = () => {
                 headerCenter: 'My Report'
             };
     
-            wkhtmltopdf(`http://localhost:3000/api/report/print/${base}`, options)
+            wkhtmltopdf(`https://depoarenda.ru/api/report/print/${base}`, options)
                 .pipe(fs.createWriteStream(pdfPath))
                 .on('finish', async () => {
                     try {

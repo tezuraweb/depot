@@ -26,7 +26,6 @@ const verifyToken = (req, res, next) => {
         }
         return next();
     } catch (err) {
-        console.log(err.message);
         if (originalUrl.startsWith('/api')) {
             return res.status(401).json({ message: 'Authentication error' });
         } else if (originalUrl.startsWith('/backoffice')) {

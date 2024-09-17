@@ -32,14 +32,12 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
                 try {
                     if (selectedRoomData.complex !== 0) {
                         const response = await axios.get(`/api/premises/complex/${selectedRoomData.complex}`);
-                        console.log(response.data)
                         setRooms(response.data);
                         setComplexIds(response.data.map(item => item.code))
                     } else {
                         setRooms([selectedRoomData]);
                         setComplexIds([selectedRoomData.code])
                     }
-                    
                 } catch (error) {
                     console.error('Error fetching rooms:', error);
                 }
@@ -111,7 +109,6 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
             });
         };
     }, [elements, rooms, controls, complexIds, selectedRoomData]);
-    
 
     const handleClick = (index) => {
         setActiveFloor(index);

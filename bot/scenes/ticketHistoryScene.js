@@ -156,7 +156,7 @@ const createTicketHistoryScene = () => {
         try {
             let tickets = [];
             if (ctx.session.user.status == 'admin' && ctx.session.ticketStatus) {
-                tickets = await db.getTicketsByStatusBot(ctx.session.ticketStatus, ctx.session.ticketOffset, ctx.session.ticketLimit);
+                tickets = await db.getTicketsByStatusBot(ctx.session.ticketStatus, ctx.session.ticketOffset, ctx.session.ticketLimit, ctx.session.user.organization);
             } else {
                 tickets = await db.getTicketsByUserBot(ctx.from.id, ctx.session.ticketOffset, ctx.session.ticketLimit);
             }

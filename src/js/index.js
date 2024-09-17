@@ -5,6 +5,8 @@ import ymaps from 'ymaps';
 import LoadingSpinner from './includes/LoadingSpinner';
 import { ViewportProvider } from './utils/ViewportContext';
 
+const siteName = process.env.REACT_APP_SITE_NAME;
+
 const loadComponent = (componentName) => {
     switch (componentName) {
         case 'mainFilter':
@@ -46,8 +48,8 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/AuthRegister'));
         case 'resetPassword':
             return lazy(() => import('./components/AuthReset'));
-        case 'promotionsCardList':
-            return lazy(() => import('./components/PromotionsCardList'));
+        case 'premisesEditor':
+            return lazy(() => import('./components/PremisesEditor'));
 
         default:
             return null;
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <Router>
                     <Suspense fallback={<LoadingSpinner />}>
                         <Routes>
-                            {componentName === 'premises' && <Route path="/premises/:id" element={<Component />} />}
+                            {componentName === 'premises' && <Route path="/premises/:id" element={<Component siteName={siteName} />} />}
                             {componentName === 'signup' && (
                                 <>
                                     <Route path="/auth/signup" element={<Component mode="signup" />} />
@@ -88,7 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <Route path="/backoffice/report" element={<Component />} />
                                 </>
                             )}
-                            {(componentName !== 'premises' && componentName !== 'signup' && componentName !== 'resetPassword' && componentName !== 'webReport') && (
+                            {(componentName === 'mainFilter' || componentName === 'partnerCardList' || componentName === 'searchPage' || componentName === 'partnerLinks') && (
+                                <Route path="*" element={<Component siteName={siteName} />} />
+                            )}
+                            {(componentName !== 'premises' && componentName !== 'signup' && componentName !== 'resetPassword' && componentName !== 'webReport' && componentName !== 'mainFilter' && componentName !== 'partnerCardList' && componentName !== 'searchPage' && componentName !== 'partnerLinks') && (
                                 <Route path="*" element={<Component {...(componentName === 'contactFormModal' && { modal: true })} />} />
                             )}
                         </Routes>
@@ -104,6 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderApp(componentName, container);
     });
 });
+
+var geoIconUrl = '';
+if (siteName == 'depo') {
+    geoIconUrl = '/img/icons/geoIconDepot.svg';
+} else if (siteName == 'gagarinsky') {
+    geoIconUrl = '/img/icons/geoIconGagarinsky.svg';
+} else if (siteName == 'yujnaya') {
+    geoIconUrl = '/img/icons/geoIconYujnaya.svg';
+}
 
 ymaps
     .load()
@@ -124,7 +138,7 @@ ymaps
                 balloonContent: 'Торгово-складской комплекс «Депо»'
             }, {
                 iconLayout: 'default#image',
-                iconImageHref: '/img/icons/geoIcon.svg',
+                iconImageHref: geoIconUrl,
                 iconImageSize: [40, 40],
             });
 

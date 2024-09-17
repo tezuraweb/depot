@@ -11,7 +11,7 @@
                 <a href="/backoffice/report" class="menu__link{% if page == 'report' %} active{% endif %}">Отчет</a>
             </li>
             <li class="menu__item">
-                <a href="/backoffice/promotions" class="menu__link{% if page == 'promotions' %} active{% endif %}">Акции</a>
+                <a href="/backoffice/premises" class="menu__link{% if page == 'premises' %} active{% endif %}">Помещения</a>
             </li>
         </ul>
     {% else %}
@@ -26,13 +26,15 @@
                 <a href="/backoffice/requests" class="menu__link{% if page == 'requests' %} active{% endif %}">Обращения</a>
             </li>
         </ul>
-        <a class="menu__bot" href="/bot" target="_blank" rel="nofollow noopener">
-            <div class="menu__bot--icon">
-                {% set includeIcon = 'telegramIcon' %}
-                {% set iconWidth = 50 %}
-                {% include "includes/svg.njk" %}
-            </div>
-            <div class="menu__bot--text">Телеграм-бот</div>
-        </a>
+        {% if contacts and contacts.bot %}
+            <a class="menu__bot" href="{{ contacts.bot }}" target="_blank" rel="nofollow noopener">
+                <div class="menu__bot--icon">
+                    {% set includeIcon = 'telegramIcon' %}
+                    {% set iconWidth = 50 %}
+                    {% include "includes/svg.njk" %}
+                </div>
+                <div class="menu__bot--text">Телеграм-бот</div>
+            </a>
+        {% endif %}
     {% endif %}
 </div>

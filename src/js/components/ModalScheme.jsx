@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense, useMemo, useCallback, lazy } from 'react';
 import LoadingSpinner from '../includes/LoadingSpinner';
-import Territory from '../includes/maps/Territory';
 import FloorMap from '../includes/maps/FloorMap';
 
-const Scheme = ({ buildings = [], selectedElement = null }) => {
+const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
     const [elements, setElements] = useState([]);
     const [selectedBuilding, setSelectedBuilding] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -13,11 +12,10 @@ const Scheme = ({ buildings = [], selectedElement = null }) => {
 
     const activeElements = buildings.map(item => item.key_liter_id);
 
-    useEffect(() => {
-        const svg = svgRef.current;
-
-        if (svg) {
-            const els = svg.querySelectorAll('[data-id]');
+    const setSvgRef = useCallback((node) => {
+        if (node !== null) {
+            svgRef.current = node;
+            const els = node.querySelectorAll('[data-id]');
             setElements(els);
         }
     }, []);
@@ -62,11 +60,66 @@ const Scheme = ({ buildings = [], selectedElement = null }) => {
     };
 
     const loadFloors = async (buildingId) => {
-        switch (buildingId) {
-            default:
-                return [];
+        if (siteName === 'depo') {
+            switch (buildingId) {
+                default:
+                    return [];
+            }
+        } else if (siteName === 'gagarinsky') {
+            switch (buildingId) {
+                default:
+                    return [];
+            }
+        } else if (siteName === 'yujnaya') {
+            switch (buildingId) {
+                case '1':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor1'))];
+                case '14':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/B/Floor1'))];
+                case '10':
+                    return [
+                        React.lazy(() => import('../includes/maps/yujnaya/V/Floor1')),
+                        React.lazy(() => import('../includes/maps/yujnaya/V/Floor2'))
+                    ];
+                case '8':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/E/Floor1'))];
+                case '7':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/P/Floor1'))];
+                case '16':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/G/Floor1'))];
+                case '9':
+                    return [
+                        React.lazy(() => import('../includes/maps/yujnaya/Zh/Floor1')),
+                        React.lazy(() => import('../includes/maps/yujnaya/Zh/Floor2'))
+                    ];
+                case '3':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/Z/Floor1'))];
+                case '15':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/I/Floor1'))];
+                case '23':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/S/Floor1'))];
+                case '5':
+                    return [React.lazy(() => import('../includes/maps/yujnaya/D/Floor1'))];
+                default:
+                    return [];
+            }
         }
     };
+
+    const loadTerritory = (siteName) => {
+        switch (siteName) {
+            case 'depo':
+                return lazy(() => import('../includes/maps/depo/Territory'));
+            case 'gagarinsky':
+                return lazy(() => import('../includes/maps/gagarinsky/Territory'));
+            case 'yujnaya':
+                return lazy(() => import('../includes/maps/yujnaya/Territory'));
+            default:
+                return null;
+        }
+    };
+
+    const TerritoryComponent = useMemo(() => loadTerritory(siteName), [siteName]);
 
     const closeModal = () => {
         setShowModal(false);
@@ -75,7 +128,9 @@ const Scheme = ({ buildings = [], selectedElement = null }) => {
 
     return (
         <div className="scheme">
-            <Territory ref={svgRef} />
+            <Suspense fallback={<LoadingSpinner />}>
+                <TerritoryComponent ref={setSvgRef} />
+            </Suspense>
             {showModal && selectedBuilding && (
                 <div className="scheme__popup">
                     <div className="flex flex--sb flex--center">

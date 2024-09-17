@@ -5,7 +5,7 @@ import MainForm from './MainForm';
 import CardList from './CardList';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const MainFilter = () => {
+const MainFilter = ({ siteName }) => {
     const deviceType = useViewportContext();
     const [cards, setCards] = useState([]);
     const [types, setTypes] = useState([]);
@@ -96,9 +96,9 @@ const MainFilter = () => {
 
     return (
         <>
-            <section className="section" id="hero">
+            <section className={`section section__hero section__hero--${siteName}`} id="hero">
                 <div className="container">
-                    <Hero showSearchIcon={deviceType === 'mobile' ? true : false} />
+                    <Hero showSearchIcon={deviceType === 'mobile' ? true : false} siteName={siteName} />
                     <MainForm
                         types={types}
                         onSubmit={handleFormSubmit}

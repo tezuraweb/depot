@@ -1,70 +1,198 @@
-{% set navs = [
-    {
-        link: '/search',
-        title: 'Помещения'
-    },
-    {
-        link: '/about',
-        title: 'О компании'
-    },
-    {
-        link: 'https://tsc.depoarenda.ru/',
-        title: 'Торговый центр'
-    },
-    {
-        link: '/lightindustrial',
-        title: 'Light Industrial'
-    },
-    {
-        link: '#partner-locations',
-        title: 'Объекты партнеров'
-    }
-] %}
+{% set navs = [] %}
+{% set contacts = {} %}
+{% set companyInfo = {} %}
 
-{% set contacts = {
-    phone: {
-        link: 'tel:+73412794040',
-        title: '+7 (3412) 79-40-40'
-    },
-    socials: [
+{% if activeBase == 'depo' %}
+    {% set navs = [
         {
-            link: 'https://t.me/+79120557755',
-            type: 'telegram',
-            icon: 'telegramIcon',
-            title: 'Telegram'
+            link: '/search',
+            title: 'Помещения'
         },
         {
-            link: 'https://wa.me/79120557755',
-            type: 'whatsapp',
-            icon: 'whatsappIcon',
-            title: 'WhatsApp'
+            link: '/about',
+            title: 'О компании'
         },
         {
-            link: 'https://vk.me/depoizh',
-            type: 'vk',
-            icon: 'vkIcon',
-            title: 'Vk'
+            link: 'https://tsc.depoarenda.ru/',
+            title: 'Торговый центр'
+        },
+        {
+            link: '/lightindustrial',
+            title: 'Light Industrial'
+        },
+        {
+            link: '#partner-locations',
+            title: 'Объекты партнеров'
         }
-    ],
-    channels: [
+    ] %}
+
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412794040',
+            title: '+7 (3412) 79-40-40'
+        },
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79120557755',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            },
+            {
+                link: 'https://vk.me/depoizh',
+                type: 'vk',
+                icon: 'vkIcon',
+                title: 'Vk'
+            }
+        ],
+        channels: [
+            {
+                link: 'https://t.me/depo_arenda',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Наш канал'
+            },
+            {
+                link: 'https://vk.com/depoizh',
+                type: 'vk',
+                icon: 'vkIcon',
+                title: 'Vk'
+            }
+        ],
+        email: {
+            link: 'mailto:info@depoarenda.ru',
+            title: 'info@depoarenda.ru'
+        }
+    } %}
+
+    {% set companyInfo = {
+        name: 'АО «ДЕПО»',
+        workHours: 'ПН-ПТ: 09:00 - 18:00',
+        address: 'Ижевск, Буммашевская, 5'
+    } %}
+{% elif activeBase == 'gagarinsky' %}
+    {% set navs = [
         {
-            link: 'https://t.me/depo_arenda',
-            type: 'telegram',
-            icon: 'telegramIcon',
-            title: 'Наш канал'
+            link: '/search',
+            title: 'Помещения'
         },
         {
-            link: 'https://vk.com/depoizh',
-            type: 'vk',
-            icon: 'vkIcon',
-            title: 'Vk'
+            link: '/about',
+            title: 'О компании'
+        },
+        {
+            link: '/lightindustrial',
+            title: 'Light Industrial'
+        },
+        {
+            link: '#partner-locations',
+            title: 'Объекты партнеров'
         }
-    ],
-    email: {
-        link: 'mailto:info@depoarenda.ru',
-        title: 'info@depoarenda.ru'
-    }
-} %}
+    ] %}
+
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412794100',
+            title: '+7 (3412) 79-41-00'
+        },
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79120203331',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            }
+        ],
+        channels: [
+            {
+                link: 'https://t.me/depo_arenda',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Наш канал'
+            }
+        ],
+        email: {
+            link: 'mailto:gagarinskiy1@mail.ru',
+            title: 'gagarinskiy1@mail.ru'
+        }
+    } %}
+
+    {% set companyInfo = {
+        name: 'ООО ПКЦ «ГАГАРИНСКИЙ»',
+        workHours: 'ПН-ПТ: 09:00 - 18:00',
+        address: 'Ижевск, Гагарина, 17'
+    } %}
+{% elif activeBase == 'yujnaya' %}
+    {% set navs = [
+        {
+            link: '/search',
+            title: 'Помещения'
+        },
+        {
+            link: '/about',
+            title: 'О компании'
+        },
+        {
+            link: '/lightindustrial',
+            title: 'Light Industrial'
+        },
+        {
+            link: '#partner-locations',
+            title: 'Объекты партнеров'
+        }
+    ] %}
+
+    {% set contacts = {
+        phone: {
+            link: 'tel:+73412311077',
+            title: '+7 (3412) 31-10-77'
+        },
+        socials: [
+            {
+                link: 'https://t.me/+79120557755',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Telegram'
+            },
+            {
+                link: 'https://wa.me/79128559133',
+                type: 'whatsapp',
+                icon: 'whatsappIcon',
+                title: 'WhatsApp'
+            }
+        ],
+        channels: [
+            {
+                link: 'https://t.me/depo_arenda',
+                type: 'telegram',
+                icon: 'telegramIcon',
+                title: 'Наш канал'
+            }
+        ],
+        email: {
+            link: 'mailto:bazauzhnaya@mail.ru',
+            title: 'bazauzhnaya@mail.ru'
+        }
+    } %}
+
+    {% set companyInfo = {
+        name: 'ООО «База Южная»',
+        workHours: 'ПН-ПТ: 09:00 - 18:00',
+        address: 'Ижевск, Маяковского, 43'
+    } %}
+{% endif %}
 
 {% extends "layouts/body.njk" %}
 
@@ -78,7 +206,7 @@
         {% block mainContent %}{% endblock %}
     </main>
 
-    <footer class="page__footer">
+    <footer class="page__footer page__footer--{{ activeBase }}">
         {% include "includes/footer.njk" %}
     </footer>
 

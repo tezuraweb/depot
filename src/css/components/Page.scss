@@ -6,9 +6,23 @@
     }
 
     &__footer {
-        background-image: url('../../assets/img/pictures/pattern.png');
-        background-repeat: repeat-x;
         background-position-y: 80%;
+
+        &--depo {
+            background-image: url('../../assets/img/pictures/pattern-depot.png');
+            background-repeat: repeat-x;
+        }
+
+        &--gagarinsky {
+            background-image: url('../../assets/img/pictures/pattern-gagarinsky.svg');
+            background-repeat: repeat-x;
+        }
+
+        &--yujnaya {
+            background-image: url('../../assets/img/pictures/pattern-yujnaya.png');
+            background-repeat: no-repeat;
+            background-position-x: center;
+        }
     }
 
     &__login {
@@ -69,8 +83,10 @@
 
     @media (max-width: ($mobile-breakpoint - 1)) {
         &__footer {
-            background-image: url('../../assets/img/pictures/pattern-mobile.svg');
-            background-position-y: 85%;
+            &--depo {
+                background-image: url('../../assets/img/pictures/pattern-mobile-depot.svg');
+                background-position-y: 85%;
+            }
         }
 
         &__login {

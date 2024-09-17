@@ -1,11 +1,11 @@
-{% set pageTitle = 'Профиль - Депо' %}
-{% set pageDescription = 'Торгово-складской комплекс Депо: Личный кабинет' %}
+{% set pageTitle = 'Управление помещениями' %}
+{% set pageDescription = 'Редактирование информации о помещениях и установка акционных предложений' %}
 
 {% extends "layouts/backoffice.njk" %}
 
 {% block mainContent %}
 
-    <section class="section section--nopadding" id="profile">
+    <section class="section section--nopadding" id="premisesEditor">
         <div class="container container--nopadding">
             <div class="page__backoffice">
                 <div class="page__backoffice--column page__backoffice--first">
@@ -16,8 +16,8 @@
 
                 <div class="page__backoffice--column page__backoffice--second">
                     <div class="page__backoffice--content">
-                        <h1 class="page__backoffice--greeting">Акции</h1>
-                        <div data-react-component="promotionsCardList"></div>
+                        <h1 class="page__backoffice--greeting">Управление помещениями</h1>
+                        <div data-react-component="premisesEditor"></div>
                     </div>
                 </div>
             </div>

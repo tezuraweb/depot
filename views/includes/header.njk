@@ -1,11 +1,11 @@
 <div class="container">
     <div class="header {% if hideLogin %} header--backoffice{% endif %}">
         <a href="/" class="header__logo">
-            {% set includeIcon = 'mainLogo' %}
+            {% set includeIcon = mainLogo %}
             {% include "includes/svg.njk" %}
         </a>
         <a href="/" class="header__logoMobile">
-            {% set includeIcon = 'mainLogoMobile' %}
+            {% set includeIcon = mainLogoMobile %}
             {% include "includes/svg.njk" %}
         </a>
         {% if navs %}
@@ -49,7 +49,7 @@
         {% elif not hideLogin %}
             <a class="header__auth header__auth--desktop" href="/auth/login" aria-label="Войти в кабинет арендатора">
                 <div class="header__auth--icon">
-                    {% set includeIcon = 'authIcon' %}
+                    {% set includeIcon = authIcon %}
                     {% include "includes/svg.njk" %}
                 </div>
                 <div class="header__auth--text">Кабинет арендатора</div>
@@ -94,7 +94,7 @@
                         {% elif not hideLogin %}
                             <a class="header__auth" href="/auth/login" aria-label="Войти в кабинет арендатора">
                                 <div class="header__auth--icon">
-                                    {% set includeIcon = 'authIcon' %}
+                                    {% set includeIcon = authIcon %}
                                     {% include "includes/svg.njk" %}
                                 </div>
                                 <div class="header__auth--text">Кабинет арендатора</div>

@@ -19,12 +19,17 @@
 
     &__link {
         display: block;
-        padding: 20px 0;
         position: relative;
+        padding: 20px 0;
+        line-height: 20px;
 
         &--first {
             display: flex;
             align-items: center;
+        }
+
+        &--icon {
+            height: 20px;
         }
 
         &--text {

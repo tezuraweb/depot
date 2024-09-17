@@ -5,7 +5,7 @@ import CardList from './CardList';
 import Scheme from './ModalScheme';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const SearchPage = () => {
+const SearchPage = ({ siteName }) => {
     const deviceType = useViewportContext();
     const [cards, setCards] = useState([]);
     const [types, setTypes] = useState([]);
@@ -68,7 +68,6 @@ const SearchPage = () => {
     }, [deviceType]);
 
     const handleFormSubmit = async () => {
-        // setFormData(data);
         setCards([]);
     };
 
@@ -121,6 +120,7 @@ const SearchPage = () => {
                                         buildings={buildings}
                                         selectedElement={formData.building}
                                         isModal={true}
+                                        siteName={siteName}
                                     />
                                 </div>
                                 <div className="search__info">

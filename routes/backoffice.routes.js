@@ -1,5 +1,6 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
+const appConfig = require('../config/appConfig');
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router
         if (req.user.status && req.user.status === 'admin') {
             return res.redirect('/backoffice/editor');
         }
-        res.render('nodes/profile', { user: req.user, page: 'profile' });
+        res.render('nodes/profile', { user: req.user, page: 'profile', activeBase: appConfig.base });
     });
 
 router
@@ -18,7 +19,7 @@ router
         if (req.user.status && req.user.status === 'admin') {
             return res.redirect('/backoffice/editor');
         }
-        res.render('nodes/docs', { user: req.user, page: 'docs' });
+        res.render('nodes/docs', { user: req.user, page: 'docs', activeBase: appConfig.base });
     });
 
 router
@@ -27,16 +28,16 @@ router
         if (req.user.status && req.user.status === 'admin') {
             return res.redirect('/backoffice/editor');
         }
-        res.render('nodes/requests', { user: req.user, page: 'requests' });
+        res.render('nodes/requests', { user: req.user, page: 'requests', activeBase: appConfig.base });
     });
 
 router
-    .route('/promotions')
+    .route('/premises')
     .get(auth, (req, res) => {
         if (req.user.status && req.user.status === 'tenant') {
             return res.redirect('/backoffice/profile');
         }
-        res.render('nodes/promotions', { user: req.user, page: 'promotions' });
+        res.render('nodes/premises-editor', { user: req.user, page: 'premises', activeBase: appConfig.base });
     });
 
 router
@@ -45,7 +46,7 @@ router
         if (req.user.status && req.user.status === 'tenant') {
             return res.redirect('/backoffice/profile');
         }
-        res.render('nodes/editor', { user: req.user, page: 'editor' });
+        res.render('nodes/editor', { user: req.user, page: 'editor', activeBase: appConfig.base });
     });
 
 // router
@@ -54,7 +55,7 @@ router
 //         if (req.user.status && req.user.status === 'tenant') {
 //             return res.redirect('/backoffice/profile');
 //         }
-//         res.render('nodes/feedback', { user: req.user, page: 'feedback' });
+//         res.render('nodes/feedback', { user: req.user, page: 'feedback', activeBase: appConfig.base });
 //     });
 
 router
@@ -63,7 +64,7 @@ router
         if (req.user.status && req.user.status === 'tenant') {
             return res.redirect('/backoffice/profile');
         }
-        res.render('nodes/report', { user: req.user, page: 'report' });
+        res.render('nodes/report', { user: req.user, page: 'report', activeBase: appConfig.base });
     });
 
 module.exports = router;

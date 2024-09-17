@@ -9,7 +9,7 @@ import IconSprite from '../includes/IconSprite';
 import LoadingSpinner from '../includes/LoadingSpinner';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const Premises = () => {
+const Premises = ({ siteName }) => {
     const deviceType = useViewportContext();
     const [premisesId, setPremisesId] = useState(null);
     const [premisesData, setPremisesData] = useState({});
@@ -102,6 +102,15 @@ const Premises = () => {
     const showFullLink = deviceType === 'desktop' || deviceType === 'laptop';
     const showPrinter = deviceType === 'desktop' || deviceType === 'laptop';
     const showmaps = deviceType !== 'mobile';
+
+    var companyAddress = '';
+    if (siteName == 'depo') {
+        companyAddress = 'Ижевск, Буммашевская, 5';
+    } else if (siteName == 'gagarinsky') {
+        companyAddress = 'Ижевск, Гагарина, 17';
+    } else if (siteName == 'yujnaya') {
+        companyAddress = 'Ижевск, Маяковского, 43';
+    }
 
     return (
         <>
@@ -233,12 +242,13 @@ const Premises = () => {
                             <>
                                 <div className="premises__location">
                                     <h2 className="premises__title">Расположение</h2>
-                                    <a className="premises__title" href="/">Ижевск, Буммашевская, 5</a>
+                                    <a className="premises__title" href="/">{companyAddress}</a>
                                 </div>
 
                                 <div className="premises__scheme">
                                     <Scheme
                                         activeElement={premisesData}
+                                        siteName={siteName}
                                     />
                                 </div>
                             </>
