@@ -131,7 +131,7 @@ const PremisesEditor = () => {
             setLoading(true);
 
             if (photos.length > 0) {
-                const uploadPromises = photos.map((file) => uploadPhoto(file, id));
+                const uploadPromises = photos.map((file) => uploadPhoto(file, id, 'rooms'));
 
                 const results = await Promise.allSettled(uploadPromises);
 
@@ -174,10 +174,7 @@ const PremisesEditor = () => {
         try {
             const id = cards[activeCardIndex].id;
             await axios.delete('/api/photo', {
-                data: {
-                    id,
-                    photoUrl
-                }
+                data: { id, photoUrl, model: 'rooms' }
             });
             setCards(prevCards => {
                 const updatedCards = [...prevCards];
@@ -191,87 +188,99 @@ const PremisesEditor = () => {
     };
 
     return (
-        <>
-            <form className="form form--small" onSubmit={handleSubmitPromotion}>
-                <input
-                    type="text"
-                    name="searchQuery"
-                    placeholder="Поиск по ID помещения"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="form__input"
-                />
-            </form>
+        <div className="editor editor--wide">
+            <div className="editor__block">
+                <form className="form form--small" onSubmit={handleSubmitPromotion}>
+                    <input
+                        type="text"
+                        name="searchQuery"
+                        placeholder="Поиск по ID помещения"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="form__input"
+                    />
+                </form>
+            </div>
 
-            <CardList
-                modifier="promotions"
-                cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                totalCards={totalCards}
-                setActiveCardOuter={setCardIndex}
-            />
+            <div className="editor__block">
+                <CardList
+                    modifier="promotions"
+                    cards={cards.slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    totalCards={totalCards}
+                    setActiveCardOuter={setCardIndex}
+                />
+            </div>
 
             {activeCardIndex !== null && (
                 <>
-                    <form className="form form--small" onSubmit={handleSubmitPromotion}>
-                        <div className="form__group">
-                            <input type="checkbox" name="promotions" id="promotionCheckbox" checked={isPromotion} onChange={(e) => setIsPromotion(e.target.checked)} className="form__checkbox" />
-                            <label className="form__label" htmlFor="promotionCheckbox">Акция</label>
-                        </div>
-
-                        <input
-                            type="text"
-                            name="promotionPrice"
-                            placeholder="Акционная цена"
-                            value={promotionPrice}
-                            onChange={(e) => setPromotionPrice(e.target.value)}
-                            className="form__input"
-                            required={isPromotion}
-                        />
-
-                        <button type="submit" className="form__button button">Сохранить</button>
-                        {promotionError && <div className="form__message form__message--red">{promotionError}</div>}
-                        {promotionSuccess && <div className="form__message form__message--green">{promotionSuccess}</div>}
-                    </form>
-
-                    <form className="form form--small" onSubmit={handleSubmitPhotos}>
-                        <div className="form__group">
-                            <label className="form__label">Изменить фотографию</label>
-                            <input
-                                className="form__input form__input--black"
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={(e) => handlePhotoChange(e)}
-                            />
-                        </div>
-
-                        <button type="submit" className="form__button button">Сохранить</button>
-                        {fileError && <div className="form__message form__message--red">{fileError}</div>}
-                        {fileSuccess && <div className="form__message form__message--green">{fileSuccess}</div>}
-                    </form>
-
-                    {loading && <LoadingSpinner />}
-
-                    <div className="editor__photos">
-                        {cards[activeCardIndex].images && cards[activeCardIndex].images.map((img, index) => (
-                            <div className="card__carousel" key={index}>
-                                <div className="card__pic">
-                                    <img
-                                        src={img}
-                                        alt="Property"
-                                        className="card__pic--img"
-                                    />
-                                </div>
-                                <button className="form__button button button--red" onClick={() => handleDeletePhoto(img)}>Удалить</button>
+                    <div className="editor__block">
+                        <form className="form form--small" onSubmit={handleSubmitPromotion}>
+                            <div className="form__group">
+                                <input type="checkbox" name="promotions" id="promotionCheckbox" checked={isPromotion} onChange={(e) => setIsPromotion(e.target.checked)} className="form__checkbox" />
+                                <label className="form__label" htmlFor="promotionCheckbox">Акция</label>
                             </div>
-                        ))}
+
+                            <input
+                                type="text"
+                                name="promotionPrice"
+                                placeholder="Акционная цена"
+                                value={promotionPrice}
+                                onChange={(e) => setPromotionPrice(e.target.value)}
+                                className="form__input"
+                                required={isPromotion}
+                            />
+
+                            <button type="submit" className="form__button button">Сохранить</button>
+                            {promotionError && <div className="form__message form__message--red">{promotionError}</div>}
+                            {promotionSuccess && <div className="form__message form__message--green">{promotionSuccess}</div>}
+                        </form>
+                    </div>
+
+                    <div className="editor__block">
+                        <form className="form form--small" onSubmit={handleSubmitPhotos}>
+                            <div className="form__group">
+                                <label className="form__label">Изменить фотографию</label>
+                                <input
+                                    className="form__input form__input--black"
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={(e) => handlePhotoChange(e)}
+                                />
+                            </div>
+
+                            <button type="submit" className="form__button button">Сохранить</button>
+                            {fileError && <div className="form__message form__message--red">{fileError}</div>}
+                            {fileSuccess && <div className="form__message form__message--green">{fileSuccess}</div>}
+                        </form>
+                    </div>
+
+                    <div className="editor__block">
+                        {loading && <LoadingSpinner />}
+
+                        <ul className="editor__photos">
+                            {cards[activeCardIndex].images && cards[activeCardIndex].images.map((img, index) => (
+                                <li className="editor__photos--item">
+                                    <div className="card__carousel" key={index}>
+                                        <div className="card__pic">
+                                            <img
+                                                src={img}
+                                                alt="Property"
+                                                className="card__pic--img"
+                                            />
+                                        </div>
+                                        <button className="editor__photos--button button" onClick={() => handleDeletePhoto(img)}>Удалить</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </>
             )}
-        </>
+        </div>
     );
 };
 

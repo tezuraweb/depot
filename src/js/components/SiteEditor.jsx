@@ -15,14 +15,17 @@ const SiteEditor = () => {
     const [tenants, setTenants] = useState([]);
     const [selectedTenant, setSelectedTenant] = useState('');
     const [tenantData, setTenantData] = useState({
-        id: '',
+        id: -1,
         title: '',
         link: '',
         text: '',
-        logo: ''
+        logo: '',
     });
+    const [tenantPhoto, setTenantPhoto] = useState('');
     const [tenantSuccessMessage, setTenantSuccessMessage] = useState('');
     const [tenantFailMessage, setTenantFailMessage] = useState('');
+    const [tenantPhotoSuccessMessage, setTenantPhotoSuccessMessage] = useState('');
+    const [tenantPhotoFailMessage, setTenantPhotoFailMessage] = useState('');
 
     useEffect(() => {
         fetchManager();
@@ -79,28 +82,44 @@ const SiteEditor = () => {
     const handleTenantSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (tenantData.photoFile) {
-                const photoUrl = await uploadPhoto(tenantData.photoFile);
-                setTenantData(prevData => ({ ...prevData, photo: photoUrl }));
-            }
             if (selectedTenant === '') {
-                await axios.put('/api/residents/create', tenantData);
+                const formData = {
+                    title: tenantData.title,
+                    link: tenantData.link,
+                    text: tenantData.text,
+                }
+                await axios.put('/api/residents/create', formData);
             } else {
-                await axios.post('/api/residents/update', tenantData);
+                const formData = {
+                    id: tenantData.id,
+                    title: tenantData.title,
+                    link: tenantData.link,
+                    text: tenantData.text,
+                }
+                await axios.post('/api/residents/update', formData);
             }
             showMessage('Данные успешно сохранены', setTenantSuccessMessage);
+            setTenantData({ id: '', title: '', link: '', text: '', logo: '' });
+            setSelectedTenant('');
             fetchTenants();
         } catch (error) {
-            showMessage('Ошибка при сохранении данных', setTenantFailMessage);
+            showMessage(error.message, setTenantFailMessage);
         }
     };
 
     const handleTenantDelete = async () => {
         if (selectedTenant === '') return;
         try {
-            await axios.delete(`/api/tenants/delete/${selectedTenant}`);
+            await axios.delete('/api/photo', {
+                data: { id: tenantData.id, photoUrl: tenantData.logo, model: 'residents' }
+            });
+        } catch (error) {
+            console.log('не найден файл для удаления', error.message)
+        }
+        try {
+            await axios.delete(`/api/residents/delete/${tenantData.id}`);
             showMessage('Данные успешно удалены', setTenantSuccessMessage);
-            setTenantData({ id: '', title: '', link: '', text: '', photo: '' });
+            setTenantData({ id: '', title: '', link: '', text: '', logo: '' });
             setSelectedTenant('');
             fetchTenants();
         } catch (error) {
@@ -108,27 +127,24 @@ const SiteEditor = () => {
         }
     };
 
-    // const uploadPhoto = async (file, id) => {
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //     formData.append('id', id);
-
-    //     try {
-    //         const response = await axios.post('/api/upload', formData, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data'
-    //             }
-    //         });
-    //         return response.data.fileUrl;
-    //     } catch (error) {
-    //         console.error('Ошибка при загрузке фотографии:', error);
-    //     }
-    // };
-
     const handlePhotoChange = (e, setData) => {
         const file = e.target.files[0];
         if (!file) return;
-        setData(prevData => ({ ...prevData, photoFile: file }));
+        setData(file);
+    };
+
+    const handleTenantPhotoSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (selectedTenant && tenantData.id && tenantPhoto) {
+                await uploadPhoto(tenantPhoto, tenantData.id, 'residents');
+            }
+
+            showMessage('Фото успешно обновлено', setTenantPhotoSuccessMessage);
+            fetchTenants();
+        } catch (error) {
+            showMessage(error.message, setTenantPhotoFailMessage);
+        }
     };
 
     const showMessage = (message, msgSetter) => {
@@ -165,7 +181,7 @@ const SiteEditor = () => {
                             placeholder="Введите текст"
                         ></textarea>
                     </div>
-                    <div className="form__group">
+                    {/* <div className="form__group">
                         <label className="form__label">Изменить фотографию</label>
                         <input
                             className="form__input form__input--black"
@@ -173,7 +189,7 @@ const SiteEditor = () => {
                             accept="image/*"
                             onChange={(e) => handlePhotoChange(e, setManagerData)}
                         />
-                    </div>
+                    </div> */}
                     <button className="button animate--pulse" type="submit">Сохранить</button>
                     {managerSuccessMessage && <div className="editor__message editor__message--green">{managerSuccessMessage}</div>}
                     {managerFailMessage && <div className="editor__message editor__message--red">{managerFailMessage}</div>}
@@ -229,15 +245,6 @@ const SiteEditor = () => {
                             placeholder="Введите текст"
                         ></textarea>
                     </div>
-                    <div className="form__group">
-                        <label className="form__label">Изменить фотографию</label>
-                        <input
-                            className="form__input form__input--black"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handlePhotoChange(e, setTenantData)}
-                        />
-                    </div>
 
                     <div className="flex flex--sb">
                         <button className="button animate--pulse" type="submit">Сохранить</button>
@@ -252,6 +259,31 @@ const SiteEditor = () => {
 
                     {tenantSuccessMessage && <div className="editor__message editor__message--green">{tenantSuccessMessage}</div>}
                     {tenantFailMessage && <div className="editor__message editor__message--red">{tenantFailMessage}</div>}
+                </form>
+            </div>
+
+            <div className="editor__block">
+                <form className="form form--small" onSubmit={handleTenantPhotoSubmit}>
+                    <div className="form__group">
+                        <label className="form__label">Изменить фотографию</label>
+                        <input
+                            className="form__input form__input--black"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handlePhotoChange(e, setTenantPhoto)}
+                            disabled={selectedTenant === '' ? true : false}
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="form__button button"
+                        disabled={selectedTenant === '' ? true : false}
+                    >
+                        Сохранить
+                    </button>
+                    {tenantPhotoFailMessage && <div className="form__message form__message--red">{tenantPhotoFailMessage}</div>}
+                    {tenantPhotoSuccessMessage && <div className="form__message form__message--green">{tenantPhotoSuccessMessage}</div>}
                 </form>
             </div>
         </div>

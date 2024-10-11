@@ -2,10 +2,11 @@ import { useCallback } from 'react';
 import axios from 'axios';
 
 const usePhotoManager = () => {
-    const uploadPhoto = useCallback(async (file, id) => {
+    const uploadPhoto = useCallback(async (file, id, model) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('id', id);
+        formData.append('model', model);
 
         try {
             const response = await axios.post('/api/photo', formData, {
@@ -30,6 +31,8 @@ const usePhotoManager = () => {
                         throw new Error('Один из файлов слишком маленький. Минимальные размеры: 550x310');
                     case 'UPLOAD_ERROR':
                         throw new Error('Ошибка при загрузке фотографий');
+                    case 'LACK_OF_DATA':
+                        throw new Error('Отсутствуют данные БД');
                     default:
                         throw new Error('Неизвестная ошибка');
                 }

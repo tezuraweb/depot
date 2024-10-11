@@ -493,8 +493,7 @@
 
     &--small {
         display: flex;
-        align-items: center;
-        margin-bottom: 50px;
+        align-items: flex-end;
 
         .form__group {
             margin-right: 25px;
@@ -960,7 +959,6 @@
 
         &--small {
             flex-direction: column;
-            margin-bottom: 35px;
 
             .form__group {
                 margin-right: 0;

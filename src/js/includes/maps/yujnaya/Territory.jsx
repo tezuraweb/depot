@@ -4,23 +4,23 @@ const Territory = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="432" height="414" viewBox="0 0 432 414" fill="none">
         <g xmlns="http://www.w3.org/2000/svg">
             <path id="Vector" d="M48.4 293L32.5 269L50.5 80L77 23.5L181.5 69.5L204.5 80L205.5 78L209.5 80L208.5 82L245.5 96L322.5 49.5L335.5 71L340 89L357 116.5L374 107.5L413 177L402.5 299.5L247.5 361L237 346L112 389L48.4 293ZM48.4 293L53 261.5L58 259.5L115.5 224M203.5 152.5L189.5 161.5" stroke="black" stroke-dasharray="2 3" />
-            <path className="map__building" data-id="15" d="M344.5 265L295 294L310 321.5L360.5 292.5L344.5 265Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="21" d="M224 225.5L222 222.5L228 219L230 222L224 225.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="5" d="M378 108.5L356.5 117.5L387 192L408 183.5L378 108.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="5" d="M409 184.5L387.5 193L391.5 204L405 199.5L409 184.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="14" d="M309 112L268 137L278 153L319 128L309 112Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="22" d="M238 164L225.5 170.5L231 181L243.5 174.5L238 164Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="7" d="M200.5 88.5L203.5 81.5L212 85.5L208.5 92.5L200.5 88.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="16" d="M176 141.5L96 190L109 211L188.5 162L176 141.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="10" d="M84 53L46 139L94.5 160.5L99.5 149L94.5 146.5L122.5 83L127.5 85L132.5 74.5L84 53Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="10" d="M81.5 50.5L90.5 31L181 71L168 100L131 83.5L135.5 73.5L87.5 52L87 53L81.5 50.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="23" d="M201.5 182.5L189.5 164L110 213L121 231.5L201.5 182.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="9" d="M320.5 52.5L192 131.5L204.5 152L333.5 73L320.5 52.5Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="3" d="M111.5 230L62 261L77.5 285L127 253L111.5 230Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="1" data-id-2="24" d="M335 159L155.5 268L192 329L372 219.5L335 159Z" fill="#E1E1E1" />
-            <path className="map__building" data-id="8"d="M326.5 98.5L340.5 90.5L356 117L342 125.5L326.5 98.5Z" fill="#E1E1E1" />
-            <rect className="map__building" data-id="1" data-id-2="11" x="295.013" y="182.369" width="43.3709" height="9.95643" transform="rotate(149 295.013 182.369)" fill="#E1E1E1" />
-            <rect className="map__building" data-id="1" data-id-2="11" x="334.624" y="158.549" width="35.5776" height="9.95643" transform="rotate(149 334.624 158.549)" fill="#E1E1E1" />
+            <path className="map__building" data-id="И" d="M344.5 265L295 294L310 321.5L360.5 292.5L344.5 265Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="У" d="M224 225.5L222 222.5L228 219L230 222L224 225.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Д" d="M378 108.5L356.5 117.5L387 192L408 183.5L378 108.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Д" d="M409 184.5L387.5 193L391.5 204L405 199.5L409 184.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Б" d="M309 112L268 137L278 153L319 128L309 112Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Т" d="M238 164L225.5 170.5L231 181L243.5 174.5L238 164Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="П" d="M200.5 88.5L203.5 81.5L212 85.5L208.5 92.5L200.5 88.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Г" d="M176 141.5L96 190L109 211L188.5 162L176 141.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="А" d="M84 53L46 139L94.5 160.5L99.5 149L94.5 146.5L122.5 83L127.5 85L132.5 74.5L84 53Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="В" d="M81.5 50.5L90.5 31L181 71L168 100L131 83.5L135.5 73.5L87.5 52L87 53L81.5 50.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="С" d="M201.5 182.5L189.5 164L110 213L121 231.5L201.5 182.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Ж" d="M320.5 52.5L192 131.5L204.5 152L333.5 73L320.5 52.5Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="З" d="M111.5 230L62 261L77.5 285L127 253L111.5 230Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Пр2" d="M335 159L155.5 268L192 329L372 219.5L335 159Z" fill="#E1E1E1" />
+            <path className="map__building" data-id="Е" d="M326.5 98.5L340.5 90.5L356 117L342 125.5L326.5 98.5Z" fill="#E1E1E1" />
+            <rect className="map__building" data-id="Пр1" x="295.013" y="182.369" width="43.3709" height="9.95643" transform="rotate(149 295.013 182.369)" fill="#E1E1E1" />
+            <rect className="map__building" data-id="Пр" x="334.624" y="158.549" width="35.5776" height="9.95643" transform="rotate(149 334.624 158.549)" fill="#E1E1E1" />
             <g id="Vector_2">
                 <path d="M299.308 157V148.6H306.544V157H305.368V149.332L305.656 149.644H300.196L300.496 149.332V157H299.308Z" fill="black" />
                 <path d="M312.344 157.072C311.816 157.072 311.332 156.952 310.892 156.712C310.46 156.464 310.112 156.1 309.848 155.62C309.592 155.14 309.464 154.54 309.464 153.82C309.464 153.1 309.588 152.5 309.836 152.02C310.092 151.54 310.436 151.18 310.868 150.94C311.308 150.7 311.8 150.58 312.344 150.58C312.968 150.58 313.52 150.716 314 150.988C314.48 151.26 314.86 151.64 315.14 152.128C315.42 152.608 315.56 153.172 315.56 153.82C315.56 154.468 315.42 155.036 315.14 155.524C314.86 156.012 314.48 156.392 314 156.664C313.52 156.936 312.968 157.072 312.344 157.072ZM308.972 159.328V150.64H310.076V152.356L310.004 153.832L310.124 155.308V159.328H308.972ZM312.248 156.064C312.656 156.064 313.02 155.972 313.34 155.788C313.668 155.604 313.924 155.344 314.108 155.008C314.3 154.664 314.396 154.268 314.396 153.82C314.396 153.364 314.3 152.972 314.108 152.644C313.924 152.308 313.668 152.048 313.34 151.864C313.02 151.68 312.656 151.588 312.248 151.588C311.848 151.588 311.484 151.68 311.156 151.864C310.836 152.048 310.58 152.308 310.388 152.644C310.204 152.972 310.112 153.364 310.112 153.82C310.112 154.268 310.204 154.664 310.388 155.008C310.58 155.344 310.836 155.604 311.156 155.788C311.484 155.972 311.848 156.064 312.248 156.064Z" fill="black" />

@@ -349,6 +349,45 @@ async function getResidents(req, res, next) {
     }
 }
 
+async function alterResidentById(req, res, next) {
+    try {
+        const data = pick(req.body, ['id', 'title', 'link', 'text']);
+        const residents = await residentsService.alterResidentById(data);
+        res.json(residents.success);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function insertResident(req, res, next) {
+    try {
+        const data = pick(req.body, ['title', 'link', 'text']);
+        const residents = await residentsService.insertResident(data);
+        res.json(residents.success);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function deleteResident(req, res, next) {
+    try {
+        const id = req.params.id;
+        const result = await residentsService.deleteResident(id);
+        res.json(result.success);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function setResidentsPhotoById(id, fileUrl) {
+    try {
+        const residents = await residentsService.updatePhotoById(id, fileUrl);
+        return residents.previousLogo;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getTenantByParam,
     setTenantEmail,
@@ -381,4 +420,8 @@ module.exports = {
     insertTicketFromBackoffice,
     getDocsByUser,
     getResidents,
+    alterResidentById,
+    insertResident,
+    deleteResident,
+    setResidentsPhotoById,
 };

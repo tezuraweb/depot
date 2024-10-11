@@ -9,7 +9,7 @@ const Scheme = ({ activeElement = null, siteName }) => {
     const setSvgRef = useCallback((node) => {
         if (node !== null) {
             svgRef.current = node;
-            const element = node.querySelector(`[data-id="${activeElement.key_liter_id}"]`);
+            const element = node.querySelector(`[data-id="${activeElement?.key_liter}"]`);
             if (element) {
                 element.classList.add('active');
             }
@@ -18,7 +18,7 @@ const Scheme = ({ activeElement = null, siteName }) => {
 
     useEffect(() => {
         const loadFloor = async () => {
-            const floors = await loadFloors(activeElement.key_liter_id, activeElement.floor);
+            const floors = await loadFloors(activeElement.key_liter, activeElement.floor);
             setFloors(floors);
         };
 
@@ -30,50 +30,132 @@ const Scheme = ({ activeElement = null, siteName }) => {
     const loadFloors = async (buildingId, floor) => {
         if (siteName === 'depo') {
             switch (buildingId) {
+                case 'Пр':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/Pr/Floor1'))];
+                    break;
+                case 'А':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/A/Floor1'))];
+                    break;
+                case 'Б':
+                case 'Пр2':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/B/Floor1'))];
+                    break;
+                case 'В':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/V/Floor1'))];
+                    break;
+                case 'Е':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/E/Floor1'))];
+                    break;
+                case 'П':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/P/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/depo/P/Floor2'))];
+                    if (floor === 3) return [React.lazy(() => import('../includes/maps/depo/P/Floor3'))];
+                    break;
+                case 'Г':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/G/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/depo/G/Floor2'))];
+                    break;
+                case 'З':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/Z/Floor1'))];
+                    break;
+                case 'Т':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/T/Floor1'))];
+                    break;
+                case 'Д':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/D/Floor1'))];
+                    break;
                 default:
                     return [];
             }
         } else if (siteName === 'gagarinsky') {
             switch (buildingId) {
+                case 'А':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/A/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/A/Floor2'))];
+                    if (floor === 3) return [React.lazy(() => import('../includes/maps/gagarinsky/A/Floor3'))];
+                    break;
+                case 'Б':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/B/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/B/Floor2'))];
+                    break;
+                case 'В':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/V/Floor1'))];
+                    break;
+                case 'Г':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/G/Floor1'))];
+                    break;
+                case 'Д':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/D/Floor1'))];
+                    break;
+                case 'Е':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/E/Floor1'))];
+                    break;
+                case 'Ж':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/J/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/J/Floor2'))];
+                    break;
+                case 'З':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/Z/Floor1'))];
+                    break;
+                case 'К':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/K/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/K/Floor2'))];
+                    break;
+                case 'Л':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/L/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/L/Floor2'))];
+                    break;
+                case 'Н':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/N/Floor1'))];
+                    break;
+                case 'П':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/P/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/gagarinsky/P/Floor2'))];
+                    break;
+                case 'С':
+                    if (floor === 1) return [React.lazy(() => import('../includes/maps/gagarinsky/S/Floor1'))];
+                    break;
                 default:
                     return [];
             }
         } else if (siteName === 'yujnaya') {
             switch (buildingId) {
-                case 1:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor1'))];
+                case 'Пр':
+                case 'Пр1':
+                case 'Пр2':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor1'))];
                     break;
-                case 14:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/B/Floor1'))];
+                case 'Б':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/B/Floor1'))];
                     break;
-                case 10:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/V/Floor1'))];
-                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/V/Floor2'))];
+                case 'В':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/V/Floor1'))];
+                    if (floor === 2) return [lazy(() => import('../includes/maps/yujnaya/V/Floor2'))];
                     break;
-                case 8:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/E/Floor1'))];
+                case 'Е':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/E/Floor1'))];
                     break;
-                case 7:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/P/Floor1'))];
+                case 'П':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/P/Floor1'))];
                     break;
-                case 16:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/G/Floor1'))];
+                case 'Г':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/G/Floor1'))];
                     break;
-                case 9:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/Zh/Floor1'))];
-                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/Zh/Floor2'))];
+                case 'Ж':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/J/Floor1'))];
+                    if (floor === 2) return [lazy(() => import('../includes/maps/yujnaya/J/Floor2'))];
                     break;
-                case 3:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/Z/Floor1'))];
+                case 'З':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/Z/Floor1'))];
                     break;
-                case 15:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/I/Floor1'))];
+                case 'И':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/I/Floor1'))];
                     break;
-                case 23:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/S/Floor1'))];
+                case 'С':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/S/Floor1'))];
                     break;
-                case 5:
-                    if (floor === 0) return [lazy(() => import('../includes/maps/yujnaya/D/Floor1'))];
+                case 'Д':
+                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/D/Floor1'))];
                 default:
                     return [];
             }

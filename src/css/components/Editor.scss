@@ -70,9 +70,52 @@
         }
     }
 
+    &__photos {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+
+        &--item {
+            padding: 10px;
+            flex-basis: 50%;
+        }
+
+        &--button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+    }
+
+    &--wide {
+        max-width: none;
+    }
+
+    @media (max-width: ($laptop-breakpoint - 1)) {
+        &__photos {
+            &--item {
+                flex-basis: 100%;
+            }
+        }
+    }
+
+    @media (max-width: ($tablet-breakpoint - 1)) {
+        &__photos {
+            &--item {
+                flex-basis: 50%;
+            }
+        }
+    }
+
     @media (max-width: ($mobile-breakpoint - 1)) {
         &__popup {
             padding: 35px 20px;
+        }
+
+        &__photos {
+            &--item {
+                flex-basis: 100%;
+            }
         }
     }
 }

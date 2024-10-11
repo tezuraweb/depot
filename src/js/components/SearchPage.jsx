@@ -42,6 +42,7 @@ const SearchPage = ({ siteName }) => {
         try {
             const response = await axios.get('/api/search/buildings');
             const data = response.data.filter((item) => item.key_liter != '');
+
             setBuildings(data);
         } catch (error) {
             console.error('Error fetching buildings:', error);

@@ -30,13 +30,13 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
         const fetchComplex = async () => {
             if (selectedRoomData) {
                 try {
-                    if (selectedRoomData.complex !== 0) {
-                        const response = await axios.get(`/api/premises/complex/${selectedRoomData.complex}`);
+                    if (selectedRoomData?.complex !== 0) {
+                        const response = await axios.get(`/api/premises/complex/${selectedRoomData?.complex}`);
                         setRooms(response.data);
                         setComplexIds(response.data.map(item => item.code))
                     } else {
                         setRooms([selectedRoomData]);
-                        setComplexIds([selectedRoomData.code])
+                        setComplexIds([selectedRoomData?.code])
                     }
                 } catch (error) {
                     console.error('Error fetching rooms:', error);

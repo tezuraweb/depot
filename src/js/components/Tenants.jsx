@@ -27,7 +27,7 @@ const Accordion = () => {
                 <div key={index} className="about__accordion--item">
                     <div className="about__accordion--header flex flex--sb flex--center">
                         <div className="about__accordion--headerWrapper flex flex--center">
-                            <img className="about__accordion--image" src={item.logo} alt={item.title} />
+                            {item.logo && <img className="about__accordion--image" src={item.logo} alt={item.title} />}
                             <div className="about__accordion--title">{item.title}</div>
                         </div>
                         <button

@@ -24,8 +24,11 @@ if (appConfig.base === 'depo') {
     var sanitizedOrg = ['База Южная ООО', 'Строительная База "Южная" ООО'].map(item => sqlstring.escape(item)).join(', ');
 }
 
+const typesToExclude = ['Помещение вспомогательное'].map(item => sqlstring.escape(item)).join(', ')
+// const statusVacant = sqlstring.escape('Свободен');
+
 async function getAll() {
-    const query = `SELECT * FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`;
+    const query = `SELECT * FROM rooms WHERE organization IN (${sanitizedOrg}) AND type NOT IN (${typesToExclude}) FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -44,7 +47,13 @@ async function getAll() {
 }
 
 async function getTypes() {
-    const query = `SELECT DISTINCT type FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`;
+    const query = `
+        SELECT DISTINCT type
+        FROM rooms
+        WHERE organization IN (${sanitizedOrg})
+        AND type NOT IN (${typesToExclude})
+        FORMAT JSON`;
+        // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -63,7 +72,13 @@ async function getTypes() {
 }
 
 async function getIdLiter() {
-    const query = `SELECT DISTINCT key_liter, key_liter_id FROM rooms WHERE organization IN (${sanitizedOrg}) FORMAT JSON`; //where status == vacant
+    const query = `
+        SELECT DISTINCT key_liter, key_liter_id
+        FROM rooms
+        WHERE organization IN (${sanitizedOrg})
+        AND type NOT IN (${typesToExclude})
+        FORMAT JSON`;
+        // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -122,12 +137,17 @@ async function getRoomsByTenant(id) {
 async function getPage(data) {
     const conditions = [];
 
-    if (data.type) conditions.push(`type = ${sqlstring.escape(data.type)}`);
     if (data.id_liter) conditions.push(`key_liter_id = ${sqlstring.escape(data.id_liter)}`);
     if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
     if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
     if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
     if (data.code) conditions.push(`kode_text LIKE '%${sqlstring.escape(data.code).replace(/^'|'$/g, "")}%'`);
+
+    if (data.type) {
+        conditions.push(`type = ${sqlstring.escape(data.type)}`);
+    } else {
+        conditions.push(`type NOT IN ${typesToExclude}`);
+    }
 
     if (data.areaFrom !== undefined && data.areaTo !== undefined) {
         conditions.push(`area BETWEEN ${sqlstring.escape(data.areaFrom)} AND ${sqlstring.escape(data.areaTo)}`);
@@ -160,6 +180,8 @@ async function getPage(data) {
             conditions.push(`cost <= ${sqlstring.escape(data.priceTo)}`);
         }
     }
+
+    // conditions.push(`status = ${statusVacant}`);
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
@@ -282,10 +304,13 @@ async function getRecommended(id) {
             WHERE id = ${sanitizedId}
         ) AS subquery
         ON rooms.type = subquery.type
-        WHERE rooms.id != ${sanitizedId} AND organization IN (${sanitizedOrg})
+        WHERE rooms.id != ${sanitizedId}
+        AND organization IN (${sanitizedOrg})
+        AND type NOT IN (${typesToExclude})
         ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
         LIMIT 3
         FORMAT JSON`;
+        // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
