@@ -53,7 +53,7 @@ async function getTypes() {
         WHERE organization IN (${sanitizedOrg})
         AND type NOT IN (${typesToExclude})
         FORMAT JSON`;
-        // AND status = ${statusVacant}
+    // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -78,7 +78,7 @@ async function getIdLiter() {
         WHERE organization IN (${sanitizedOrg})
         AND type NOT IN (${typesToExclude})
         FORMAT JSON`;
-        // AND status = ${statusVacant}
+    // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -134,6 +134,7 @@ async function getRoomsByTenant(id) {
     }
 }
 
+// sane
 async function getPage(data) {
     const conditions = [];
 
@@ -185,7 +186,7 @@ async function getPage(data) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images
+        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images
         FROM rooms 
         ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -203,6 +204,119 @@ async function getPage(data) {
             url: `/?${queryParams}`,
         });
         return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// insane
+async function getPageGroupComplex(data) {
+    const conditions = [];
+
+    if (data.id_liter) conditions.push(`key_liter_id = ${sqlstring.escape(data.id_liter)}`);
+    if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
+    if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
+
+    if (data.type) {
+        conditions.push(`type = ${sqlstring.escape(data.type)}`);
+    } else {
+        conditions.push(`type NOT IN ${typesToExclude}`);
+    }
+
+    if (data.organization !== undefined && Array.isArray(data.organization) && data.organization.length > 0) {
+        conditions.push(`organization IN (${data.organization.map(item => sqlstring.escape(item)).join(', ')})`);
+    } else {
+        conditions.push(`organization IN (${sanitizedOrg})`);
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const query = `
+        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images, complex_id
+        FROM rooms 
+        ${whereClause}
+        ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
+        FORMAT JSON`;
+    const queryParams = querystring.stringify({
+        'database': dbConfig.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            url: `/?${queryParams}`,
+        });
+
+        const renponseData = response?.data?.data;
+        // console.log('1', renponseData);
+        result = [];
+        complexes = {};
+        renponseData.forEach((item) => {
+            if (!item.complex_id || item.complex_id === 0) {
+                item.amount = 1;
+                result.push(item);
+            } else {
+                if (!complexes[item.complex_id]) {
+                    item.amount = 1;
+                    complexes[item.complex_id] = item;
+
+                } else {
+                    complexes[item.complex_id].area += item.area;
+                    complexes[item.complex_id].promotion = complexes[item.complex_id].promotion || item.promotion;
+                    complexes[item.complex_id].images = [...complexes[item.complex_id].images, ...item.images];
+                    complexes[item.complex_id].amount += 1;
+                }
+            }
+        });
+
+        // console.log('2', complexes);
+
+        Object.keys(complexes).forEach((key) => {
+            result.push(complexes[key]);
+        });
+
+        // console.log('3', result);
+
+        const resultLength = result.length;
+        const resultFiltered = result.filter((item) => {
+            let match = true;
+
+            if (data.promotion) {
+                match = match && item.promotion;
+            }
+
+            if (data.areaFrom !== undefined && data.areaTo !== undefined) {
+                match = match && (item.area >= data.areaFrom) && (item.area <= data.areaTo);
+            } else if (data.areaFrom !== undefined) {
+                match = match && (item.area >= data.areaFrom);
+            } else if (data.areaTo !== undefined) {
+                match = match && (item.area <= data.areaTo);
+            }
+
+            if (data.priceType === 'total') {
+                if (data.priceFrom !== undefined && data.priceTo !== undefined) {
+                    match = match && (item.area * item.cost >= data.priceFrom) && (item.area * item.cost <= data.priceTo);
+                } else if (data.priceFrom !== undefined) {
+                    match = match && (item.area * item.cost >= data.priceFrom);
+                } else if (data.priceTo !== undefined) {
+                    match = match && (item.area * item.cost <= data.priceTo);
+                }
+            } else {
+                if (data.priceFrom !== undefined && data.priceTo !== undefined) {
+                    match = match && (item.cost >= data.priceFrom) && (item.cost <= data.priceTo);
+                } else if (data.priceFrom !== undefined) {
+                    match = match && (item.cost >= data.priceFrom);
+                } else if (data.priceTo !== undefined) {
+                    match = match && (item.cost <= data.priceTo);
+                }
+            }
+
+            return match;
+        });
+
+        const slicedResult = resultFiltered.slice(data.offset, data.limit);
+
+        return { data: slicedResult, rows_before_limit_at_least: resultLength };
     } catch (error) {
         throw error;
     }
@@ -310,7 +424,7 @@ async function getRecommended(id) {
         ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
         LIMIT 3
         FORMAT JSON`;
-        // AND status = ${statusVacant}
+    // AND status = ${statusVacant}
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -395,4 +509,5 @@ module.exports = {
     alterRoomById,
     addPhotoById,
     deletePhotoById,
+    getPageGroupComplex,
 };

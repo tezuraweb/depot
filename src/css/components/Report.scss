@@ -1,5 +1,5 @@
 .report {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     color: $black;
 
@@ -57,13 +57,25 @@
         margin-right: 10px;
     }
 
+    &__group {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -5px;
+    }
+
+    &__column {
+        flex-basis: 50%;
+        padding: 0 5px;
+    }
+
     &__metrics {
         display: flex;
         flex-wrap: wrap;
-        margin: 0 -10px;
+        align-items: center;
 
         &--sb {
             justify-content: space-between;
+            align-items: baseline;
         }
     }
 
@@ -98,7 +110,6 @@
     }
 
     &__block {
-        max-width: 500px;
         margin-bottom: 15px;
     }
 
@@ -107,12 +118,14 @@
         width: 100%;
         border-radius: 10px;
         overflow: hidden;
+        background-color: $lightGrey;
     }
 
     &__percentage {
         max-width: 90%;
         min-width: 20%;
         padding: 10px 20px;
+        border-radius: 10px;
         text-align: center;
 
         &--yellow {
@@ -125,6 +138,42 @@
 
         &--green {
             background-color: $green;
+        }
+
+        &--red {
+            background-color: $red;
+            color: $white;
+        }
+    }
+
+    &__stats {
+        border: 1px solid $black;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    &__stat {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+
+        &--yellow {
+            background-color: $yellow;
+        }
+
+        &--grey {
+            background-color: $lightGrey;
+        }
+
+        &--green {
+            background-color: $green;
+        }
+
+        &--blue {
+            background-color: $tgBlue;
+            color: $white;
         }
 
         &--red {
@@ -147,5 +196,5 @@
         &__print {
             display: none;
         }
-    }   
+    }
 }

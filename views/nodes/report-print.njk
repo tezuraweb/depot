@@ -6,151 +6,238 @@
 {% block customCss %}
 
 <style>
-    .report {
-        padding: 50px;
-        max-width: 800px;
-        margin: 0 auto;
-        color: #1C1D20;
-    }
+.report {
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #1C1D20;
+}
 
-    .report__header {
-        display: table;
-        width: 100%;
-        margin-bottom: 40px;
-    }
+.report__header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
 
-    .report__title, .report__date {
-        display: table-cell;
-        vertical-align: top;
-    }
+.report__h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
 
+.report__h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.report__h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.report__h4 {
+    font-size: 14px;
+    font-weight: 500;
+    position: absolute;
+    top: 5px;
+    left: 40px;
+    margin: 0;
+}
+
+.report__title {
+    margin-right: 20px;
+}
+
+.report__date {
+    text-align: right;
+    font-size: 14px;
+    margin-left: auto;
+}
+
+.report__print {
+    margin-left: 15px;
+}
+
+.report__summary,
+.report__ratio {
+    margin-bottom: 20px;
+}
+
+.report__summary--large {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.report__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.report__table {
+    display: table;
+    width: 100%;
+}
+
+.report__row {
+    display: table-row;
+}
+
+.report__cell {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.report__column {
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.report__metrics {
+    position: relative;
+    height: 35px;
+}
+
+.report__metrics-2 {
+    position: relative;
+    height: 30px;
+}
+
+.report__metric {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.report__metric-2 {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.report__metric--green {
+    color: #5EC7B1;
+}
+
+.report__metric--red {
+    color: #D40000;
+}
+
+.report__metric--large {
+    font-size: 18px;
+}
+
+.report__metric--thin {
+    font-weight: 500;
+}
+
+.report__metric--right {
+    text-align: right;
+}
+
+.report__metric p:first-child {
+    margin-bottom: 5px;
+}
+
+.report__block {
+    margin-bottom: 15px;
+}
+
+.report__bar {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #EFEFEF;
+}
+
+.report__percentage {
+    max-width: 90%;
+    min-width: 20%;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.report__percentage-2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.report__percentage--yellow {
+    background-color: #F9BC07;
+}
+
+.report__percentage--grey {
+    background-color: #EFEFEF;
+}
+
+.report__percentage--green {
+    background-color: #5EC7B1;
+}
+
+.report__percentage--red {
+    background-color: #D40000;
+    color: #FFFFFF;
+}
+
+.report__stats {
+    border: 1px solid #1C1D20;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.report__stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.report__stat--yellow {
+    background-color: #F9BC07;
+}
+
+.report__stat--grey {
+    background-color: #EFEFEF;
+}
+
+.report__stat--green {
+    background-color: #5EC7B1;
+}
+
+.report__stat--blue {
+    background-color: #26A5E3;
+    color: #FFFFFF;
+}
+
+.report__stat--red {
+    background-color: #D40000;
+    color: #FFFFFF;
+}
+
+@media (max-width: 1023px) {
     .report__title {
-        width: 70%;
-    }
-
-    .report__date {
-        width: 30%;
-        text-align: right;
-        font-size: 14px;
-    }
-
-    .report__h1 {
-        font-size: 24px;
-        margin-bottom: 5px;
-    }
-
-    .report__h2 {
-        font-size: 20px;
-        text-transform: uppercase;
-    }
-
-    .report__h3 {
-        font-size: 20px;
-        font-weight: 500;
         margin-bottom: 10px;
     }
 
-    .report__h4 {
-        font-size: 18px;
-        font-weight: 500;
-        width: 100%;
-        margin-bottom: 5px;
+    .report__date {
+        margin-left: 0;
     }
+}
 
-    .report__title {
-        margin-right: 20px;
+@media print {
+    .report__print {
+        display: none;
     }
-
-    .report__summary,
-    .report__ratio {
-        margin-bottom: 20px;
-    }
-
-    .report__icon {
-        display: inline-block;
-        width: 30px;
-        vertical-align: middle;
-        margin-right: 10px;
-    }
-
-    .report__metrics {
-        display: table;
-        width: 100%;
-        margin: 0 -10px;
-    }
-
-    .report__metrics--sb {
-        justify-content: space-between;
-    }
-
-    .report__metric {
-        display: table-cell;
-        font-weight: 700;
-        font-size: 14px;
-        padding: 5px 10px;
-        width: 33%;
-    }
-
-    .report__metric--green {
-        color: #5EC7B1;
-    }
-
-    .report__metric--red {
-        color: #D40000;
-    }
-
-    .report__metric--large {
-        font-size: 18px;
-    }
-
-    .report__metric--thin {
-        font-weight: 500;
-    }
-
-    .report__metric--right {
-        text-align: right;
-    }
-
-    .report__metric p:first-child {
-        margin-bottom: 5px;
-    }
-
-    .report__block {
-        max-width: 500px;
-        margin-bottom: 15px;
-    }
-
-    .report__bar {
-        display: table;
-        width: 100%;
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .report__percentage {
-        display: table-cell;
-        max-width: 90%;
-        min-width: 20%;
-        padding: 10px 20px;
-        text-align: center;
-    }
-
-    .report__percentage--yellow {
-        background-color: #F9BC07;
-    }
-
-    .report__percentage--grey {
-        background-color: #EFEFEF;
-    }
-
-    .report__percentage--green {
-        background-color: #5EC7B1;
-    }
-
-    .report__percentage--red {
-        background-color: #D40000;
-        color: white;
-    }
+}
 </style>
 
 {% endblock %}
@@ -212,7 +299,7 @@
     <div class="report">
         <div class="report__header">
             <div class="report__title">
-                <h1 class="report__h1">АО “Депо”</h1>
+                <h1 class="report__h1">АО "Депо"</h1>
                 <h2 class="report__h2">Отчет данных аренды</h2>
             </div>
             <div class="report__date">
@@ -220,82 +307,167 @@
             </div>
         </div>
 
-        <div class="report__summary">
-            <h3 class="report__h3">Общие показатели</h3>
-            <div class="report__metrics">
-                <div class="report__metric">
-                    <p>Всего помещений:</p>
-                    <p class="report__metric--large">{{ aggregatedData.total }}</p>
+        <div class="report__table">
+            <div class="report__row">
+                <div class="report__column report__cell">
+                    <div class="report__status">
+                        <h3 class="report__h3">Показатели помещений</h3>
+                        {% for type in data %}
+                            <div class="report__block">
+                                <div class="report__metrics">
+                                    <div class="report__icon">
+                                        {% if type.typeRooms == 'Торговое' %} {{ CommercialPremises | safe }}
+                                        {% elif type.typeRooms == 'Холодный склад' %} {{ RefrigeratorPremises | safe }}
+                                        {% elif type.typeRooms == 'Производственно-складское' %} {{ WarehousePremises | safe }}
+                                        {% elif type.typeRooms == 'Офис' %} {{ OfficePremises | safe }}
+                                        {% elif type.typeRooms == 'Земельный участок' %} {{ SitePremises | safe }}
+                                        {% endif %}
+                                    </div>
+                                    <h4 class="report__h4">{{ type.typeRooms }}</h4>
+                                    <div class="report__metric">
+                                        {{ type.quantityRomms }} <span class="report__metric--thin">позиций</span>
+                                    </div>
+                                </div>
+                                <div class="report__bar">
+                                    <div class="report__percentage report__percentage--green" style="width: {{ type.percent }}%;">{{ type.percent }}%</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="report__ratio">
+                        <div class="report__stats">
+                            <div class="report__stat report__stat--grey">
+                                <div>Общее количество помещений</div>
+                                <div>{{ calculatedData.quantityRoomsSum }}</div>
+                            </div>
+                            <div class="report__stat report__stat--grey">
+                                <div>Средняя стоимость кв/м (Аренда)</div>
+                                <div>{{ calculatedData.averagePriceAvg }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="report__metric report__metric--green">
-                    <p>В аренде: {{ aggregatedData.rented }}</p>
-                    <p class="report__metric--large">{{ aggregatedData.rented_percentage }}%</p>
-                </div>
-                <div class="report__metric report__metric--red">
-                    <p>Свободно: {{ aggregatedData.available }}</p>
-                    <p class="report__metric--large">{{ aggregatedData.available_percentage }}%</p>
+
+                <div class="report__column report__cell">
+                    <div class="report__status">
+                        <h3 class="report__h3">Помещения в аренде</h3>
+                        {% for type in data %}
+                            <div class="report__block">
+                                <div class="report__metrics">
+                                    <div class="report__icon">
+                                            {% if type.typeRooms == 'Торговое' %} {{ CommercialPremises | safe }}
+                                            {% elif type.typeRooms == 'Холодный склад' %} {{ RefrigeratorPremises | safe }}
+                                            {% elif type.typeRooms == 'Производственно-складское' %} {{ WarehousePremises | safe }}
+                                            {% elif type.typeRooms == 'Офис' %} {{ OfficePremises | safe }}
+                                            {% elif type.typeRooms == 'Земельный участок' %} {{ SitePremises | safe }}
+                                            {% endif %}
+                                        </div>
+                                    <h4 class="report__h4">{{ type.typeRooms }}</h4>
+                                    <div class="report__metric">
+                                        {{ type.forRent }} <span class="report__metric--thin">арендовано из {{ type.quantityRomms }}</span>
+                                    </div>
+                                </div>
+                                <div class="report__bar">
+                                    <div class="report__percentage report__percentage--green" style="width: {{ type.percentforRent }}%;">{{ type.percentforRent }}%</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="report__ratio">
+                        <div class="report__stats">
+                            <div class="report__stat report__stat--grey">
+                                <div>Всего помещений в аренде</div>
+                                <div>{{ calculatedData.forRentSum }}</div>
+                            </div>
+                            <div class="report__stat {{ 'report__stat--green' if calculatedData.percentforRentAvg >= 90 else ('report__stat--yellow' if calculatedData.percentforRentAvg >= 50 else 'report__stat--red') }}">
+                                <div>Конверсия аредны</div>
+                                <div>{{ calculatedData.percentforRentAvg }}%</div>
+                            </div>
+                            <div class="report__stat report__stat--grey">
+                                <div>Помещений свободно</div>
+                                <div>{{ calculatedData.vacantPremisesSum }} ({{ calculatedData.percentvacantPremisesAvg }}%)</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="report__ratio">
-            <h3 class="report__h3">Соотношение по типам помещений от общего числа</h3>
-            <div class="report__metrics">
-                {% for type in types %}
-                    <div class="report__metric">
-                        <p>{{ type.type }}</p>
-                        <p class="report__metric--large">{{ type.type_percentage }}%</p>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="report__status">
-            <h3 class="report__h3">Статус по типам</h3>
-            {% for type in types %}
-                <div class="report__block">
-                    <h4 class="report__h4">
-                        <div class="report__icon">
-                            {% if type.type == 'Торговое' %} {{ CommercialPremises | safe }}
-                            {% elif type.type == 'Холодный склад' %} {{ RefrigeratorPremises | safe }}
-                            {% elif type.type == 'Производственно-складское' %} {{ WarehousePremises | safe }}
-                            {% elif type.type == 'Офис' %} {{ OfficePremises | safe }}
-                            {% elif type.type == 'Участок' %} {{ SitePremises | safe }}
-                            {% endif %}
-                        </div>
-                        <span>{{ type.type }}</span>
-                    </h4>
-                    <div class="report__bar">
-                        <div class="report__percentage 
-                            {% if type.rented == type.total %}report__percentage--green
-                            {% elseif type.rented == 0 %}report__percentage--red
-                            {% else %}report__percentage--yellow
-                            {% endif %}" 
-                            style="width: {{ type.rented_percentage }}%;">
-                            {{ type.rented_percentage }}%
+            {% for type in data %}
+                {% if loop.index0 % 2 == 0 %}
+                    <div class="report__row">
+                {% endif %}
+            
+                    <div class="report__column report__cell">
+                        <div class="report__status">
+                            <div class="report__block">
+                                <div class="report__metrics">
+                                    <div class="report__icon">
+                                        {% if type.typeRooms == 'Торговое' %} {{ CommercialPremises | safe }}
+                                        {% elif type.typeRooms == 'Холодный склад' %} {{ RefrigeratorPremises | safe }}
+                                        {% elif type.typeRooms == 'Производственно-складское' %} {{ WarehousePremises | safe }}
+                                        {% elif type.typeRooms == 'Офис' %} {{ OfficePremises | safe }}
+                                        {% elif type.typeRooms == 'Земельный участок' %} {{ SitePremises | safe }}
+                                        {% endif %}
+                                    </div>
+                                    <h4 class="report__h4">{{ type.typeRooms }}</h4>
+                                </div>
+                                <div class="report__metrics-2">
+                                    <div class="report__metric-2">
+                                        <span class="report__metric--thin">В аренде </span>{{ type.forRent }}
+                                    </div>
+                                    <div class="report__metric">
+                                        <span class="report__metric--thin">Свободно </span>{{ type.vacantPremises }}
+                                    </div>
+                                </div>
+                                <div class="report__bar">
+                                    <div class="report__percentage report__percentage--green" style="width: {{ type.percentforRent }}%;">{{ type.percentforRent }}%</div>
+                                    <div class="report__percentage report__percentage-2" style="width: {{ type.percentvacantPremises }}%;">{{ type.percentvacantPremises }}%</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="report__percentage 
-                            {% if type.available == type.total %}report__percentage--red
-                            {% elseif type.available == 0 %}report__percentage--green
-                            {% else %}report__percentage--grey
-                            {% endif %}" 
-                            style="width: {{ type.available_percentage }}%;">
-                            {{ type.available_percentage }}%
+                        <div class="report__ratio">
+                            <div class="report__stats">
+                                <div class="report__stat report__stat--grey">
+                                    <div>Средняя стоимость кв/м (Аренда) </div>
+                                    <div>{{ type.averagePrice }}</div>
+                                </div>
+                                <div class="report__stat {{ 'report__stat--green' if type.percentforRent >= 90 else ('report__stat--yellow' if type.percentforRent >= 50 else 'report__stat--red') }}">
+                                    <div>Конверсия аредны</div>
+                                    <div>{{ type.percentforRent }}%</div>
+                                </div>
+                                <div class="report__stat report__stat--blue">
+                                    <div>Арендный поток</div>
+                                    <div>{{ type.rentalFlow }} руб.</div>
+                                </div>
+                                <div class="report__stat report__stat--grey">
+                                    <div>Потенциальный арендный поток</div>
+                                    <div>{{ type.potentialrentalFlow }} руб.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="report__metrics report__metrics--sb">
-                        <div class="report__metric">
-                            <p>В Аренде</p>
-                            <p>{{ type.rented }} <span class="report__metric--thin">из {{ type.total }}</span></p>
-                        </div>
-                        <div class="report__metric report__metric--right">
-                            <p>Свободно</p>
-                            <p>{{ type.available }} <span class="report__metric--thin">из {{ type.total }}</span></p>
-                        </div>
+
+                {% if loop.index % 2 == 0 or loop.last %}
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
+        </div>
+
+        <div class="report__summary">
+            <h3 class="report__h3">Финансовая информация</h3>
+            <div class="report__summary--block">
+                <div class="report__summary--item">
+                    <div>Арендный поток в месяц</div>
+                    <div class="report__summary--large">{{ calculatedData.rentalFlowSum }} руб.</p>
+                </div>
+                <div class="report__summary--item">
+                    <div>Потенциальный арендный поток со свободных помещений</div>
+                    <div class="report__summary--large">{{ calculatedData.potentialrentalFlowSum }} руб.</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

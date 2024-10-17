@@ -56,6 +56,7 @@ class Bot {
         if (this.bot) {
             try {
                 this.bot.launch();
+                console.log('Bot launched successfully');
             } catch (error) {
                 console.error('Error launching bot:', error);
             }

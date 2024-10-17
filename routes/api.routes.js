@@ -66,7 +66,7 @@ if (appConfig.base === 'depo') {
 
 router
     .route('/search')
-    .post(dbController.getRoomsSearch);
+    .post(dbController.getRoomsSearchWithComplex);
 
 router
     .route('/search/types')
@@ -75,10 +75,6 @@ router
 router
     .route('/search/buildings')
     .get(dbController.getRoomsLiters);
-
-router
-    .route('/report/:base')
-    .get(dbController.getRoomsReport);
 
 router
     .route('/premises/:id')
@@ -144,59 +140,114 @@ router
     .route('/residents/delete/:id')
     .delete(auth, dbController.deleteResident);
 
+router
+    .route('/report')
+    .get(dbController.getReport);
+
+// router.route('/report/print/:base')
+//     .get(dbController.getReportMiddleware, async (req, res) => {
+//         try {
+//             const report = req.report;
+
+//             if (report?.length > 0) {
+//                 const list = rooms.map(item => {
+//                     const total = parseInt(item.total);
+//                     const rented = parseInt(item.rented);
+//                     let type_percentage = parseFloat(item.type_percentage);
+//                     let rented_percentage = parseFloat(item.rented_percentage);
+
+//                     if (isNaN(total) || isNaN(rented) || isNaN(type_percentage) || isNaN(rented_percentage)) {
+//                         throw 'Invalid data';
+//                     }
+
+//                     type_percentage = Math.round(type_percentage);
+//                     rented_percentage = Math.round(rented_percentage);
+
+//                     return {
+//                         type: item.type,
+//                         total: total,
+//                         rented: rented,
+//                         available: total - rented,
+//                         type_percentage: type_percentage,
+//                         rented_percentage: rented_percentage,
+//                         available_percentage: 100 - rented_percentage,
+//                     };
+//                 });
+
+//                 const aggregatedData = list.reduce((acc, curr) => {
+//                     acc.total += curr.total;
+//                     acc.rented += curr.rented;
+//                     return acc;
+//                 }, {
+//                     total: 0,
+//                     rented: 0,
+//                 });
+
+//                 aggregatedData.available = aggregatedData.total - aggregatedData.rented;
+//                 aggregatedData.rented_percentage = Math.round(aggregatedData.rented / aggregatedData.total * 100);
+//                 aggregatedData.available_percentage = 100 - aggregatedData.rented_percentage;
+
+//                 const reportData = {
+//                     aggregatedData,
+//                     types: list,
+//                     generatedAt: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+//                 };
+
+//                 res.render('nodes/report-print', reportData);
+//             }
+//         } catch (error) {
+//             console.error('Error fetching report data:', error);
+//             res.status(500).send('Error generating report');
+//         }
+//     });
+
 router.route('/report/print/:base')
-    .get(dbController.getRoomsReportMiddleware, async (req, res) => {
+    .get(dbController.getReportMiddleware, async (req, res) => {
         try {
-            const rooms = req.rooms;
+            const reportData = req.report;
 
-            if (rooms?.length > 0) {
-                const list = rooms.map(item => {
-                    const total = parseInt(item.total);
-                    const rented = parseInt(item.rented);
-                    let type_percentage = parseFloat(item.type_percentage);
-                    let rented_percentage = parseFloat(item.rented_percentage);
-
-                    if (isNaN(total) || isNaN(rented) || isNaN(type_percentage) || isNaN(rented_percentage)) {
-                        throw 'Invalid data';
-                    }
-
-                    type_percentage = Math.round(type_percentage);
-                    rented_percentage = Math.round(rented_percentage);
-
-                    return {
-                        type: item.type,
-                        total: total,
-                        rented: rented,
-                        available: total - rented,
-                        type_percentage: type_percentage,
-                        rented_percentage: rented_percentage,
-                        available_percentage: 100 - rented_percentage,
-                    };
-                });
-
-                const aggregatedData = list.reduce((acc, curr) => {
-                    acc.total += curr.total;
-                    acc.rented += curr.rented;
+            if (reportData?.length > 0) {
+                const calculatedData = reportData.reduce((acc, item) => {
+                    acc.quantityRoomsSum += (item?.quantityRomms || 0);
+                    acc.forRentSum += (item?.forRent || 0);
+                    acc.vacantPremisesSum += (item?.vacantPremises || 0);
+                    acc.rentalFlowSum += (item?.rentalFlow || 0);
+                    acc.potentialrentalFlowSum += (item?.potentialrentalFlow || 0);
+                    acc.averagePriceSum += (item?.quantityRomms * item?.averagePrice || 0);
+                    acc.percentforRentSum += (item?.forRent * item?.percentforRent || 0);
+                    acc.percentvacantPremisesSum += (item?.vacantPremises * item?.percentvacantPremises || 0);
                     return acc;
                 }, {
-                    total: 0,
-                    rented: 0,
+                    quantityRoomsSum: 0,
+                    forRentSum: 0,
+                    vacantPremisesSum: 0,
+                    rentalFlowSum: 0,
+                    potentialrentalFlowSum: 0,
+                    averagePriceSum: 0,
+                    percentforRentSum: 0,
+                    percentvacantPremisesSum: 0
                 });
 
-                aggregatedData.available = aggregatedData.total - aggregatedData.rented;
-                aggregatedData.rented_percentage = Math.round(aggregatedData.rented / aggregatedData.total * 100);
-                aggregatedData.available_percentage = 100 - aggregatedData.rented_percentage;
+                calculatedData.averagePriceAvg = Math.round(calculatedData.averagePriceSum / calculatedData.quantityRoomsSum) || 0;
+                calculatedData.percentforRentAvg = Math.round(calculatedData.percentforRentSum / calculatedData.forRentSum) || 0;
+                calculatedData.percentvacantPremisesAvg = Math.round(calculatedData.percentvacantPremisesSum / calculatedData.vacantPremisesSum) || 0;
 
-                const reportData = {
-                    aggregatedData,
-                    types: list,
+                delete calculatedData.averagePriceSum;
+                delete calculatedData.percentforRentSum;
+                delete calculatedData.percentvacantPremisesSum;
+
+                const reportInfo = {
+                    data: reportData,
+                    calculatedData,
                     generatedAt: new Date().toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                 };
 
-                res.render('nodes/report-print', reportData);
+                res.render('nodes/report-print', reportInfo);
+            } else {
+                res.status(404).send('No report data found');
             }
         } catch (error) {
-            console.error('Error fetching report data:', error);
+            console.error('Error processing report data:', error);
             res.status(500).send('Error generating report');
         }
     });

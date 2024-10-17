@@ -22,7 +22,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
     const isPromotion = modifier === 'promotions';
     const showPromotion = card.promotion && modifier !== 'rented';
     const showType = card.type !== undefined;
-    const showLocation = card.liter !== undefined;
+    const showLocation = card.key_liter !== undefined && !isExternal;
     const showArea = card.area !== undefined;
     const showStorey = !isExternal && card.floor !== undefined;
     const showPrice = card.cost !== undefined || isExternal;
@@ -31,6 +31,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
     const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
     const showPromotionPrice = card.promotion && card.promotion_price > 0;
+    const showRoomsAmount = card.amount !== undefined;
     const coverPlaceholder = card.type == 'Офис' ? '/img/pics/officePlaceholder.webp' : '/img/pics/warehousePlaceholder.webp';
 
     return (
@@ -62,24 +63,21 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                         <div className="card__type">{card.type}</div>
                     )}
 
-                    <div className="card__location">
-                        {showLocation && (
-                            <>
-                                {isExternal ? card.liter : `Место: `}
-                                {!isExternal && <span className="card__value">{card.liter} {card.room}</span>}
-                            </>
-                        )}
-                    </div>
+                    {showLocation && (
+                        <div className="card__location">
+                            Литер: <span className="card__value">{card.key_liter}</span>
+                        </div>
+                    )}
 
-                    <div className="card__columns">
-                        <div className={`card__details ${isExternal ? 'card__details--flex' : ''}`}>
+                    <div className="card__rows">
+                        <div className={`card__row card__details ${isExternal ? 'card__details--flex' : ''}`}>
                             {showArea && (
                                 <div className="card__detail">
                                     <span className="card__icon">
                                         <IconSprite
                                             selector="AreaIcon"
-                                            width="19"
-                                            height="19"
+                                            width="20"
+                                            height="20"
                                         />
                                     </span>
                                     <span className="card__value">{card.area} м²</span>
@@ -91,14 +89,29 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                     <span className="card__icon">
                                         <IconSprite
                                             selector="StoreyIcon"
-                                            width="19"
-                                            height="19"
+                                            width="20"
+                                            height="20"
                                         />
                                     </span>
                                     <span className="card__value">{card.floor} этаж</span>
                                 </div>
                             )}
 
+                            {showRoomsAmount && (
+                                <div className="card__detail">
+                                    <span className="card__icon">
+                                        <IconSprite
+                                            selector="RoomsAmountIcon"
+                                            width="20"
+                                            height="20"
+                                        />
+                                    </span>
+                                    <span className="card__value">{card.amount}{card.amount == 1 ? ' комната' : ([2, 3, 4].includes(card.amount) ? ' комнаты': ' комнат')}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="card__row">
                             {showPrice && (
                                 <div className="card__detail">
                                     <span className="card__icon">
@@ -126,11 +139,11 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                     </span>
                                 </div>
                             )}
-                        </div>
 
-                        {showDetailsButton && (
-                            <a href={`/premises/${card.id}`} className="card__button button animate--pulse">Подробнее</a>
-                        )}
+                            {showDetailsButton && (
+                                <a href={`/premises/${card.id}`} className="card__button button animate--pulse">Подробнее</a>
+                            )}
+                        </div>
                     </div>
 
                     {showRentedUntil && (

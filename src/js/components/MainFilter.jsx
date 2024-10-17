@@ -69,7 +69,7 @@ const MainFilter = ({ siteName }) => {
             const response = await axios.post('/api/search', requestData);
             setTotalCards(response.data.total);
             setTotalPages(Math.ceil(response.data.total / cardsPerPage));
-            if (response.data.total === 0) {
+            if (response.data.total === 0 || response.data.rows.length === 0) {
                 setNoResults(true);
                 return;
             }
