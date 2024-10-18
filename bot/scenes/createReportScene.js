@@ -2,7 +2,6 @@ const { Scenes, Markup } = require('telegraf');
 const wkhtmltopdf = require('wkhtmltopdf');
 const path = require('path');
 const fs = require('fs');
-// const htmlPdfNode = require('html-pdf-node');
 const nunjucks = require('nunjucks');
 
 const createReportScene = () => {

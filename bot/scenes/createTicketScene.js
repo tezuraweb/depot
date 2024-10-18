@@ -1,5 +1,6 @@
 const { Scenes, Markup } = require('telegraf');
 const db = require('../../controllers/dbController');
+const config = require('../../config/botConfig');
 
 const createTicketScene = () => {
     const createTicketScene = new Scenes.BaseScene('CREATE_TICKET_SCENE');
@@ -60,9 +61,10 @@ const createTicketScene = () => {
                 for (const fileId of ctx.session.ticket.files) {
                     await ctx.telegram.sendDocument(ctx.session.newTicketInquirer, fileId);
                 }
-            } else if (ctx.session.manager) {
-                await ctx.telegram.sendMessage(ctx.session.manager.tg_id, `Получено новое обращение`);
             }
+            // else if (ctx.session.manager) {
+            //     await ctx.telegram.sendMessage(ctx.session.manager.tg_id, `Получено новое обращение`);
+            // }
 
             ctx.session.newTicketNumber = null;
             ctx.session.newTicketInquirer = null;
@@ -72,6 +74,7 @@ const createTicketScene = () => {
                 ctx.reply("Ваш ответ записан!");
                 return ctx.scene.enter('ADMIN_MENU_SCENE');
             } else {
+                await notifyAdmins(ctx, ticket.ticket_number);
                 ctx.reply("Ваше обращение зарегистрировано!");
                 return ctx.scene.enter('MAIN_MENU_SCENE');
             }
@@ -114,6 +117,33 @@ const createTicketScene = () => {
     createTicketScene.leave(async (ctx) => {
         ctx.session.ticket = null;
     });
+
+    async function getAdminContacts() {
+        const managersToSend = config.managers;
+
+        if (ctx.session.user.organization == 'АО ДЕПО') {
+            managersToSend.push(config.managerDepo);
+        } else if (ctx.session.user.organization == 'ПКЦ Гагаринский') {
+            managersToSend.push(config.managerGagarin);
+        } else if (['ООО «База «Южная»', 'ООО «Строительная База «Южная»'].includes(ctx.session.user.organization)) {
+            managersToSend.push(config.managerSouth);
+        }
+        
+        return managersToSend;
+    }
+    
+    async function notifyAdmins(ctx, ticketNumber) {
+        const adminContacts = await getAdminContacts();
+        const notificationMessage = `Обновление по обращению: #${ticketNumber}`;
+        
+        for (const adminUsername of adminContacts) {
+            try {
+                await ctx.telegram.sendMessage(`${adminUsername}`, notificationMessage);
+            } catch (error) {
+                console.error(`Failed to notify admin ${adminUsername}: ${error.message}`);
+            }
+        }
+    }
 
     return createTicketScene;
 };
