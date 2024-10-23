@@ -3,6 +3,9 @@ const wkhtmltopdf = require('wkhtmltopdf');
 const path = require('path');
 const fs = require('fs');
 const nunjucks = require('nunjucks');
+const appConfig = require('../../config/appConfig');
+
+const baseUrl = appConfig.baseUrl;
 
 const createReportScene = () => {
     const createReportScene = new Scenes.BaseScene('CREATE_REPORT_SCENE');
@@ -59,7 +62,7 @@ const createReportScene = () => {
                 headerCenter: 'My Report'
             };
     
-            wkhtmltopdf(`http://localhost:3000/api/report/print/${base}`, options)
+            wkhtmltopdf(`${baseUrl}/api/report/print/${base}`, options)
                 .pipe(fs.createWriteStream(pdfPath))
                 .on('finish', async () => {
                     try {

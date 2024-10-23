@@ -9,12 +9,12 @@ const PartnerLinks = ({ siteName }) => {
             label: 'ДЕПО'
         },
         'yujnaya': {
-            link: 'https://depoarenda.ru',
+            link: 'https://bazayug.ru',
             img: '/img/pics/yujnaya.png',
             label: 'База Южная'
         },
         'gagarinsky': {
-            link: 'https://depoarenda.ru',
+            link: 'https://gagarinski.rent',
             img: '/img/pics/gagarinsky.png',
             label: 'ГАГАРИНСКИЙ'
         },

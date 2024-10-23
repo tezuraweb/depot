@@ -231,7 +231,7 @@ async function getPageGroupComplex(data) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images, complex_id
+        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images, complex_id, organization
         FROM rooms 
         ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -248,36 +248,32 @@ async function getPageGroupComplex(data) {
         });
 
         const renponseData = response?.data?.data;
-        // console.log('1', renponseData);
         result = [];
         complexes = {};
         renponseData.forEach((item) => {
             if (!item.complex_id || item.complex_id === 0) {
                 item.amount = 1;
+                item.roomCodes = [item.code];
                 result.push(item);
             } else {
                 if (!complexes[item.complex_id]) {
                     item.amount = 1;
+                    item.roomCodes = [item.code];
                     complexes[item.complex_id] = item;
-
                 } else {
                     complexes[item.complex_id].area += item.area;
                     complexes[item.complex_id].promotion = complexes[item.complex_id].promotion || item.promotion;
                     complexes[item.complex_id].images = [...complexes[item.complex_id].images, ...item.images];
                     complexes[item.complex_id].amount += 1;
+                    complexes[item.complex_id].roomCodes.push(item.code);
                 }
             }
         });
-
-        // console.log('2', complexes);
 
         Object.keys(complexes).forEach((key) => {
             result.push(complexes[key]);
         });
 
-        // console.log('3', result);
-
-        const resultLength = result.length;
         const resultFiltered = result.filter((item) => {
             let match = true;
 
@@ -314,7 +310,17 @@ async function getPageGroupComplex(data) {
             return match;
         });
 
-        const slicedResult = resultFiltered.slice(data.offset, data.limit);
+        const resultLength = resultFiltered.length;
+        const sortedResult = resultFiltered.sort((a, b) => {
+            if (a.status !== b.status) {
+                if (a.status === 'Свободен') return -1;
+                if (b.status === 'Свободен') return 1;
+            } else {
+                if (a.id < b.id) return -1;
+            }
+            return 1;
+        });
+        const slicedResult = sortedResult.slice(data.offset, data.limit);
 
         return { data: slicedResult, rows_before_limit_at_least: resultLength };
     } catch (error) {

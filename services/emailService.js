@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../config/jwtConfig');
 const mailConfig = require('../config/mailConfig');
+const appConfig = require('../config/appConfig');
 
 const transporter = nodemailer.createTransport({
     auth: {
@@ -14,16 +15,17 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendVerificationEmail = async (email, token, isVerify = true) => {
+    let baseUrl = appConfig.baseUrl;
     let text = '';
     if (isVerify) {
         text = `Добрый день!
         Для подтверждения данного почтового адреса и задания пароля перейдите по ссылке:
-        http://localhost:3000/auth/verify/${token} 
+        ${baseUrl}/auth/verify/${token} 
         Спасибо!`
     } else {
         text = `Добрый день!
         Для обновления пароля перейдите по ссылке:
-        http://localhost:3000/auth/reset/${token} 
+        ${baseUrl}/auth/reset/${token} 
         Спасибо!`;
     }
     const mailConfigurations = {

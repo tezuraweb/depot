@@ -4,7 +4,7 @@ import Share from '../includes/Share';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
 
-const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false, setActiveCardOuter = null }) => {
+const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onPageChange = null, modifier = '', totalCards = 0, activeTab, setActiveTab, noResults = false, setActiveCardOuter = null, siteName }) => {
     const deviceType = useViewportContext();
     const [activeCardIndex, setActiveCardIndex] = useState(null);
 
@@ -121,7 +121,7 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
                         </div>
 
                         {showShareSide && (
-                            <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneSmall' />
+                            <Share siteName={siteName} activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneSmall' />
                         )}
                     </div>
                 )}
@@ -172,7 +172,7 @@ const CardList = ({ types = [], cards = [], currentPage = 0, totalPages = 0, onP
             )}
 
             {showShareBottom && (
-                <Share activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneLarge' />
+                <Share siteName={siteName} activeCard={activeCardIndex !== null ? cards[activeCardIndex] : null} modifier='phoneLarge' />
             )}
         </div>
     );

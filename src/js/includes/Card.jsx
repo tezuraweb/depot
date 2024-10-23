@@ -18,6 +18,19 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
         }
     };
 
+    const getExtarnalLink = (org) => {
+        if (org === 'База Южная ООО') {
+            return 'https://yuzhka.ru';
+        } else if (org === 'Строительная База "Южная" ООО') {
+            return 'https://bazayug.ru';
+        } else if (org === 'ГАГАРИНСКИЙ ПКЦ ООО') {
+            return 'https://depoarenda.ru';
+        } else if (org === 'ДЕПО АО') {
+            return 'https://gagarinski.ru';
+        }
+        return '';
+    }
+
     const isExternal = modifier === 'external';
     const isPromotion = modifier === 'promotions';
     const showPromotion = card.promotion && modifier !== 'rented';
@@ -80,7 +93,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                             height="20"
                                         />
                                     </span>
-                                    <span className="card__value">{card.area} м²</span>
+                                    <span className="card__value">{Math.round(card.area)} м²</span>
                                 </div>
                             )}
 
@@ -127,11 +140,11 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                         ) : showPromotionPrice ? (
                                             isPromotion ? (
                                                 <>
-                                                    <span className="card__value--green">{`${card.promotion_price}₽ / мес.`}</span>
+                                                    <span className="card__value--green">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
                                                     <span>{` (${card.cost}₽ / мес.)`}</span>
                                                 </>
                                             ) : (
-                                                <span className="card__value--red">{`${card.promotion_price}₽ / мес.`}</span>
+                                                <span className="card__value--red">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
                                             )
                                         ) : (
                                             `${card.cost}₽ / мес.`
@@ -155,7 +168,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                 </div>
 
                 {showExternalLink && (
-                    <a href={`saitprtnera`} className="card__link button">Перейти на сайт партнера</a>
+                    <a href={`${getExtarnalLink(card.oranization)}/premises/${card.id}`} className="card__link button" target="_blank">Перейти на сайт партнера</a>
                 )}
             </div>
         </div>
