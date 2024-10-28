@@ -18,9 +18,10 @@ const Premises = ({ siteName }) => {
     const [message, setMessage] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [recommendations, setRecommendations] = useState([]);
+    const [showInfo, setShowInfo] = useState(true);
 
     const { id } = useParams();
-    
+
     useEffect(() => {
         if (id) {
             setPremisesId(id);
@@ -48,6 +49,14 @@ const Premises = ({ siteName }) => {
                 });
         }
     }, [premisesId]);
+
+    useEffect(() => {
+        if (premisesData?.type === 'Земельный участок') {
+            setShowInfo(false);
+        } else {
+            setShowInfo(true);
+        }
+    }, [premisesData]);
 
     const handlePrint = () => {
         window.print();
@@ -143,8 +152,10 @@ const Premises = ({ siteName }) => {
                     <div className="premises__wrapper">
                         <div className="premises__header">
                             <div className="premises__header--block">
-                                <div className="premises__heading premises__heading--uppercase">Литер</div>
-                                <div className="premises__heading premises__heading--large">{premisesData.key_liter}</div>
+                                {(premisesData?.key_liter && showInfo) && (<>
+                                    <div className="premises__heading premises__heading--uppercase">Литер</div>
+                                    <div className="premises__heading premises__heading--large">{premisesData.key_liter}</div>
+                                </>)}
                             </div>
                             <div className="premises__header--block">
                                 <div className="premises__heading premises__heading--uppercase">{premisesData.type}</div>
@@ -165,24 +176,30 @@ const Premises = ({ siteName }) => {
                                     </div>
                                     <div className="premises__cell">Площадь:</div>
                                     <div className="premises__cell premises__cell--bold">{premisesData.area} м²</div>
-                                    <div className="premises__cell">
-                                        <IconSprite
-                                            selector="StoreyIcon"
-                                            width="19"
-                                            height="19"
-                                        />
-                                    </div>
-                                    <div className="premises__cell">Этаж:</div>
-                                    <div className="premises__cell premises__cell--bold">{premisesData.floor}</div>
-                                    <div className="premises__cell">
-                                        <IconSprite
-                                            selector="CeilingHeight"
-                                            width="19"
-                                            height="19"
-                                        />
-                                    </div>
-                                    <div className="premises__cell">Высота потолка:</div>
-                                    <div className="premises__cell premises__cell--bold">{premisesData.ceiling} м</div>
+
+                                    {showInfo && (<>
+                                        <div className="premises__cell">
+                                            <IconSprite
+                                                selector="StoreyIcon"
+                                                width="19"
+                                                height="19"
+                                            />
+                                        </div>
+                                        <div className="premises__cell">Этаж:</div>
+                                        <div className="premises__cell premises__cell--bold">{premisesData.floor}</div>
+                                    </>)}
+
+                                    {showInfo && (<>
+                                        <div className="premises__cell">
+                                            <IconSprite
+                                                selector="CeilingHeight"
+                                                width="19"
+                                                height="19"
+                                            />
+                                        </div>
+                                        <div className="premises__cell">Высота потолка:</div>
+                                        <div className="premises__cell premises__cell--bold">{premisesData.ceiling} м</div>
+                                    </>)}
                                 </div>
 
                                 <div className="premises__label">Стоимость аренды:</div>
@@ -208,25 +225,23 @@ const Premises = ({ siteName }) => {
                             </div>
 
                             <div className="premises__column">
-                                {(premisesData.images && premisesData.images.length > 0) && (
-                                    <>
-                                        <h2 className="premises__title">Фото помещения</h2>
-                                        <div className="premises__carousel card__carousel">
-                                            <div className="card__pic">
-                                                {/* {loading && <div className="card__pic--placeholder">Загрузка...</div>} */}
-                                                <img
-                                                    src={premisesData.images[currentImageIndex]}
-                                                    alt="Property"
-                                                    className="card__pic--img"
-                                                // onLoad={() => setLoading(false)}
-                                                // style={{ display: loading ? 'none' : 'block' }}
-                                                />
-                                            </div>
-                                            {premisesData.images.length > 1 && <button className="card__nav card__nav--prev" onClick={handlePrevImage}>{'<'}</button>}
-                                            {premisesData.images.length > 1 && <button className="card__nav card__nav--next" onClick={handleNextImage}>{'>'}</button>}
+                                {(premisesData.images && premisesData.images.length > 0) && (<>
+                                    <h2 className="premises__title">Фото помещения</h2>
+                                    <div className="premises__carousel card__carousel">
+                                        <div className="card__pic">
+                                            {/* {loading && <div className="card__pic--placeholder">Загрузка...</div>} */}
+                                            <img
+                                                src={premisesData.images[currentImageIndex]}
+                                                alt="Property"
+                                                className="card__pic--img"
+                                            // onLoad={() => setLoading(false)}
+                                            // style={{ display: loading ? 'none' : 'block' }}
+                                            />
                                         </div>
-                                    </>
-                                )}
+                                        {premisesData.images.length > 1 && <button className="card__nav card__nav--prev" onClick={handlePrevImage}>{'<'}</button>}
+                                        {premisesData.images.length > 1 && <button className="card__nav card__nav--next" onClick={handleNextImage}>{'>'}</button>}
+                                    </div>
+                                </>)}
                             </div>
                         </div>
 
@@ -238,21 +253,19 @@ const Premises = ({ siteName }) => {
             <section className="section" id="premises-maps">
                 <div className="premises container">
                     <div className="premises__wrapper">
-                        {showmaps && (
-                            <>
-                                <div className="premises__location">
-                                    <h2 className="premises__title">Расположение</h2>
-                                    <a className="premises__title" href="/">{companyAddress}</a>
-                                </div>
+                        {showmaps && (<>
+                            <div className="premises__location">
+                                <h2 className="premises__title">Расположение</h2>
+                                <a className="premises__title" href="/">{companyAddress}</a>
+                            </div>
 
-                                <div className="premises__scheme">
-                                    <Scheme
-                                        activeElement={premisesData}
-                                        siteName={siteName}
-                                    />
-                                </div>
-                            </>
-                        )}
+                            <div className="premises__scheme">
+                                <Scheme
+                                    activeElement={premisesData}
+                                    siteName={siteName}
+                                />
+                            </div>
+                        </>)}
 
                         <div className="premises__info">
                             <h2 className="premises__title">Общая информация</h2>

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 
 const Floor = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="515" height="606" viewBox="0 0 515 606" fill="none">
-        <rect width="515" height="606" fill="#F5F5F5" />
+        <rect width="515" height="606" fill="white" />
         <g id="t-1" clip-path="url(#clip0_0_1)">
             <g id="t">
                 <path d="M446.5 566H318.5V578H446.5V566Z" fill="#FFF8D3" />

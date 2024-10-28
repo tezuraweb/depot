@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchForm = ({ onSubmit, types = [], buildings = [], formData, setFormData }) => {
+const SearchForm = ({ onSubmit, types = [], buildings = [], amounts = [], floors = [], formData, setFormData }) => {
     const [priceDesc, setPriceDesc] = useState(false);
 
     const priceRanges = {
@@ -157,9 +157,9 @@ const SearchForm = ({ onSubmit, types = [], buildings = [], formData, setFormDat
                     <label className="form__label form__label--inline">Этаж</label>
                     <select name="storey" value={formData.storey} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        {floors.map(floor => (
+                            <option value={floor}>{floor}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -167,9 +167,9 @@ const SearchForm = ({ onSubmit, types = [], buildings = [], formData, setFormDat
                     <label className="form__label form__label--inline">Количество комнат</label>
                     <select name="rooms" value={formData.rooms} onChange={handleChange} className="form__input form__input--select">
                         <option value="">Не выбрано</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        {amounts.map(amount => (
+                            <option value={amount}>{amount}</option>
+                        ))}
                     </select>
                 </div>
 

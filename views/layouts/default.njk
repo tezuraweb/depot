@@ -3,6 +3,7 @@
 {% set companyInfo = {} %}
 
 {% if activeBase == 'depo' %}
+
     {% set navs = [
         {
             link: '/search',
@@ -76,7 +77,9 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Буммашевская, 5'
     } %}
+
 {% elif activeBase == 'gagarinsky' %}
+
     {% set navs = [
         {
             link: '/search',
@@ -134,7 +137,9 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Гагарина, 17'
     } %}
+
 {% elif activeBase == 'yujnaya' %}
+
     {% set navs = [
         {
             link: '/search',
@@ -192,6 +197,7 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Маяковского, 43'
     } %}
+    
 {% endif %}
 
 {% extends "layouts/body.njk" %}

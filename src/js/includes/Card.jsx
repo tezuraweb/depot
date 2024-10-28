@@ -26,25 +26,26 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
         } else if (org === 'ГАГАРИНСКИЙ ПКЦ ООО') {
             return 'https://depoarenda.ru';
         } else if (org === 'ДЕПО АО') {
-            return 'https://gagarinski.ru';
+            return 'https://gagarinski.rent';
         }
         return '';
     }
 
     const isExternal = modifier === 'external';
     const isPromotion = modifier === 'promotions';
+    const hideInfo = card.type === 'Земельный участок';
     const showPromotion = card.promotion && modifier !== 'rented';
     const showType = card.type !== undefined;
-    const showLocation = card.key_liter !== undefined && !isExternal;
+    const showLocation = card.key_liter !== undefined && !isExternal && !hideInfo;
     const showArea = card.area !== undefined;
-    const showStorey = !isExternal && card.floor !== undefined;
+    const showStorey = !isExternal && card.floor !== undefined && !hideInfo;
     const showPrice = card.cost !== undefined || isExternal;
     const showDetailsButton = !isExternal && (modifier !== 'rented' && modifier !== 'promotions');
-    const showRentedUntil = modifier === 'rented' && card.date_d;
+    const showRentedUntil = modifier === 'rented' && card.date;
     const showPics = card.images !== undefined && card.images?.length > 0;
     const showExternalLink = isExternal;
     const showPromotionPrice = card.promotion && card.promotion_price > 0;
-    const showRoomsAmount = card.amount !== undefined;
+    const showRoomsAmount = card?.amount > 0 && !hideInfo;
     const coverPlaceholder = card.type == 'Офис' ? '/img/pics/officePlaceholder.webp' : '/img/pics/warehousePlaceholder.webp';
 
     return (
@@ -162,13 +163,13 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                     {showRentedUntil && (
                         <div className="card__rented">
                             <div className="card__subtitle">Арендовано до:</div>
-                            <div className="card__value">{card.date_d}</div>
+                            <div className="card__value">{card.date}</div>
                         </div>
                     )}
                 </div>
 
                 {showExternalLink && (
-                    <a href={`${getExtarnalLink(card.oranization)}/premises/${card.id}`} className="card__link button" target="_blank">Перейти на сайт партнера</a>
+                    <a href={`${getExtarnalLink(card.organization)}/premises/${card.id}`} className="card__link button" target="_blank">Перейти на сайт партнера</a>
                 )}
             </div>
         </div>

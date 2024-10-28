@@ -10,6 +10,8 @@ const SearchPage = ({ siteName }) => {
     const [cards, setCards] = useState([]);
     const [types, setTypes] = useState([]);
     const [buildings, setBuildings] = useState([]);
+    const [amounts, setAmounts] = useState([]);
+    const [floors, setFloors] = useState([]);
     const [totalCards, setTotalCards] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -46,6 +48,26 @@ const SearchPage = ({ siteName }) => {
             setBuildings(data);
         } catch (error) {
             console.error('Error fetching buildings:', error);
+        }
+
+        try {
+            const response = await axios.get('/api/search/amount');
+            setAmounts(response.data.map(item => item.amount).sort((a, b) => {
+                if (a > b) return 1;
+                return -1;
+            }));
+        } catch (error) {
+            console.error('Error fetching rooms amount:', error);
+        }
+
+        try {
+            const response = await axios.get('/api/search/floors');
+            setFloors(response.data.map(item => item.floor).sort((a, b) => {
+                if (a > b) return 1;
+                return -1;
+            }));
+        } catch (error) {
+            console.error('Error fetching floors:', error);
         }
     }, []);
 
@@ -113,6 +135,8 @@ const SearchPage = ({ siteName }) => {
                                 setFormData={setFormData}
                                 onSubmit={handleFormSubmit}
                                 types={types}
+                                amounts={amounts}
+                                floors={floors}
                                 buildings={buildings}
                             />
                         </div>

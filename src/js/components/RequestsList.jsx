@@ -45,7 +45,7 @@ const RequestsList = () => {
         axios.get('/api/tenant/tg')
             .then(response => {
                 setTelegramUsername(response.data.username);
-                console.log(response.data.username, response.data.tg_id)
+
                 if (response.data.username && response.data.tg_id !== 0) {
                     setHasTg(true);
                 }
@@ -80,7 +80,6 @@ const RequestsList = () => {
 
         axios.post('/api/tenant/tg', { tg_user: username })
             .then(response => {
-                setTelegramUsername(username);
                 fetchTgData();
                 setSuccess('Имя пользователя успешно обновлено!');
                 setTimeout(() => {
@@ -107,7 +106,7 @@ const RequestsList = () => {
                 Создать обращение можно с помощью Telegram-бота, для этого задайте ваше имя пользователя Telegram и перейдите в бота. Для запуска бота введите команду /start.
             </div>
 
-            <form className="form form--small" onSubmit={handleTelegramSubmit}>
+            <form className="requests__form form form--small" onSubmit={handleTelegramSubmit}>
                 <input
                     type="text"
                     name="telegramUsername"
@@ -127,11 +126,12 @@ const RequestsList = () => {
                 </div>
             )}
 
-            <div className="requests__line">
-                <div className="requests__title">История обращений</div>
-                <div className="requests__title">Статус</div>
-            </div>
             <div className="requests__list">
+                <div className="requests__line">
+                    <div className="requests__title">История обращений</div>
+                    <div className="requests__title">Статус</div>
+                </div>
+
                 {Object.keys(requests).map(ticketNumber => {
                     const request = requests[ticketNumber][0];
                     return (

@@ -25,7 +25,7 @@ if (appConfig.base === 'depo') {
 }
 
 const typesToExclude = ['Помещение вспомогательное'].map(item => sqlstring.escape(item)).join(', ')
-// const statusVacant = sqlstring.escape('Свободен');
+const statusVacant = sqlstring.escape('Свободен');
 
 async function getAll() {
     const query = `SELECT * FROM rooms WHERE organization IN (${sanitizedOrg}) AND type NOT IN (${typesToExclude}) FORMAT JSON`;
@@ -52,8 +52,9 @@ async function getTypes() {
         FROM rooms
         WHERE organization IN (${sanitizedOrg})
         AND type NOT IN (${typesToExclude})
+        AND status = ${statusVacant}
         FORMAT JSON`;
-    // AND status = ${statusVacant}
+
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -71,14 +72,68 @@ async function getTypes() {
     }
 }
 
+async function getFloors() {
+    const query = `
+        SELECT DISTINCT floor
+        FROM rooms
+        WHERE organization IN (${sanitizedOrg})
+        AND type NOT IN (${typesToExclude})
+        AND status = ${statusVacant}
+        FORMAT JSON`;
+
+    const queryParams = querystring.stringify({
+        'database': dbConfig.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function getRoomsAmounts() {
+    const query = `
+        SELECT DISTINCT length(floor_ids) AS amount
+        FROM rooms
+        WHERE organization IN (${sanitizedOrg})
+        AND type NOT IN (${typesToExclude})
+        AND status = ${statusVacant}
+        FORMAT JSON`;
+
+    const queryParams = querystring.stringify({
+        'database': dbConfig.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 async function getIdLiter() {
     const query = `
         SELECT DISTINCT key_liter, key_liter_id
         FROM rooms
         WHERE organization IN (${sanitizedOrg})
         AND type NOT IN (${typesToExclude})
+        AND status = ${statusVacant}
         FORMAT JSON`;
-    // AND status = ${statusVacant}
+
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -103,14 +158,12 @@ async function getRoomsByTenant(id) {
             rooms.id, 
             rooms.room, 
             rooms.type, 
-            rooms.liter, 
-            rooms.id_liter, 
             rooms.cost, 
             rooms.area, 
             rooms.floor, 
             rooms.ceiling, 
             rooms.promotion,
-            rooms.date_d,
+            rooms.date_k AS date,
             rooms.images
         FROM rooms 
         JOIN tenants 
@@ -134,15 +187,15 @@ async function getRoomsByTenant(id) {
     }
 }
 
-// sane
 async function getPage(data) {
     const conditions = [];
 
+    if (data.code) conditions.push(`id LIKE '%${sqlstring.escape(data.code).replace(/^'|'$/g, "")}%'`);
     if (data.id_liter) conditions.push(`key_liter_id = ${sqlstring.escape(data.id_liter)}`);
     if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
     if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
     if (data.promotion) conditions.push(`promotion = ${sqlstring.escape(data.promotion)}`);
-    if (data.code) conditions.push(`kode_text LIKE '%${sqlstring.escape(data.code).replace(/^'|'$/g, "")}%'`);
+    if (data.roomsAmount) conditions.push(`length(floor_ids) = ${sqlstring.escape(data.roomsAmount)}`);
 
     if (data.type) {
         conditions.push(`type = ${sqlstring.escape(data.type)}`);
@@ -182,11 +235,11 @@ async function getPage(data) {
         }
     }
 
-    // conditions.push(`status = ${statusVacant}`);
+    conditions.push(`status = ${statusVacant}`);
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images
+        SELECT id, room, type, liter, id_liter, key_liter, cost, area, floor, ceiling, promotion, promotion_price, images, floor_ids	AS room_codes, length(floor_ids) AS amount, organization
         FROM rooms 
         ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -204,125 +257,6 @@ async function getPage(data) {
             url: `/?${queryParams}`,
         });
         return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-// insane
-async function getPageGroupComplex(data) {
-    const conditions = [];
-
-    if (data.id_liter) conditions.push(`key_liter_id = ${sqlstring.escape(data.id_liter)}`);
-    if (data.floor) conditions.push(`floor = ${sqlstring.escape(data.floor)}`);
-    if (data.ceiling) conditions.push(`ceiling = ${sqlstring.escape(data.ceiling)}`);
-
-    if (data.type) {
-        conditions.push(`type = ${sqlstring.escape(data.type)}`);
-    } else {
-        conditions.push(`type NOT IN ${typesToExclude}`);
-    }
-
-    if (data.organization !== undefined && Array.isArray(data.organization) && data.organization.length > 0) {
-        conditions.push(`organization IN (${data.organization.map(item => sqlstring.escape(item)).join(', ')})`);
-    } else {
-        conditions.push(`organization IN (${sanitizedOrg})`);
-    }
-
-    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-    const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, kode_text AS code, cost, area, floor, ceiling, promotion, promotion_price, images, complex_id, organization
-        FROM rooms 
-        ${whereClause}
-        ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
-        FORMAT JSON`;
-    const queryParams = querystring.stringify({
-        'database': dbConfig.database,
-        'query': query,
-    });
-
-    try {
-        const response = await axios({
-            ...dbOptions,
-            url: `/?${queryParams}`,
-        });
-
-        const renponseData = response?.data?.data;
-        result = [];
-        complexes = {};
-        renponseData.forEach((item) => {
-            if (!item.complex_id || item.complex_id === 0) {
-                item.amount = 1;
-                item.roomCodes = [item.code];
-                result.push(item);
-            } else {
-                if (!complexes[item.complex_id]) {
-                    item.amount = 1;
-                    item.roomCodes = [item.code];
-                    complexes[item.complex_id] = item;
-                } else {
-                    complexes[item.complex_id].area += item.area;
-                    complexes[item.complex_id].promotion = complexes[item.complex_id].promotion || item.promotion;
-                    complexes[item.complex_id].images = [...complexes[item.complex_id].images, ...item.images];
-                    complexes[item.complex_id].amount += 1;
-                    complexes[item.complex_id].roomCodes.push(item.code);
-                }
-            }
-        });
-
-        Object.keys(complexes).forEach((key) => {
-            result.push(complexes[key]);
-        });
-
-        const resultFiltered = result.filter((item) => {
-            let match = true;
-
-            if (data.promotion) {
-                match = match && item.promotion;
-            }
-
-            if (data.areaFrom !== undefined && data.areaTo !== undefined) {
-                match = match && (item.area >= data.areaFrom) && (item.area <= data.areaTo);
-            } else if (data.areaFrom !== undefined) {
-                match = match && (item.area >= data.areaFrom);
-            } else if (data.areaTo !== undefined) {
-                match = match && (item.area <= data.areaTo);
-            }
-
-            if (data.priceType === 'total') {
-                if (data.priceFrom !== undefined && data.priceTo !== undefined) {
-                    match = match && (item.area * item.cost >= data.priceFrom) && (item.area * item.cost <= data.priceTo);
-                } else if (data.priceFrom !== undefined) {
-                    match = match && (item.area * item.cost >= data.priceFrom);
-                } else if (data.priceTo !== undefined) {
-                    match = match && (item.area * item.cost <= data.priceTo);
-                }
-            } else {
-                if (data.priceFrom !== undefined && data.priceTo !== undefined) {
-                    match = match && (item.cost >= data.priceFrom) && (item.cost <= data.priceTo);
-                } else if (data.priceFrom !== undefined) {
-                    match = match && (item.cost >= data.priceFrom);
-                } else if (data.priceTo !== undefined) {
-                    match = match && (item.cost <= data.priceTo);
-                }
-            }
-
-            return match;
-        });
-
-        const resultLength = resultFiltered.length;
-        const sortedResult = resultFiltered.sort((a, b) => {
-            if (a.status !== b.status) {
-                if (a.status === 'Свободен') return -1;
-                if (b.status === 'Свободен') return 1;
-            } else {
-                if (a.id < b.id) return -1;
-            }
-            return 1;
-        });
-        const slicedResult = sortedResult.slice(data.offset, data.limit);
-
-        return { data: slicedResult, rows_before_limit_at_least: resultLength };
     } catch (error) {
         throw error;
     }
@@ -364,7 +298,7 @@ async function getReport(base) {
 async function getRoomById(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, complex_id, kode_text, images
+        SELECT id, room, type, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, promotion_price, floor_ids AS room_codes, images
         FROM rooms
         WHERE id = ${sanitizedId}
         LIMIT 1
@@ -392,9 +326,9 @@ async function getRoomsByParam(params) {
         .join(' AND ');
 
     const query = `
-        SELECT id, kode_text AS code, complex_id AS complex
+        SELECT id, floor_ids AS room_codes
         FROM rooms
-        WHERE ${conditions} AND kode_text != '' AND organization IN (${sanitizedOrg})
+        WHERE ${conditions} AND organization IN (${sanitizedOrg})
         FORMAT JSON`;
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
@@ -427,10 +361,11 @@ async function getRecommended(id) {
         WHERE rooms.id != ${sanitizedId}
         AND organization IN (${sanitizedOrg})
         AND type NOT IN (${typesToExclude})
+        AND status = ${statusVacant}
         ORDER BY ABS(rooms.cost - subquery.cost), ABS(rooms.area - subquery.area)
         LIMIT 3
         FORMAT JSON`;
-    // AND status = ${statusVacant}
+
     const queryParams = querystring.stringify({
         'database': dbConfig.database,
         'query': query,
@@ -507,6 +442,8 @@ module.exports = {
     getReport,
     getPage,
     getTypes,
+    getFloors,
+    getRoomsAmounts,
     getIdLiter,
     getRoomById,
     getRecommended,
@@ -515,5 +452,4 @@ module.exports = {
     alterRoomById,
     addPhotoById,
     deletePhotoById,
-    getPageGroupComplex,
 };

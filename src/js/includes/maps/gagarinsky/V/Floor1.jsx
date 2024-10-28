@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 
 const Floor = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="4025" height="2140" viewBox="0 0 4025 2140" fill="none">
-        <rect width="4025" height="2140" fill="#F5F5F5" />
+        <rect width="4025" height="2140" fill="white" />
         <g id="v-1" clip-path="url(#clip0_0_1)">
             <path className="map__room" data-id="000000246" d="M3445 851H3423.2L3423.02 803H3445V819.052V851Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000000244" d="M3463 808V803H3503V808H3463Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
@@ -35,7 +35,7 @@ const Floor = forwardRef((props, ref) => (
             <path className="map__room" data-id="000000227" d="M2070.5 703H2234V2124H1696.5V23H2065.5V698V703H2070.5Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000000263" d="M2078 23H2425V691H2078V23Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000000228" d="M2768.5 1026V2122.5L2589.5 2122.5L2494 2122.5H2248.49L2247.01 702H3404V852.235L3149 852.235H3144V857.235V1021H2773.5H2768.5V1026Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
-            <path className="map__room" data-id="000000237" d="M3361 549V518H3398V549H3361Z" fill="#F5F5F5" stroke="#D40000" stroke-width="10" />
+            <path className="map__room" data-id="000000237" d="M3361 549V518H3398V549H3361Z" fill="white" stroke="#D40000" stroke-width="10" />
             <rect className="map__room" data-id="000000242" x="3361" y="604" width="43" height="78" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000001430" d="M3470 471H3503V499H3470V471Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <rect className="map__room" data-id="000001410" x="3169" y="23" width="179" height="668" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />

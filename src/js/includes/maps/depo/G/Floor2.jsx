@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 
 const Floor = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="229" height="78" viewBox="0 0 229 78" fill="none">
-        <rect width="229" height="78" fill="#F5F5F5" />
+        <rect width="229" height="78" fill="white" />
         <g id="g-antresole" clip-path="url(#clip0_0_1)">
             <g id="g">
                 <rect id="Rectangle 3" x="0.5" y="0.5" width="228" height="77" stroke="black" />

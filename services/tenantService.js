@@ -107,8 +107,8 @@ async function alterTenantById(id, data) {
     });
 
     try {
-        const response = await axios.post(`/?${queryParams}`, null, dbOptions);
-        return response.data;
+        await axios.post(`/?${queryParams}`, null, dbOptions);
+        return { success: true, ...data };
     } catch (error) {
         throw error;
     }

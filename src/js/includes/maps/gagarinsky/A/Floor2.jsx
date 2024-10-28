@@ -4,7 +4,7 @@ import React, { forwardRef } from 'react';
 
 const Floor = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="2347" height="401" viewBox="0 0 2347 401" fill="none">
-        <rect width="2347" height="401" fill="#F5F5F5" />
+        <rect width="2347" height="401" fill="white" />
         <g id="a-2" clip-path="url(#clip0_0_1)">
             <path className="map__room" data-id="000000049" d="M37.9141 157.772V79.0449H167.793V157.772H37.9141Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000000047" d="M134.478 249.815H144.683V381.415H37.9141V230.976H129.478V244.815V249.815H134.478Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 
 const Floor = forwardRef((props, ref) => (
     <svg ref={ref} {...props} className="icon" xmlns="http://www.w3.org/2000/svg" width="2683" height="2725" viewBox="0 0 2683 2725" fill="none">
-        <rect width="2683" height="2725" fill="#F5F5F5" />
+        <rect width="2683" height="2725" fill="white" />
         <g id="z-1">
             <path className="map__room" data-id="000000130" d="M38.9951 484.036V41.6123H980.859V484.036H38.9951Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />
             <path className="map__room" data-id="000000129" d="M44.2252 894.616V525.417H444.782V894.616H44.2252Z" fill="#E1E1E1" stroke="#D40000" stroke-width="10" />

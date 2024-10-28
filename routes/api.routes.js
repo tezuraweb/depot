@@ -66,7 +66,7 @@ if (appConfig.base === 'depo') {
 
 router
     .route('/search')
-    .post(dbController.getRoomsSearchWithComplex);
+    .post(dbController.getRoomsSearch);
 
 router
     .route('/search/types')
@@ -75,6 +75,14 @@ router
 router
     .route('/search/buildings')
     .get(dbController.getRoomsLiters);
+
+router
+    .route('/search/amount')
+    .get(dbController.getRoomsAmounts);
+
+router
+    .route('/search/floors')
+    .get(dbController.getRoomsFloors);
 
 router
     .route('/premises/:id')

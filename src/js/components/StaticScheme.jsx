@@ -186,8 +186,7 @@ const Scheme = ({ activeElement = null, siteName }) => {
                             floors={floors}
                             selectedRoomData={{
                                 id: activeElement.id,
-                                code: activeElement.kode_text,
-                                complex: activeElement.complex_id,
+                                roomCodes: activeElement.room_codes,
                             }}
                         />
                     </Suspense>

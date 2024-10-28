@@ -109,7 +109,9 @@
     }
 
     &__rows {
+        display: flex;
         flex-direction: column;
+        margin-top: auto;
     }
 
     &__row {
@@ -131,28 +133,6 @@
         margin-bottom: 15px;
         display: flex;
         align-items: center;
-
-        // &>.card__detail {
-        //     margin-bottom: 10px;
-
-        //     &:last-child {
-        //         margin-bottom: 0;
-        //     }
-        // }
-
-        // &--flex {
-        //     display: flex;
-        //     align-items: center;
-
-        //     &>.card__detail {
-        //         margin-bottom: 0;
-        //         margin-right: 40px;
-
-        //         &:last-child {
-        //             margin-right: 0;
-        //         }
-        //     }
-        // }
     }
 
     &__icon {

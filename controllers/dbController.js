@@ -70,7 +70,7 @@ async function setTenantTgUsername(req, res, next) {
         const id = req.user.id;
         const { tg_user } = pick(req.body, ['tg_user']);
         const user = await tenantService.alterTenantById(id, { tg_user });
-        return user && user.data?.length > 0 ? user.data[0] : null;
+        res.json(user);
     } catch (error) {
         next(error);
     }
@@ -126,36 +126,6 @@ async function getRoomsSearch(req, res, next) {
     }
 }
 
-async function getRoomsSearchWithComplex(req, res, next) {
-    try {
-        const data = pick(req.body, ['startIdx', 'endIdx', 'type', 'building', 'areaFrom', 'areaTo', 'priceFrom', 'priceTo', 'priceType', 'priceDesc', 'storey', 'rooms', 'ceilingHeight', 'promotions', 'organization', 'code']);
-        const dbData = {};
-
-        if (data.startIdx !== undefined && data.startIdx !== null) dbData.offset = data.startIdx || 0;
-        if (data.endIdx !== undefined && data.endIdx !== null) dbData.limit = data.endIdx || 6;
-
-        if (data.type && data.type !== '') dbData.type = data.type;
-        if (data.building && data.building !== '') dbData.id_liter = data.building;
-        if (data.areaFrom && data.areaFrom !== '') dbData.areaFrom = parseFloat(data.areaFrom);
-        if (data.areaTo && data.areaTo !== '') dbData.areaTo = parseFloat(data.areaTo);
-        if (data.priceFrom && data.priceFrom !== '') dbData.priceFrom = parseFloat(data.priceFrom);
-        if (data.priceTo && data.priceTo !== '') dbData.priceTo = parseFloat(data.priceTo);
-        if (data.priceType && data.priceType !== '') dbData.priceType = data.priceType;
-        if (data.priceDesc !== undefined) dbData.priceDesc = data.priceDesc;
-        if (data.storey && data.storey !== '') dbData.floor = parseFloat(data.storey);
-        if (data.rooms && data.rooms !== '') dbData.roomsAmount = data.rooms;
-        if (data.ceilingHeight && data.ceilingHeight !== '') dbData.ceiling = parseFloat(data.ceilingHeight);
-        if (data.promotions !== undefined) dbData.promotion = data.promotions;
-        if (data.organization && data.organization !== '') dbData.organization = data.organization;
-        if (data.code && data.code !== '') dbData.code = data.code;
-
-        const rooms = await roomsService.getPageGroupComplex(dbData);
-        res.json({ rows: rooms.data, total: rooms.rows_before_limit_at_least });
-    } catch (error) {
-        next(error);
-    }
-}
-
 async function getRoomsTypes(req, res, next) {
     try {
         const rooms = await roomsService.getTypes();
@@ -168,6 +138,24 @@ async function getRoomsTypes(req, res, next) {
 async function getRoomsLiters(req, res, next) {
     try {
         const rooms = await roomsService.getIdLiter();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsAmounts(req, res, next) {
+    try {
+        const rooms = await roomsService.getRoomsAmounts();
+        res.json(rooms.data);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getRoomsFloors(req, res, next) {
+    try {
+        const rooms = await roomsService.getFloors();
         res.json(rooms.data);
     } catch (error) {
         next(error);
@@ -460,9 +448,10 @@ module.exports = {
     setTenantTgId,
     getAllRooms,
     getRoomsSearch,
-    getRoomsSearchWithComplex,
     getRoomsTypes,
     getRoomsLiters,
+    getRoomsAmounts,
+    getRoomsFloors,
     getRoomsReport,
     getRoomsReportMiddleware,
     getRoomsById,

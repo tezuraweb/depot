@@ -7,7 +7,6 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
     const [rooms, setRooms] = useState([]);
     const svgRef = useRef(null);
     const [elements, setElements] = useState([]);
-    const [complexIds, setComplexIds] = useState([]);
 
     useEffect(() => {
         const fetchRooms = async () => {
@@ -26,29 +25,6 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
         }
     }, [buildingId]);
 
-    useEffect(() => {
-        const fetchComplex = async () => {
-            if (selectedRoomData) {
-                try {
-                    if (selectedRoomData?.complex !== 0) {
-                        const response = await axios.get(`/api/premises/complex/${selectedRoomData?.complex}`);
-                        setRooms(response.data);
-                        setComplexIds(response.data.map(item => item.code));
-                    } else {
-                        setRooms([selectedRoomData]);
-                        setComplexIds([selectedRoomData?.code])
-                    }
-                } catch (error) {
-                    console.error('Error fetching rooms:', error);
-                }
-            }
-        };
-
-        if (!controls) {
-            fetchComplex();
-        }
-    }, [selectedRoomData]);
-
     const setSvgRef = useCallback((node) => {
         if (node !== null) {
             svgRef.current = node;
@@ -60,7 +36,7 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
     useEffect(() => {
         const handleElementClick = (event) => {
             const roomCode = event.target.dataset.id;
-            const room = rooms.find((r) => r.code === roomCode);
+            const room = rooms.find((r) => r?.room_codes?.includes(roomCode));
             if (room) {
                 window.location.href = `/premises/${room.id}`;
             }
@@ -68,10 +44,10 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
     
         const handleElementHover = (event) => {
             const roomCode = event.target.dataset.id;
-            const hoveredRoom = rooms.find((r) => r.code === roomCode);
+            const hoveredRoom = rooms.find((r) => r?.room_codes?.includes(roomCode));
             if (hoveredRoom) {
                 elements.forEach((el) => {
-                    if (el.dataset.id === roomCode || (el.dataset.id === rooms.find(r => r.code === el.dataset.id && r.complex !== 0 && r.complex === hoveredRoom.complex)?.code)) {
+                    if (el.dataset.id === roomCode || hoveredRoom?.room_codes?.includes(el.dataset.id)) {
                         el.classList.add('hovered');
                     }
                 });
@@ -87,13 +63,16 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
                 element.addEventListener('click', handleElementClick);
                 element.addEventListener('mouseover', handleElementHover);
                 element.addEventListener('mouseout', handleElementMouseOut);
-                element.classList.add('clickable');
-            } else if (complexIds.includes(element.dataset.id)) {
+                if (rooms?.length > 0) {
+                    const vacantRoom = rooms.find((r) => r?.room_codes?.includes(element.dataset.id));
+                    if (vacantRoom) {
+                        element.classList.add('clickable');
+                        element.classList.add('active');
+                    }
+                }
+            } else if (selectedRoomData.roomCodes.includes(element.dataset.id)) {
                 element.addEventListener('click', handleElementClick);
                 element.classList.add('active');
-                if (element.dataset.id === selectedRoomData.code) {
-                    element.classList.add('selected');
-                }
             }
         });
     
@@ -103,12 +82,12 @@ const FloorMap = ({ floors = [], controls = false, buildingId = null, selectedRo
                     element.removeEventListener('click', handleElementClick);
                     element.removeEventListener('mouseover', handleElementHover);
                     element.removeEventListener('mouseout', handleElementMouseOut);
-                } else if (complexIds.includes(element.dataset.id)) {
+                } else if (selectedRoomData.roomCodes.includes(element.dataset.id)) {
                     element.removeEventListener('click', handleElementClick);
                 }
             });
         };
-    }, [elements, rooms, controls, complexIds, selectedRoomData]);
+    }, [elements, rooms, controls, selectedRoomData]);
 
     const handleClick = (index) => {
         setActiveFloor(index);
