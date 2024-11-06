@@ -32,9 +32,11 @@ const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
                     element.classList.remove('selected');
                 }
                 element.classList.add('active');
+                element.classList.add('hoverable');
                 element.addEventListener('click', handleClick);
             } else {
                 element.classList.remove('active');
+                element.classList.remove('hoverable');
                 element.removeEventListener('click', handleClick);
             }
         });
@@ -150,9 +152,7 @@ const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
             }
         } else if (siteName === 'yujnaya') {
             switch (buildingId) {
-                case 'Пр':
-                case 'Пр1':
-                case 'Пр2':
+                case 'АПр':
                     return [
                         React.lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor1')),
                         React.lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor2'))
@@ -164,11 +164,6 @@ const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
                     ];
                 case 'Б':
                     return [React.lazy(() => import('../includes/maps/yujnaya/B/Floor1'))];
-                case 'В':
-                    return [
-                        React.lazy(() => import('../includes/maps/yujnaya/V/Floor1')),
-                        React.lazy(() => import('../includes/maps/yujnaya/V/Floor2'))
-                    ];
                 case 'Е':
                     return [React.lazy(() => import('../includes/maps/yujnaya/E/Floor1'))];
                 case 'П':

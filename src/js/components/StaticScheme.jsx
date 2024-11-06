@@ -9,10 +9,10 @@ const Scheme = ({ activeElement = null, siteName }) => {
     const setSvgRef = useCallback((node) => {
         if (node !== null) {
             svgRef.current = node;
-            const element = node.querySelector(`[data-id="${activeElement?.key_liter}"]`);
-            if (element) {
+            const elements = node.querySelectorAll(`[data-id="${activeElement?.key_liter}"]`);
+            elements?.forEach((element) => {
                 element.classList.add('active');
-            }
+            });
         }
     }, []);
 
@@ -120,17 +120,11 @@ const Scheme = ({ activeElement = null, siteName }) => {
             }
         } else if (siteName === 'yujnaya') {
             switch (buildingId) {
-                case 'Пр':
-                case 'Пр1':
-                case 'Пр2':
+                case 'АПр':
                     if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/A_pr2/Floor1'))];
                     break;
                 case 'Б':
                     if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/B/Floor1'))];
-                    break;
-                case 'В':
-                    if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/V/Floor1'))];
-                    if (floor === 2) return [lazy(() => import('../includes/maps/yujnaya/V/Floor2'))];
                     break;
                 case 'Е':
                     if (floor === 1) return [lazy(() => import('../includes/maps/yujnaya/E/Floor1'))];

@@ -21,6 +21,7 @@
 
                 {% if contacts %}
                     <div class="footer__contacts">
+                        {% if activeBase !== 'depo' %}
                         <div class="footer__group">
                             <div class="footer__label">Телефон</div>
                             <a class="footer__link" href="{{ contacts.phone.link }}">{{ contacts.phone.title }}</a>
@@ -39,6 +40,7 @@
                                 {% endfor %}
                             </ul>
                         </div>
+                        {% endif %}
 
                         <div class="footer__group">
                             <div class="footer__label">Социальные сети</div>

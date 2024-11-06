@@ -239,7 +239,7 @@ async function getPage(data) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
     const query = `
-        SELECT id, room, type, liter, id_liter, key_liter, cost, area, floor, ceiling, promotion, promotion_price, images, floor_ids	AS room_codes, length(floor_ids) AS amount, organization
+        SELECT id, room, type, key_liter, cost, area, floor, ceiling, promotion, promotion_price, images, floor_ids AS room_codes, length(floor_ids) AS amount, organization
         FROM rooms 
         ${whereClause}
         ORDER BY promotion DESC, cost ${data.priceDesc ? 'DESC' : ''}, id
@@ -350,7 +350,7 @@ async function getRoomsByParam(params) {
 async function getRecommended(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT id, room, type, liter, id_liter, cost, area, floor, ceiling, promotion, images
+        SELECT id, room, type, key_liter, key_liter_id, cost, area, floor, ceiling, promotion, images
         FROM rooms
         JOIN (
             SELECT type, cost, area

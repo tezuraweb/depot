@@ -7,3 +7,5 @@ static/test/
 .eslintrc
 **/.DS_Store*
 .vscode
+views/includes/versionJs.njk
+views/includes/versionCss.njk

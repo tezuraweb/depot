@@ -2,16 +2,19 @@
     &__building {
         fill: $grey;
         transition: fill .3s;
-    
+
         &.active {
             fill: $yellow;
+        }
+
+        &.hoverable {
             cursor: pointer;
 
             &:hover {
                 fill: $red;
             }
         }
-        
+
         &.selected {
             fill: $red;
         }
@@ -22,8 +25,9 @@
         stroke-width: 1px;
         transition: fill .3s, stroke .3s, stroke-width .3s;
 
-        &.clickable, &.active {
-            cursor: pointer; 
+        &.clickable,
+        &.active {
+            cursor: pointer;
         }
 
         &.active {
