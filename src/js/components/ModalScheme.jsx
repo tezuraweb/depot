@@ -75,7 +75,11 @@ const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
                     return [React.lazy(() => import('../includes/maps/depo/A/Floor1'))];
                 case 'Б':
                 case 'Пр2':
-                    return [React.lazy(() => import('../includes/maps/depo/B/Floor1'))];
+                    return [
+                        React.lazy(() => import('../includes/maps/depo/B/Floor1')),
+                        React.lazy(() => import('../includes/maps/depo/B/Floor2')),
+                        React.lazy(() => import('../includes/maps/depo/B/Floor3'))
+                    ];
                 case 'В':
                     return [React.lazy(() => import('../includes/maps/depo/V/Floor1'))];
                 case 'Е':
@@ -96,7 +100,12 @@ const Scheme = ({ buildings = [], selectedElement = null, siteName }) => {
                 case 'Т':
                     return [React.lazy(() => import('../includes/maps/depo/T/Floor1'))];
                 case 'Д':
-                    return [React.lazy(() => import('../includes/maps/depo/D/Floor1'))];
+                case 'Л':
+                    return [
+                        React.lazy(() => import('../includes/maps/depo/D/Floor1')),
+                        React.lazy(() => import('../includes/maps/depo/D/Floor2')),
+                        React.lazy(() => import('../includes/maps/depo/D/Floor3'))
+                    ];
                 default:
                     return [];
             }

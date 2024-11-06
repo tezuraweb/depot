@@ -39,6 +39,8 @@ const Scheme = ({ activeElement = null, siteName }) => {
                 case 'Б':
                 case 'Пр2':
                     if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/B/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/depo/B/Floor2'))];
+                    if (floor === 3) return [React.lazy(() => import('../includes/maps/depo/B/Floor3'))];
                     break;
                 case 'В':
                     if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/V/Floor1'))];
@@ -62,7 +64,10 @@ const Scheme = ({ activeElement = null, siteName }) => {
                     if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/T/Floor1'))];
                     break;
                 case 'Д':
+                case 'Л':
                     if (floor === 1) return [React.lazy(() => import('../includes/maps/depo/D/Floor1'))];
+                    if (floor === 2) return [React.lazy(() => import('../includes/maps/depo/D/Floor2'))];
+                    if (floor === 3) return [React.lazy(() => import('../includes/maps/depo/D/Floor3'))];
                     break;
                 default:
                     return [];
