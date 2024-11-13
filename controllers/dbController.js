@@ -221,16 +221,6 @@ async function getRoomsByBuilding(req, res, next) {
     }
 }
 
-async function getRoomsByComplex(req, res, next) {
-    try {
-        const id = req.params.id;
-        const rooms = await roomsService.getRoomsByParam({ complex_id: id });
-        res.json(rooms.data);
-    } catch (error) {
-        next(error);
-    }
-}
-
 async function getRoomsRecommended(req, res, next) {
     try {
         const id = req.params.id;
@@ -456,7 +446,6 @@ module.exports = {
     getRoomsReportMiddleware,
     getRoomsById,
     getRoomsByBuilding,
-    getRoomsByComplex,
     getRoomsRecommended,
     getRoomsByTenant,
     setRoomsPromotions,

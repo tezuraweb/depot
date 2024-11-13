@@ -60,7 +60,7 @@ if (appConfig.base === 'depo') {
     var baseName = 'ГАГАРИНСКИЙ ПКЦ';
     var manager = gagarinskyManager;
 } else if (appConfig.base === 'yujnaya') {
-    var baseName = 'База Южная';
+    var baseName = 'База Южная ООО';
     var manager = yujnayaManager;
 }
 
@@ -91,10 +91,6 @@ router
 router
     .route('/premises/floormap/:id')
     .get(dbController.getRoomsByBuilding);
-
-router
-    .route('/premises/complex/:id')
-    .get(dbController.getRoomsByComplex);
 
 router
     .route('/recommendations/:id')
@@ -268,29 +264,33 @@ router
             let user;
 
             if (/\S+@\S+\.\S+/.test(login)) {
-                // Login using email
                 user = await dbController.getTenantByParam({ 'email': login });
             } else if (/^\d+$/.test(login)) {
-                // Login using TIN
                 user = await dbController.getTenantByParam({ 'tin': login });
             } else {
-                return res.status(400).json({ success: false, message: 'Invalid login format' });
+                return res.status(400).json({ success: false, message: 'Неверный формат логина' });
             }
 
-            if (!user || user.password == null) {
-                return res.status(400).json({ success: false, message: 'No such user' });
+            if (!user || user.password == null ) {
+                return res.status(400).json({ success: false, message: 'Пользователь не существует' });
             }
 
             if (await bcrypt.compare(password, user.password)) {
+                if (user.status === 'tenant' && user.organization !== baseName) {
+                    return res.status(400).json({ success: false, message: 'Пользователь не существует' });
+                } else if (user.status === 'admin' && user.organization !== '' && user.organization !== baseName) {
+                    return res.status(400).json({ success: false, message: 'Отказано в доступе' });
+                }
+
                 const token = generateToken({ id: user.id, status: user.status, name: user.name });
 
                 return res.cookie("secretToken", token, { httpOnly: true }).json({ success: true });
             } else {
-                return res.status(400).json({ success: false, message: 'Wrong password' });
+                return res.status(400).json({ success: false, message: 'Неверный пароль' });
             }
         } catch (err) {
             console.log(err);
-            return res.status(500).json({ success: false, message: 'Failed to login' });
+            return res.status(500).json({ success: false, message: 'Ошибка входа' });
         }
     });
 
@@ -307,7 +307,7 @@ router
             return res.status(404).json({ exists: false });
         } catch (err) {
             console.log(err);
-            return res.status(500).json({ success: false, message: 'Failed to check tin' });
+            return res.status(500).json({ success: false, message: 'Ошибка проверки ИНН' });
         }
     });
 
@@ -322,13 +322,13 @@ router
             if (user) {
                 const token = generateToken({ id: user.id, email }, true);
                 await sendVerificationEmail(email, token, true);
-                return res.status(200).json({ message: 'Verification email sent' });
+                return res.status(200).json({ message: 'Отправлено письмо для верификации' });
             }
 
             return res.status(404).json({ message: 'TIN not found' });
         } catch (err) {
             console.error(err);
-            return res.status(500).json({ success: false, message: 'Failed to verify email' });
+            return res.status(500).json({ success: false, message: 'Ошибка верификации почты' });
         }
     });
 
@@ -343,13 +343,13 @@ router
             if (user) {
                 const token = generateToken({ id: user.id, email }, true);
                 await sendVerificationEmail(email, token, false);
-                return res.status(200).json({ message: 'Password reset email sent' });
+                return res.status(200).json({ message: 'Отрпавлено письмо для сброса пароля' });
             }
 
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'Пользователь не найден' });
         } catch (err) {
             console.log(err);
-            return res.status(500).json({ success: false, message: 'Failed to verify email' });
+            return res.status(500).json({ success: false, message: 'Ошибка верификации почты' });
         }
     });
 
@@ -359,28 +359,28 @@ router
         const { password, confirmPassword, token } = pick(req.body, ['password', 'confirmPassword', 'token']);
 
         if (!token) {
-            return res.status(400).json({ success: false, message: 'No reset token found' });
+            return res.status(400).json({ success: false, message: 'Не найден токен сброса' });
         }
 
         if (password !== confirmPassword) {
-            return res.status(400).json({ success: false, message: 'Passwords do not match' });
+            return res.status(400).json({ success: false, message: 'Пароли не совпадают' });
         }
 
         try {
             jwt.verify(token, jwtConfig.emailToken, async (err, decoded) => {
                 if (err) {
                     console.log(err);
-                    return res.status(400).send("Email verification failed, possibly the link is invalid or expired");
+                    return res.status(400).send("Верификация не пройдена, ссылка недействительна или устарела");
                 }
                 const hashedPassword = await bcrypt.hash(password, 10);
 
                 const user = await dbController.setTenantPassword(decoded.id, hashedPassword);
 
-                return res.status(200).json({ success: true, message: 'Password reset successfully' });
+                return res.status(200).json({ success: true, message: 'Пароль сброшен успешно' });
             });
         } catch (err) {
             console.log(err);
-            res.status(400).json({ success: false, message: 'Failed to reset password' });
+            res.status(400).json({ success: false, message: 'Ошибка сброса пароля' });
         }
     });
 

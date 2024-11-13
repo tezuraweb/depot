@@ -301,6 +301,7 @@ async function getRoomById(id) {
         SELECT id, room, type, key_liter, key_liter_id, cost, area, floor, ceiling, text, promotion, promotion_price, floor_ids AS room_codes, images
         FROM rooms
         WHERE id = ${sanitizedId}
+        AND organization IN (${sanitizedOrg})
         LIMIT 1
         FORMAT JSON`;
     const queryParams = querystring.stringify({

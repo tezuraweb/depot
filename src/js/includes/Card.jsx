@@ -24,9 +24,9 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
         } else if (org === 'Строительная База "Южная" ООО') {
             return 'https://bazayug.ru';
         } else if (org === 'ГАГАРИНСКИЙ ПКЦ ООО') {
-            return 'https://depoarenda.ru';
-        } else if (org === 'ДЕПО АО') {
             return 'https://gagarinski.rent';
+        } else if (org === 'ДЕПО АО') {
+            return 'https://depoarenda.ru';
         }
         return '';
     }
@@ -55,7 +55,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                     <div className="card__pic">
                         {showPics ? (
                             <img
-                                src={card.images[currentImageIndex]}
+                                src={isExternal ? `${getExtarnalLink(card.organization)}/${card.images[currentImageIndex]}` : card.images[currentImageIndex]}
                                 alt="Property"
                                 className="card__pic--img"
                             />
@@ -94,7 +94,7 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                             height="20"
                                         />
                                     </span>
-                                    <span className="card__value">{Math.round(card.area)} м²</span>
+                                    <span className="card__value">{card.area} м²</span>
                                 </div>
                             )}
 
@@ -141,14 +141,14 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                         ) : showPromotionPrice ? (
                                             isPromotion ? (
                                                 <>
-                                                    <span className="card__value--green">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
-                                                    <span>{` (${card.cost}₽ / мес.)`}</span>
+                                                    <span className="card__value--green">{`${card.promotion_price}₽ / мес.`}</span>
+                                                    <span>{` (${card.cost * card.area}₽ / мес.)`}</span>
                                                 </>
                                             ) : (
-                                                <span className="card__value--red">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
+                                                <span className="card__value--red">{`${card.promotion_price}₽ / мес.`}</span>
                                             )
                                         ) : (
-                                            `${card.cost}₽ / мес.`
+                                            `${card.cost * card.area}₽ / мес.`
                                         )}
                                     </span>
                                 </div>
