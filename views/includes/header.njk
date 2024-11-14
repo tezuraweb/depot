@@ -28,7 +28,6 @@
         {% endif %}
 
         {% if contacts %}
-            {% if activeBase !== 'depo' %}
             <div class="header__contacts header__contacts--desktop">
                 <a class="header__phone" href="{{ contacts.phone.link }}">{{ contacts.phone.title }}</a>
 
@@ -43,7 +42,6 @@
                     {% endfor %}
                 </ul>
             </div>
-            {% endif %}
         {% endif %}
 
         {% if user %}

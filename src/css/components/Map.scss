@@ -25,18 +25,12 @@
         stroke-width: 1px;
         transition: fill .3s, stroke .3s, stroke-width .3s;
 
-        &.clickable,
-        &.active {
+        &.clickable {
             cursor: pointer;
         }
 
         &.active {
             fill: $yellow;
-        }
-
-        &.selected {
-            stroke-width: 5px;
-            stroke: $red;
         }
 
         &.hovered {

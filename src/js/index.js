@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             {componentName === 'premises' && <Route path="/premises/:id" element={<Component siteName={siteName} />} />}
                             {componentName === 'signup' && (
                                 <>
-                                    <Route path="/auth/signup" element={<Component mode="signup" />} />
+                                    <Route path="/auth/signup" element={<Component mode="signup" siteName={siteName} />} />
                                     <Route path="/auth/password-reset" element={<Component mode="password-reset" />} />
                                 </>
                             )}
@@ -110,13 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-var geoIconUrl = '';
+let geoIconUrl = '';
+let geoIconText = '';
+let coords = [0, 0];
 if (siteName == 'depo') {
+    coords = [56.881433, 53.230957];
     geoIconUrl = '/img/icons/geoIconDepot.svg';
+    geoIconText = 'Торгово-складской комплекс «Депо»';
 } else if (siteName == 'gagarinsky') {
+    coords = [56.813794, 53.189864];
     geoIconUrl = '/img/icons/geoIconGagarinsky.svg';
+    geoIconText = 'Торгово-складской комплекс «Гагаринский»';
 } else if (siteName == 'yujnaya') {
+    coords = [56.813036, 53.205931];
     geoIconUrl = '/img/icons/geoIconYujnaya.svg';
+    geoIconText = 'Торгово-складской комплекс «База Южная»';
 }
 
 ymaps
@@ -128,14 +136,14 @@ ymaps
             mapContainer.style.width = "100%";
 
             const map = new maps.Map(mapContainer, {
-                center: [56.881433, 53.230957],
+                center: coords,
                 zoom: 15,
                 controls: [],
             });
 
             const myPlacemark = new maps.Placemark(map.getCenter(), {
-                hintContent: 'Торгово-складской комплекс «Депо»',
-                balloonContent: 'Торгово-складской комплекс «Депо»'
+                hintContent: geoIconText,
+                balloonContent: geoIconText
             }, {
                 iconLayout: 'default#image',
                 iconImageHref: geoIconUrl,

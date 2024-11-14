@@ -20,18 +20,20 @@ const Premises = ({ siteName }) => {
         currentImageIndex: 0,
         showInfo: true
     });
-    
+
     const { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             if (!id) return;
-            
+
             try {
                 const [premisesResponse, recommendationsResponse] = await Promise.all([
                     axios.get(`/api/premises/${id}`),
                     axios.get(`/api/recommendations/${id}`)
                 ]);
+
+                console.log(premisesResponse.data)
 
                 setState(prev => ({
                     ...prev,
@@ -77,8 +79,8 @@ const Premises = ({ siteName }) => {
     const handleImageNavigation = (direction) => {
         setState(prev => ({
             ...prev,
-            currentImageIndex: (prev.currentImageIndex + direction + (prev.premises?.images?.length || 0)) % 
-                             (prev.premises?.images?.length || 1)
+            currentImageIndex: (prev.currentImageIndex + direction + (prev.premises?.images?.length || 0)) %
+                (prev.premises?.images?.length || 1)
         }));
     };
 
@@ -177,13 +179,20 @@ const Premises = ({ siteName }) => {
                                         <IconSprite selector="PriceIcon" width="19" height="19" />
                                     </div>
                                     <div className="premises__cell premises__cell--bold">
-                                        {state.premises.cost} ₽ / м²
+                                        {Math.round(state.premises.cost)} ₽ / м²
                                     </div>
                                     <div className="premises__cell">
                                         <IconSprite selector="PriceIcon" width="19" height="19" />
                                     </div>
                                     <div className="premises__cell premises__cell--bold">
-                                        {state.premises.cost * state.premises.area} ₽ / мес.
+                                        {state?.premises?.promotion_price ? (
+                                            <>
+                                                <span className="premises__cell--green">{Math.round(state.premises.promotion_price)} ₽ / мес.</span>{' '}
+                                                <span className="premises__cell--strikethrough">{Math.round(state.premises.cost * state.premises.area)} ₽ / мес.</span>
+                                            </>
+                                        ) : (
+                                            `${Math.round(state.premises.cost * state.premises.area)} ₽ / мес.`
+                                        )}
                                     </div>
                                 </div>
                                 <div className="premises__label">без НДС</div>
@@ -203,14 +212,14 @@ const Premises = ({ siteName }) => {
                                             </div>
                                             {state.premises.images.length > 1 && (
                                                 <>
-                                                    <button 
-                                                        className="card__nav card__nav--prev" 
+                                                    <button
+                                                        className="card__nav card__nav--prev"
                                                         onClick={() => handleImageNavigation(-1)}
                                                     >
                                                         {'<'}
                                                     </button>
-                                                    <button 
-                                                        className="card__nav card__nav--next" 
+                                                    <button
+                                                        className="card__nav card__nav--next"
                                                         onClick={() => handleImageNavigation(1)}
                                                     >
                                                         {'>'}

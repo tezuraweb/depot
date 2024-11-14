@@ -141,14 +141,14 @@ const Card = ({ card, onClick = null, isActive, modifier = '' }) => {
                                         ) : showPromotionPrice ? (
                                             isPromotion ? (
                                                 <>
-                                                    <span className="card__value--green">{`${card.promotion_price}₽ / мес.`}</span>
-                                                    <span>{` (${card.cost * card.area}₽ / мес.)`}</span>
+                                                    <span className="card__value--green">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
+                                                    <span>{` (${Math.round(card.cost * card.area)}₽ / мес.)`}</span>
                                                 </>
                                             ) : (
-                                                <span className="card__value--red">{`${card.promotion_price}₽ / мес.`}</span>
+                                                <span className="card__value--red">{`${Math.round(card.promotion_price)}₽ / мес.`}</span>
                                             )
                                         ) : (
-                                            `${card.cost * card.area}₽ / мес.`
+                                            `${Math.round(card.cost * card.area)}₽ / мес.`
                                         )}
                                     </span>
                                 </div>

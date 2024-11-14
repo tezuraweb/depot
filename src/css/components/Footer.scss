@@ -151,7 +151,7 @@
         &__group {
             flex-basis: 100%;
 
-            &:first-child, &:nth-child(2) {
+            &--socials, &--phone {
                 background: $yellow;
                 flex-basis: auto;
                 width: calc(50% + 20px);
@@ -161,14 +161,14 @@
                 }
             }
 
-            &:first-child {
+            &--phone {
                 margin-left: -20px;
                 color: $black;
                 padding: 12px 0 12px 20px;
                 order: 1;
             }
 
-            &:nth-child(2) {
+            &--socials {
                 margin-right: -20px;
                 padding: 7px 20px 6px 0;
                 order: 2;
@@ -176,7 +176,9 @@
         }
 
         &__socials {
-            justify-content: flex-end;
+            &--messengers {
+                justify-content: flex-end;
+            }
         }
 
         &__company {

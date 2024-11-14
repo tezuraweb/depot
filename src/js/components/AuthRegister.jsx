@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AuthRegister = ({ mode = "signup" }) => {
+const AuthRegister = ({ mode = "signup", siteName }) => {
     const [step, setStep] = useState(1);
     const [tin, setTin] = useState('');
     const [email, setEmail] = useState('');
@@ -53,6 +53,19 @@ const AuthRegister = ({ mode = "signup" }) => {
             handleEmailVerification();
         }
     };
+
+    let phoneLink = '';
+    let phoneText = '';
+    if (siteName === 'depo') {
+        phoneLink = '+79120557755';
+        phoneText = '+7 (912) 055-77-55';
+    } else if (siteName === 'gagarinsky') {
+        phoneLink = '+79120203331';
+        phoneText = '+7 (912) 020-33-31';
+    } else if (siteName === 'yujnaya') {
+        phoneLink = '+79511974777';
+        phoneText = '+7 (951) 197-47-77';
+    }
 
     return (
         <div className="page__login">
@@ -112,7 +125,7 @@ const AuthRegister = ({ mode = "signup" }) => {
                         <div className="form__message form__message--red">
                             Ваш ИНН не зарегистрирован в нашей базе данных.<br /><br />
                             Пожалуйста, свяжитесь со своим менеджером или позвоните на горячую линию по телефону.<br /><br />
-                            <a href="tel:+79120557755" className="form__message--large">+7 (912) 055-77-55</a>
+                            <a href={`tel:${phoneLink}`} className="form__message--large">{phoneText}</a>
                         </div>
                     ) : (
                         <div className="form__message form__message--red">{error}</div>

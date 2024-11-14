@@ -113,6 +113,15 @@
         &--bold {
             font-weight: 700;
         }
+
+        &--strikethrough {
+            text-decoration: line-through;
+            font-weight: 300;
+        }
+
+        &--green {
+            color: $green;
+        }
     }
 
     &__label {
@@ -168,6 +177,7 @@
 
             &--block {
                 margin-bottom: 10px;
+                flex-wrap: wrap;
 
                 &:last-child {
                     margin-bottom: 0;
@@ -178,6 +188,7 @@
         &__heading {
             &--large {
                 font-size: 36px;
+                padding: 10px 0;
             }
         }
 
@@ -219,6 +230,10 @@
             font-size: 18px;
         }
 
+        &__header {
+            margin-bottom: 40px;
+        }
+
         &__heading {
             font-size: 18px;
 
@@ -243,6 +258,10 @@
     }
 
     @media (max-width: ($mobile-breakpoint - 1)) {
+        &__header {
+            margin-bottom: 30px;
+        }
+
         &__text {
             font-size: 14px;
         }

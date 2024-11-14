@@ -21,15 +21,14 @@
 
                 {% if contacts %}
                     <div class="footer__contacts">
-                        {% if activeBase !== 'depo' %}
-                        <div class="footer__group">
+                        <div class="footer__group footer__group--phone">
                             <div class="footer__label">Телефон</div>
                             <a class="footer__link" href="{{ contacts.phone.link }}">{{ contacts.phone.title }}</a>
                         </div>
 
-                        <div class="footer__group">
+                        <div class="footer__group footer__group--socials">
                             <div class="footer__label">Мессенджеры</div>
-                            <ul class="footer__socials socials">
+                            <ul class="footer__socials footer__socials--messengers socials">
                                 {% for item in contacts.socials %}
                                     <li class="socials__item">
                                         <a class="socials__link" href="{{ item.link }}" target="_blank" rel="nofollow noopener" aria-label="{{ item.title }}">
@@ -40,7 +39,6 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        {% endif %}
 
                         <div class="footer__group">
                             <div class="footer__label">Социальные сети</div>
