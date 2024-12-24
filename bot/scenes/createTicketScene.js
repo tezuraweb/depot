@@ -27,6 +27,7 @@ const createTicketScene = () => {
     createTicketScene.hears("Подтвердить", async (ctx) => {
         try {
             const ticketData = ctx.session.ticket;
+
             if (ctx.session.newTicketInquirer) {
                 ticketData.inquirer = ctx.session.newTicketInquirer;
                 ticketData.manager = ctx.from.id;
@@ -74,7 +75,9 @@ const createTicketScene = () => {
                 ctx.reply("Ваш ответ записан!");
                 return ctx.scene.enter('ADMIN_MENU_SCENE');
             } else {
-                await notifyAdmins(ctx, ticket.ticket_number);
+                if (ticket && ticket.ticket_number) {
+                    await notifyAdmins(ctx, ticket.ticket_number);
+                }
                 ctx.reply("Ваше обращение зарегистрировано!");
                 return ctx.scene.enter('MAIN_MENU_SCENE');
             }
@@ -121,11 +124,11 @@ const createTicketScene = () => {
     async function getAdminContacts() {
         const managersToSend = config.managers;
 
-        if (ctx.session.user.organization == 'АО ДЕПО') {
+        if (ctx.session.user.organization.trim() == 'ДЕПО') {
             managersToSend.push(config.managerDepo);
-        } else if (ctx.session.user.organization == 'ПКЦ Гагаринский') {
+        } else if (ctx.session.user.organization.trim() == 'Гагаринский OOO ПКЦ') {
             managersToSend.push(config.managerGagarin);
-        } else if (['ООО «База «Южная»', 'ООО «Строительная База «Южная»'].includes(ctx.session.user.organization)) {
+        } else if (['База Южная ООО', 'Строительная База "Южная" ООО'].includes(ctx.session.user.organization.trim())) {
             managersToSend.push(config.managerSouth);
         }
         
