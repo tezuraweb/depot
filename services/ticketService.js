@@ -1,6 +1,7 @@
 const axios = require('axios');
 const querystring = require('querystring');
 const sqlstring = require('sqlstring');
+const { v4: uuidv4 } = require('uuid');
 const config = require('../config/dbConfig');
 
 const dbOptions = {
@@ -15,13 +16,25 @@ const dbOptions = {
     }),
 };
 
-function generateUniqueTicketNumber() {
-    return Math.floor(Math.random() * 1000000000);
-}
-
 async function getTicketById(id) {
     const sanitizedId = sqlstring.escape(id);
-    const query = `SELECT * FROM ticket WHERE id = ${sanitizedId} FORMAT JSON`;
+    const query = `
+        SELECT 
+            t.id as id,
+            t.inquirer as inquirer,
+            t.status as status,
+            t.manager as manager,
+            t.inquirer_username as inquirer_username,
+            m.text as text,
+            m.files as files,
+            m.photos as photos,
+            m.date as date
+        FROM ticket t
+        LEFT JOIN ticket_message m ON t.id = m.ticket_id
+        WHERE t.id = ${sanitizedId}
+        ORDER BY m.date DESC
+        FORMAT JSON`;
+
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -42,12 +55,19 @@ async function getTicketById(id) {
 async function getTicketsByTenant(id) {
     const sanitizedId = sqlstring.escape(id);
     const query = `
-        SELECT ticket.text, ticket.ticket_number, ticket.status, ticket.date, ticket.manager
-        FROM ticket 
-        JOIN tenants 
-        ON ticket.inquirer_username = tenants.tg_user 
-        WHERE tenants.id = ${sanitizedId} 
+        SELECT 
+            t.id as id,
+            t.status as status,
+            t.manager as manager,
+            m.text as text,
+            m.date as date,
+            m.reply as reply
+        FROM ticket t
+        JOIN tenants ten ON t.inquirer_username = ten.tg_user
+        LEFT JOIN ticket_message m ON t.id = m.ticket_id
+        WHERE ten.id = ${sanitizedId}
         FORMAT JSON`;
+
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -67,43 +87,31 @@ async function getTicketsByTenant(id) {
 
 async function getTicketByUserTg(id, offset, limit) {
     const sanitizedId = sqlstring.escape(id);
-    const sanitizedOffcet = sqlstring.escape(offset);
+    const sanitizedOffset = sqlstring.escape(offset);
     const sanitizedLimit = sqlstring.escape(limit);
-    const query = `
-        SELECT * 
-        FROM (
-            SELECT *, 
-                row_number() OVER (PARTITION BY ticket_number ORDER BY date) AS rn
-            FROM ticket 
-            WHERE inquirer = ${sanitizedId}
-            AND status != 'closed'
-        ) 
-        WHERE rn = 1
-        ORDER BY ticket_number
-        LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffcet}
-        FORMAT JSON
-    `;
-    const queryParams = querystring.stringify({
-        'database': config.database,
-        'query': query,
-    });
 
-    try {
-        const response = await axios({
-            ...dbOptions,
-            method: 'GET',
-            url: `/?${queryParams}`,
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
-async function getTicketByNumber(number) {
-    const sanitizedNumber = sqlstring.escape(number);
     const query = `
-        SELECT * FROM ticket WHERE ticket_number = ${sanitizedNumber} ORDER BY date FORMAT JSON`;
+        SELECT
+            t.id as id,
+            t.inquirer as inquirer,
+            t.status as status,
+            t.manager as manager,
+            t.inquirer_username as inquirer_username,
+            m.text as text,
+            m.files as files,
+            m.photos as photos,
+            m.date as date
+        FROM ticket t
+        LEFT JOIN (
+            SELECT ticket_id, text, files, photos, date,
+                row_number() OVER (PARTITION BY ticket_id ORDER BY date DESC) as rn
+            FROM ticket_message
+        ) m ON t.id = m.ticket_id AND m.rn = 1
+        WHERE t.inquirer = ${sanitizedId}
+        AND t.status != 'closed'
+        ORDER BY m.date
+        LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffset}
+        FORMAT JSON`;
 
     const queryParams = querystring.stringify({
         'database': config.database,
@@ -124,34 +132,35 @@ async function getTicketByNumber(number) {
 
 async function getTicketByStatusTg(status, offset, limit, base) {
     const sanitizedStatus = sqlstring.escape(status);
-    const sanitizedOffcet = sqlstring.escape(offset);
+    const sanitizedOffset = sqlstring.escape(offset);
     const sanitizedLimit = sqlstring.escape(limit);
-    const sanitizedDase = sqlstring.escape(base);
+    const sanitizedBase = sqlstring.escape(base);
+
     const query = `
         SELECT
-            t.id AS id,
-            t.inquirer AS inquirer,
-            t.inquirer_username AS inquirer_username,
-            t.manager AS manager,
-            t.ticket_number AS ticket_number,
-            t.text AS text,
-            t.status AS status,
-            t.files AS files,
-            t.photos AS photos,
-            t.date AS date,
+            t.id as id,
+            t.inquirer as inquirer,
+            t.status as status,
+            t.manager as manager,
+            t.inquirer_username as inquirer_username,
+            m.text as text,
+            m.files as files,
+            m.photos as photos,
+            m.date as date,
             u.name AS username
-        FROM (
-            SELECT *, 
-                row_number() OVER (PARTITION BY ticket_number ORDER BY date) AS rn
-            FROM ticket 
-            WHERE status = ${sanitizedStatus}
-        ) AS t
-        JOIN tenants AS u ON t.inquirer_username = u.tg_user
-        WHERE rn = 1 AND u.organization = ${sanitizedDase}
-        ORDER BY ticket_number
-        LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffcet}
-        FORMAT JSON
-    `;
+        FROM ticket t
+        JOIN tenants u ON t.inquirer_username = u.tg_user
+        LEFT JOIN (
+            SELECT ticket_id, text, files, photos, date,
+                row_number() OVER (PARTITION BY ticket_id ORDER BY date DESC) as rn
+            FROM ticket_message
+        ) m ON t.id = m.ticket_id AND m.rn = 1
+        WHERE t.status = ${sanitizedStatus}
+            AND u.organization = ${sanitizedBase}
+        ORDER BY m.date
+        LIMIT ${sanitizedLimit} OFFSET ${sanitizedOffset}
+        FORMAT JSON`;
+
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -169,15 +178,26 @@ async function getTicketByStatusTg(status, offset, limit, base) {
     }
 }
 
-async function updateTicketStatus(data) {
-    const sanitizedNumber = sqlstring.escape(data.ticket_number);
-    const sanitizedStatus = sqlstring.escape(data.status);
-    
+async function updateTicket(id, data) {
+    const sanitizedId = sqlstring.escape(id);
+
+    const { id: _, ...updateData } = data;
+
+    const updates = Object.keys(updateData)
+        .filter(key => updateData[key] !== undefined)
+        .map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(updateData[key])}`)
+        .join(', ');
+
+    if (!updates) {
+        throw new Error('No valid fields to update');
+    }
+
     const query = `
         ALTER TABLE ticket
-        UPDATE status = ${sanitizedStatus}
-        WHERE ticket_number = ${sanitizedNumber}
+        UPDATE ${updates}
+        WHERE id = ${sanitizedId}
     `;
+
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -185,68 +205,132 @@ async function updateTicketStatus(data) {
 
     try {
         const response = await axios.post(`/?${queryParams}`, null, dbOptions);
+
         return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function addTicketMessage(data) {
+    try {
+        await insertTicketMessage({
+            ticket_id: data.id,
+            text: data.text,
+            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            files: data.files || [],
+            photos: data.photos || [],
+            reply: data.reply || 0,
+        });
+
+        const newData = data.manager ? {
+            status: data.isNew ? 'new' : 'in_process',
+            manager: data.manager
+        } : {
+            status: data.isNew ? 'new' : 'in_process'
+        };
+
+        await updateTicket(
+            data.id,
+            newData
+        );
+
+        return data.id;
     } catch (error) {
         throw error;
     }
 }
 
 async function insertTicket(data) {
-    if (data.isNew) {
-        data.ticket_number = generateUniqueTicketNumber();
-        data.status = 'new';
-    } else {
-        data.status = 'in_process';
-    }
-    data.date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    delete data.isNew;
+    // Generate UUID first
+    const ticketId = uuidv4();
 
-    const keys = Object.keys(data).map(key => sqlstring.escapeId(key)).join(', ');
-    const values = Object.keys(data).map(key => {
-        if (Array.isArray(data[key])) {
-            if (data[key].length > 0) {
-                return `['${data[key].map(item => sqlstring.escape(item).replace(/'/g, "")).join("', '")}']`;
-            } else {
-                return `[]`;
-            }
-        }
-        return sqlstring.escape(data[key]);
-    }).join(', ');
+    // Add it to ticket data
+    const ticketData = {
+        id: ticketId,
+        inquirer: data.inquirer,
+        inquirer_username: data.inquirer_username,
+        status: data.isNew ? 'new' : 'in_process',
+        manager: data.manager || ''
+    };
 
-    const query = `INSERT INTO ticket (${keys}) VALUES (${values})`;
+    const ticketKeys = Object.keys(ticketData).map(key => sqlstring.escapeId(key)).join(', ');
+    const ticketValues = Object.keys(ticketData).map(key => sqlstring.escape(ticketData[key])).join(', ');
+
+    const ticketQuery = `INSERT INTO ticket (${ticketKeys}) VALUES (${ticketValues})`;
     const queryParams = querystring.stringify({
         'database': config.database,
-        'query': query,
+        'query': ticketQuery,
     });
 
     try {
-        const response = await axios.post(`/?${queryParams}`, null, dbOptions);
-        return response.data;
+        await axios.post(`/?${queryParams}`, null, dbOptions);
+
+        // Insert initial message
+        await insertTicketMessage({
+            ticket_id: ticketId,
+            text: data.text,
+            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            files: data.files || [],
+            photos: data.photos || [],
+            reply: data.reply || 0,
+        });
+
+        return ticketId;
     } catch (error) {
         throw error;
     }
 }
 
 async function insertTicketBackoffice(data) {
-    data.ticket_number = generateUniqueTicketNumber();
-    data.status = 'new';
-    data.date = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const userId = sqlstring.escape(data.userId);
+    const ticketId = uuidv4();
 
     const inquirerUsernameSubquery = `(SELECT tg_user FROM tenants WHERE id = ${userId} LIMIT 1)`;
     const inquirerSubquery = `(SELECT tg_id FROM tenants WHERE id = ${userId} LIMIT 1)`;
 
-    const keys = ['ticket_number', 'status', 'date', 'text', 'inquirer_username', 'inquirer'];
-    const values = [
-        sqlstring.escape(data.ticket_number),
-        sqlstring.escape(data.status),
-        sqlstring.escape(data.date),
-        sqlstring.escape(data.text),
-        inquirerUsernameSubquery,
-        inquirerSubquery
-    ];
+    // Insert ticket
+    const ticketQuery = `
+        INSERT INTO ticket (id, status, inquirer_username, inquirer)
+        VALUES ('${ticketId}', 'new', ${inquirerUsernameSubquery}, ${inquirerSubquery})`;
 
-    const query = `INSERT INTO ticket (${keys.join(', ')}) VALUES (${values.join(', ')})`;
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': ticketQuery,
+    });
+
+    try {
+        await axios.post(`/?${queryParams}`, null, dbOptions);
+
+        // Insert message
+        await insertTicketMessage({
+            ticket_id: ticketId,
+            text: data.text,
+            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            files: [],
+            photos: [],
+            reply: 0,
+        });
+
+        return ticketId;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function insertTicketMessage(data) {
+    const keys = Object.keys(data).map(key => sqlstring.escapeId(key)).join(', ');
+    const values = Object.keys(data).map(key => {
+        if (Array.isArray(data[key])) {
+            if (data[key].length > 0) {
+                return `['${data[key].map(item => sqlstring.escape(item).replace(/'/g, "")).join("', '")}']`;
+            }
+            return '[]';
+        }
+        return sqlstring.escape(data[key]);
+    }).join(', ');
+
+    const query = `INSERT INTO ticket_message (${keys}) VALUES (${values})`;
     const queryParams = querystring.stringify({
         'database': config.database,
         'query': query,
@@ -259,7 +343,6 @@ async function insertTicketBackoffice(data) {
         throw error;
     }
 }
-
 
 module.exports = {
     getTicketById,
@@ -267,7 +350,8 @@ module.exports = {
     insertTicketBackoffice,
     getTicketByUserTg,
     getTicketByStatusTg,
-    getTicketByNumber,
-    updateTicketStatus,
-    getTicketsByTenant
+    updateTicket,
+    getTicketsByTenant,
+    insertTicketMessage,
+    addTicketMessage
 };

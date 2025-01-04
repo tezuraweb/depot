@@ -23,7 +23,7 @@ const RequestsList = () => {
         axios.get('/api/requests')
             .then(response => {
                 const groupedTickets = response.data.reduce((acc, ticket) => {
-                    const ticketNumber = ticket.ticket_number;
+                    const ticketNumber = ticket.id;
                     if (!acc[ticketNumber]) {
                         acc[ticketNumber] = [];
                     }
@@ -147,9 +147,9 @@ const RequestsList = () => {
             {selectedRequest && (
                 <div className="requests__dialogue">
                     {selectedRequest.map((message, index) => (
-                        <div key={index} className={`requests__message ${message.manager ? 'requests__message--manager' : ''}`}>
+                        <div key={index} className={`requests__message ${message.reply ? 'requests__message--manager' : ''}`}>
                             <div className="requests__meta">
-                                <div className="requests__from">{message.manager ? 'Ответ менеджера:' : 'Вы:'}</div>
+                                <div className="requests__from">{message.reply ? 'Ответ менеджера:' : 'Вы:'}</div>
                                 <div className="requests__time">{format(new Date(message.date), 'd MMMM yyyy, HH:mm', { locale: ru })}</div>
                             </div>
                             <div className="requests__text">{message.text}</div>

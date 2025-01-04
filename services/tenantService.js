@@ -35,13 +35,40 @@ async function getTenantById(id) {
     }
 }
 
+async function getTgManagers(org) {
+    const sanitizedOrg = sqlstring.escape(org);
+
+    const query = `SELECT id, tg_id, tg_user 
+        FROM tenants 
+        WHERE organization = ${sanitizedOrg} 
+            AND tg_manager = 1 
+            AND tg_id IS NOT NULL
+        FORMAT JSON;`;
+
+    const queryParams = querystring.stringify({
+        'database': config.database,
+        'query': query,
+    });
+
+    try {
+        const response = await axios({
+            ...dbOptions,
+            method: 'GET',
+            url: `/?${queryParams}`,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function getTenantByParam(params) {
     const conditions = Object.keys(params)
         .map(key => `${sqlstring.escapeId(key)} = ${sqlstring.escape(params[key])}`)
         .join(' AND ');
 
     let fields = '*';
-    if (params.hasOwnProperty('tg_user') || params.hasOwnProperty('organization') ) {
+    if (params.hasOwnProperty('tg_user') || params.hasOwnProperty('organization')) {
         fields = 'id, name, tg_user, tg_id, status, organization';
     } else {
         fields = 'id, name, email, tin, password, status, tg_user, tg_id, organization';
@@ -118,4 +145,5 @@ module.exports = {
     getTenantById,
     getTenantByParam,
     alterTenantById,
+    getTgManagers,
 };

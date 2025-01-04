@@ -29,10 +29,10 @@ async function getTenantTgUsername(req, res, next) {
     }
 }
 
-async function getTenantManager(organization) {
+async function getTenantManagers(organization) {
     try {
-        const user = await tenantService.getTenantByParam({ organization });
-        return user && user.data?.length > 0 ? user.data[0] : null;
+        const user = await tenantService.getTgManagers(organization);
+        return user && user.data?.length > 0 ? user.data : [];
     } catch (error) {
         throw error;
     }
@@ -214,7 +214,7 @@ async function getRoomsById(req, res, next) {
 async function getRoomsByBuilding(req, res, next) {
     try {
         const id = req.params.id;
-        const rooms = await roomsService.getRoomsByParam({ key_liter_id: id});
+        const rooms = await roomsService.getRoomsByParam({ key_liter_id: id });
         res.json(rooms.data);
     } catch (error) {
         next(error);
@@ -270,15 +270,6 @@ async function getTicketByIdBot(id) {
     }
 }
 
-async function getTicketByNumberBot(number) {
-    try {
-        const ticket = await ticketService.getTicketByNumber(number);
-        return ticket.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 async function getTicketsByUserBot(id, offset, limit) {
     try {
         const ticket = await ticketService.getTicketByUserTg(id, offset, limit);
@@ -290,7 +281,7 @@ async function getTicketsByUserBot(id, offset, limit) {
 
 async function getTicketsByStatusBot(status, offset, limit, base) {
     try {
-        
+
         const ticket = await ticketService.getTicketByStatusTg(status, offset, limit, base);
         return ticket.data;
     } catch (error) {
@@ -307,9 +298,18 @@ async function insertTicketBot(data) {
     }
 }
 
-async function updateTicketStatusBot(data) {
+async function insertTicketMessageBot(data) {
     try {
-        const ticket = await ticketService.updateTicketStatus(data);
+        const ticket = await ticketService.addTicketMessage(data);
+        return ticket.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function updateTicketBot(id, data) {
+    try {
+        const ticket = await ticketService.updateTicket(id, data);
         return ticket.data;
     } catch (error) {
         throw error;
@@ -432,7 +432,7 @@ module.exports = {
     getTenantByParam,
     setTenantEmail,
     getTenantTgUsername,
-    getTenantManager,
+    getTenantManagers,
     setTenantPassword,
     setTenantTgUsername,
     setTenantTgId,
@@ -452,12 +452,12 @@ module.exports = {
     setRoomsPhotoById,
     setRoomsDeletePhotoById,
     getTicketByIdBot,
-    getTicketByNumberBot,
     getTicketsByTenant,
     insertTicketBot,
+    insertTicketMessageBot,
     getTicketsByUserBot,
     getTicketsByStatusBot,
-    updateTicketStatusBot,
+    updateTicketBot,
     insertTicketFromBackoffice,
     getDocsByUser,
     getResidents,

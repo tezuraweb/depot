@@ -23,13 +23,6 @@ const createAuthScene = () => {
                     if (user.status == 'admin') {
                         return ctx.scene.enter('ADMIN_MENU_SCENE');
                     } else {
-                        try {
-                            const manager = await db.getTenantManager(user.organization);
-                            ctx.session.manager = manager;
-                        } catch (e) {
-                            console.error(e.message);
-                        }
-
                         return ctx.scene.enter('MAIN_MENU_SCENE');
                     }
                 }
