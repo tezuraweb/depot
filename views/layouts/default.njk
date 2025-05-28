@@ -38,14 +38,12 @@
                 type: 'telegram',
                 icon: 'telegramIcon',
                 title: 'Telegram'
-            },
-            {
+            }, {
                 link: 'https://wa.me/79120557755',
                 type: 'whatsapp',
                 icon: 'whatsappIcon',
                 title: 'WhatsApp'
-            },
-            {
+            }, {
                 link: 'https://vk.me/depoizh',
                 type: 'vk',
                 icon: 'vkIcon',
@@ -58,8 +56,7 @@
                 type: 'telegram',
                 icon: 'telegramIcon',
                 title: 'Наш канал'
-            },
-            {
+            }, {
                 link: 'https://vk.com/depoizh',
                 type: 'vk',
                 icon: 'vkIcon',
@@ -77,6 +74,10 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Буммашевская, 5б'
     } %}
+
+    {% set privacyLink = '/assets/docs/depot/Политика_обработки_персональных_данных_Депо.pdf' %}
+    {% set cookieLink = '/assets/docs/depot/Политика_cookies_Депо.pdf' %}
+    {% set formLink = '/assets/docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf' %}
 
 {% elif activeBase == 'gagarinsky' %}
 
@@ -110,8 +111,7 @@
                 type: 'telegram',
                 icon: 'telegramIcon',
                 title: 'Telegram'
-            },
-            {
+            }, {
                 link: 'https://wa.me/79120203331',
                 type: 'whatsapp',
                 icon: 'whatsappIcon',
@@ -137,6 +137,10 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Гагарина, 1'
     } %}
+
+    {% set privacyLink = '/assets/docs/depot/Политика_обработки_персональных_данных_Гагаринский.pdf' %}
+    {% set cookieLink = '/assets/docs/depot/Политика_cookies_Гагаринский.pdf' %}
+    {% set formLink = '/assets/docs/depot/Форма_согласия_на_обработку_персональных_данных_Гагаринский.pdf' %}
 
 {% elif activeBase == 'yujnaya' %}
 
@@ -170,8 +174,7 @@
                 type: 'telegram',
                 icon: 'telegramIcon',
                 title: 'Telegram'
-            },
-            {
+            }, {
                 link: 'https://wa.me/79511974777',
                 type: 'whatsapp',
                 icon: 'whatsappIcon',
@@ -197,7 +200,11 @@
         workHours: 'ПН-ПТ: 09:00 - 18:00',
         address: 'Ижевск, Маяковского, 43'
     } %}
-    
+
+    {% set privacyLink = '/assets/docs/depot/Политика_обработки_персональных_данных_БЮ.pdf' %}
+    {% set cookieLink = '/assets/docs/depot/Политика_cookies_БЮ.pdf' %}
+    {% set formLink = '/assets/docs/depot/Форма_согласия_на_обработку_персональных_данных_БЮ.pdf' %}
+
 {% endif %}
 
 {% extends "layouts/body.njk" %}
