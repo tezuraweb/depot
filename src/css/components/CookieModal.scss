@@ -1,0 +1,91 @@
+.cookie {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 9999;
+    margin: 0 auto;
+
+    &__content {
+        background: $white;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &__header {
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
+        color: $black;
+    }
+
+    &__body {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    &__text {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.4;
+        margin: 0 0 15px 0;
+        color: $darkGrey;
+    }
+
+    &__link {
+        color: $black;
+        text-decoration: underline;
+        font-weight: 400;
+        cursor: pointer;
+
+        &:hover {
+            color: $darkGrey;
+        }
+    }
+
+    &__button {
+        background: $yellow;
+        color: $black;
+        border: none;
+        border-radius: 0;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        align-self: flex-start;
+        transition: background-color 0.2s;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    @media (max-width: 768px) {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+
+        &__content {
+            padding: 15px;
+        }
+
+        &__text {
+            font-size: 11px;
+        }
+
+        &__button {
+            font-size: 13px;
+            padding: 6px 16px;
+        }
+    }
+}

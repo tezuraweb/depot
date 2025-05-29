@@ -50,6 +50,8 @@ const loadComponent = (componentName) => {
             return lazy(() => import('./components/AuthReset'));
         case 'premisesEditor':
             return lazy(() => import('./components/PremisesEditor'));
+        case 'cookieModal':
+            return lazy(() => import('./includes/CookieModal'));
 
         default:
             return null;
@@ -128,7 +130,7 @@ if (siteName == 'depo') {
 }
 
 ymaps
-    .load()
+    load('https://api-maps.yandex.ru/2.1/?lang=ru_RU')
     .then(maps => {
         const mapContainer = document.getElementById('map');
         if (mapContainer) {

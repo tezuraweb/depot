@@ -13,6 +13,20 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
     const [modalVisible, setModalVisible] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
+    const getPrivacyPolicyLink = () => {
+        const currentUrl = window.location.hostname;
+        if (currentUrl.includes('yuzhka') || currentUrl.includes('bazayug')) {
+            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_БЮ.pdf';
+        } else if (currentUrl.includes('gagarinski')) {
+            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Гагаринский.pdf';
+        } else if (currentUrl.includes('depoarenda')) {
+            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
+        } else {
+            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
+        }
+    };
 
     const popupClick = (e) => {
         if (e.target != e.currentTarget) return;
@@ -30,11 +44,21 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!privacyAccepted) {
+            setError(true);
+            setTimeout(() => {
+                setError(false);
+            }, 3000);
+            return;
+        }
+
         try {
             const requestData = formData;
             requestData.url = url ? url : window.location.href;
             const response = await axios.post('/api/contact', requestData);
             setFormData({ name: '', phone: '', email: '' });
+            setPrivacyAccepted(false);
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
@@ -118,6 +142,30 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
                                 required
                             />
                         </div>
+
+                        <div className="form__group">
+                            <label className="">
+                                <input
+                                    type="checkbox"
+                                    checked={privacyAccepted}
+                                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                                    className=""
+                                    required
+                                />
+                                <span className="form__checkbox-text">
+                                    Я согласен с{' '}
+                                    <a
+                                        href={getPrivacyPolicyLink()}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="form__link"
+                                    >
+                                        обработкой персональных данных
+                                    </a>
+                                </span>
+                            </label>
+                        </div>
+
                         <button type="submit" className="form__button button animate--pulse">Отправить</button>
                         {error && (
                             <div className="form__message form__message--icon">

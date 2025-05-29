@@ -15,7 +15,8 @@
                                 {% set includeIcon = 'geoTag' %}
                                 {% include "includes/svg.njk" %}
                             </span>
-                            <span class="main-links__link--text"> {{ companyInfo.address }}</span>
+                            <span class="main-links__link--text">
+                                {{ companyInfo.address }}</span>
                         </a>
                     {% endif %}
                 </li>
@@ -65,5 +66,7 @@
             </div>
         </div>
     </section>
+
+    <div data-react-component="cookieModal"></div>
 
 {% endblock %}
