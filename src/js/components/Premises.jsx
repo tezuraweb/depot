@@ -93,8 +93,8 @@ const Premises = ({ siteName }) => {
     const showMaps = deviceType !== 'mobile';
 
     const companyAddresses = {
-        depo: 'Ижевск, Буммашевская, 5',
-        gagarinsky: 'Ижевск, Гагарина, 17',
+        depo: 'Ижевск, Буммашевская, 5Б',
+        gagarinsky: 'Ижевск, Гагарина, 1',
         yujnaya: 'Ижевск, Маяковского, 43'
     };
 
