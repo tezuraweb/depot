@@ -142,9 +142,9 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
                                 required
                             />
                         </div>
-
-                        <div className="form__group">
-                            <label className="">
+                        <div className="form__group--buttonContainer">
+                            <button type="submit" className="form__button button animate--pulse">Отправить</button>
+                            <label className="form__checkbox--button">
                                 <input
                                     type="checkbox"
                                     checked={privacyAccepted}
@@ -160,13 +160,11 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
                                         rel="noopener noreferrer"
                                         className="form__link"
                                     >
-                                        обработкой персональных данных
+                                        политикой обработки персональных данных
                                     </a>
                                 </span>
                             </label>
                         </div>
-
-                        <button type="submit" className="form__button button animate--pulse">Отправить</button>
                         {error && (
                             <div className="form__message form__message--icon">
                                 <div className="form__message--fail"></div>
