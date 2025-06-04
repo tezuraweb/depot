@@ -57,6 +57,10 @@
         &--marginRight {
             margin-right: 20px;
         }
+
+        &--buttonContainer {
+            position: relative;
+        }
     }
 
     &__label {
@@ -158,6 +162,12 @@
             border-right: 2px solid $red;
             border-bottom: 2px solid $red;
             transform: rotate(45deg);
+        }
+
+        &--button {
+            position: absolute;
+            bottom: -37px;
+            font-size: 14px;
         }
     }
 
@@ -869,6 +879,13 @@
                 &--success {
                     transform: translate(-50%, -80%) rotate(45deg);
                 }
+            }
+
+            .form__checkbox--button {
+                width: 160px;
+                bottom: 2px;
+                left: -158px;
+                font-size: 12px;
             }
         }
 
