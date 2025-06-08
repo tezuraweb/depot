@@ -18,13 +18,13 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
     const getPrivacyPolicyLink = () => {
         const currentUrl = window.location.hostname;
         if (currentUrl.includes('yuzhka') || currentUrl.includes('bazayug')) {
-            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_БЮ.pdf';
+            return 'docs/yujnaya/Форма_согласия_на_обработку_персональных_данных_БЮ.pdf';
         } else if (currentUrl.includes('gagarinski')) {
-            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Гагаринский.pdf';
+            return 'docs/gagarinsky/Форма_согласия_на_обработку_персональных_данных_Гагаринский.pdf';
         } else if (currentUrl.includes('depoarenda')) {
-            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
+            return 'docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
         } else {
-            return '/docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
+            return 'docs/depot/Форма_согласия_на_обработку_персональных_данных_Депо.pdf';
         }
     };
 
@@ -144,26 +144,17 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
                         </div>
                         <div className="form__group--buttonContainer">
                             <button type="submit" className="form__button button animate--pulse">Отправить</button>
-                            <label className="form__checkbox--button">
-                                <input
-                                    type="checkbox"
-                                    checked={privacyAccepted}
-                                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
-                                    className=""
-                                    required
-                                />
-                                <span className="form__checkbox-text">
-                                    Я согласен с{' '}
-                                    <a
-                                        href={getPrivacyPolicyLink()}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="form__link"
-                                    >
-                                        политикой обработки персональных данных
-                                    </a>
-                                </span>
-                            </label>
+                            <div className="form__button--policy">
+                                Отправляя форму, вы соглашаетесь с{' '}
+                                <a
+                                    href={getPrivacyPolicyLink()}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="form__link"
+                                >
+                                    политикой обработки персональных данных
+                                </a>
+                            </div>
                         </div>
                         {error && (
                             <div className="form__message form__message--icon">
