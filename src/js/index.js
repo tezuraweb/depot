@@ -130,7 +130,7 @@ if (siteName == 'depo') {
 }
 
 ymaps
-    load('https://api-maps.yandex.ru/2.1/?lang=ru_RU')
+    .load('https://api-maps.yandex.ru/2.1/?lang=ru_RU')
     .then(maps => {
         const mapContainer = document.getElementById('map');
         if (mapContainer) {

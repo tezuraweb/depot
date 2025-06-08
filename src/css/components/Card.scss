@@ -221,5 +221,9 @@
         &__wrapper {
             border: none;
         }
+
+        .card__pic--img {
+            object-fit: contain;
+        }
     }
 }

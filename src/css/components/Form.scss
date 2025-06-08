@@ -163,12 +163,6 @@
             border-bottom: 2px solid $red;
             transform: rotate(45deg);
         }
-
-        &--button {
-            position: absolute;
-            bottom: -37px;
-            font-size: 14px;
-        }
     }
 
     &__radio {
@@ -203,6 +197,12 @@
 
         &--center {
             margin: 0 auto;
+        }
+
+        &--policy {
+            position: absolute;
+            padding-top: 10px;
+            font-size: 14px;
         }
     }
 
@@ -881,10 +881,8 @@
                 }
             }
 
-            .form__checkbox--button {
-                width: 160px;
-                bottom: 2px;
-                left: -158px;
+            .form__button--policy {
+                position: relative;
                 font-size: 12px;
             }
         }

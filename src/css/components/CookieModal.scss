@@ -1,16 +1,14 @@
 .cookie {
     position: fixed;
-    bottom: 20px;
+    width: 80vw;
+    bottom: 50px;
     left: 20px;
-    right: 20px;
     z-index: 9999;
-    margin: 0 auto;
 
     &__content {
         background: $white;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         padding: 20px;
-        height: 150px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -36,7 +34,7 @@
         font-size: 12px;
         font-weight: 400;
         line-height: 1.4;
-        margin: 0 0 15px 0;
+        margin: 0 10px 15px 0;
         color: $darkGrey;
     }
 
@@ -73,7 +71,9 @@
     @media (max-width: 768px) {
         left: 10px;
         right: 10px;
-        bottom: 10px;
+        bottom: 20px;
+        width: auto;
+        margin: 0 auto;
 
         &__content {
             padding: 15px;
