@@ -222,8 +222,22 @@
             border: none;
         }
 
-        .card__pic--img {
+        &__carousel {
+            padding-top: 0;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        &__pic {
+            position: static;
+            height: auto;
+        }
+
+        &__pic--img {
             object-fit: contain;
+            height: auto;
         }
     }
 }

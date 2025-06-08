@@ -4,8 +4,8 @@ static/dist/
 static/uploads
 static/test/
 .env
-.eslintrc
-**/.DS_Store*
-.vscode
+.eslintrc**/
+.DS_Store
+*.vscode
 views/includes/versionJs.njk
 views/includes/versionCss.njk
