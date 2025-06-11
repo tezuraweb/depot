@@ -232,7 +232,7 @@ const Premises = ({ siteName }) => {
                             </div>
                         </div>
 
-                        <Share activeCard={state.premises} modifier="phoneLarge" />
+                        <Share activeCard={state.premises} modifier="phoneLarge" siteName={siteName} />
                     </div>
                 </div>
             </section>
