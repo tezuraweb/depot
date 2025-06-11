@@ -68,7 +68,8 @@ const Premises = ({ siteName }) => {
                 setState(prev => ({ ...prev, message: 'Ссылка скопирована в буфер обмена' }));
             }
         } catch (error) {
-            setState(prev => ({ ...prev, message: 'Ошибка' }));
+            if (error != 'AbortError: Share canceled')
+                setState(prev => ({ ...prev, message: 'Ошибка' }));
         }
 
         setTimeout(() => {
