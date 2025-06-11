@@ -6,7 +6,6 @@ const Share = ({ activeCard, modifier, siteName }) => {
     const copyToClipboard = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
-            console.log('Copied to clipboard');
         } catch (error) {
             console.error('Failed to copy: ', error);
         }
@@ -33,7 +32,7 @@ const Share = ({ activeCard, modifier, siteName }) => {
                 case 'Telegram':
                     return `https://t.me/${tg}?text=${encodedMessage}`;
                 case 'Whatsapp':
-                    return `https://api.whatsapp.com/send?phone=${whatsapp}&text=${encodedMessage}`;
+                    return `https://api.whatsapp.com/send?phone=${whatsapp.replace(/[\+\s\-\(\)]/g, '')}&text=${encodedMessage}`;
                 case 'Vk':
                     return `https://vk.me/depoizh&text=${encodedMessage}`;
                 default:
@@ -44,7 +43,7 @@ const Share = ({ activeCard, modifier, siteName }) => {
                 case 'Telegram':
                     return `https://t.me/${tg}`;
                 case 'Whatsapp':
-                    return `https://api.whatsapp.com/send?phone=${whatsapp}&text=`;
+                    return `https://api.whatsapp.com/send?phone=${whatsapp.replace(/[\+\s\-\(\)]/g, '')}`;
                 case 'Vk':
                     return `https://vk.me/depoizh`;
                 default:
