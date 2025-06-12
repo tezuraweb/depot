@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import IconSprite from '../includes/IconSprite';
 import { useViewportContext } from '../utils/ViewportContext';
@@ -14,6 +14,17 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
     const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
+    useEffect(() => {
+        if (modalVisible) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+        return () => {
+            document.body.classList.remove('no-scroll');
+        };
+    }, [modalVisible]);
 
     const getPrivacyPolicyLink = () => {
         const currentUrl = window.location.hostname;
