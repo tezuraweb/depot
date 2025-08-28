@@ -13,7 +13,6 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
     const [modalVisible, setModalVisible] = useState(false);
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
     useEffect(() => {
         if (modalVisible) {
@@ -55,25 +54,17 @@ const ContactForm = ({ modal = false, buttonView = '', modifier = '', url = null
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!privacyAccepted) {
-            setError(true);
-            setTimeout(() => {
-                setError(false);
-            }, 3000);
-            return;
-        }
-
         try {
             const requestData = formData;
             requestData.url = url ? url : window.location.href;
             const response = await axios.post('/api/contact', requestData);
-            setFormData({ name: '', phone: '', email: '' });
-            setPrivacyAccepted(false);
-            setSuccess(true);
-            setTimeout(() => {
-                setSuccess(false);
-            }, 3000);
+            if (response) {
+                setFormData({ name: '', phone: '', email: '' });
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                }, 3000);
+            }
         } catch (error) {
             console.error('Error submitting form:', error);
             setError(true);
