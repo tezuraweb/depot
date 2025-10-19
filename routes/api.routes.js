@@ -271,7 +271,7 @@ router
                 return res.status(400).json({ success: false, message: 'Неверный формат логина' });
             }
 
-            if (!user || user.password == null ) {
+            if (!user || user.password == null) {
                 return res.status(400).json({ success: false, message: 'Пользователь не существует' });
             }
 
@@ -397,6 +397,8 @@ router
                     EMAIL: [{ VALUE: email }],
                     PHONE: [{ VALUE: phone }],
                     WEB: [{ VALUE: url, VALUE_TYPE: baseName }],
+                    SOURCE_ID: WEB,
+                    ASSIGNED_BY_ID: 2750
                 }
             });
             res.json({ success: true, data: response.data });
@@ -534,7 +536,7 @@ router
                 const filePath = `/uploads/${model}/${id}/${filename}`;
 
                 await fs.promises.writeFile(outputPath, webpBuffer);
-                
+
                 if (model === 'rooms') {
                     await dbController.setRoomsPhotoById(id, filePath);
                 } else if (model === 'residents') {
