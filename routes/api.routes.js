@@ -390,17 +390,18 @@ router
         const { name, email, phone, url } = pick(req.body, ['name', 'email', 'phone', 'url']);
 
         try {
-            const response = await axios.post(`${bitrixConfig.url}/crm.lead.add`, {
+            const params = {
                 fields: {
                     TITLE: `Заявка от ${name}`,
                     NAME: name,
                     EMAIL: [{ VALUE: email }],
                     PHONE: [{ VALUE: phone }],
                     WEB: [{ VALUE: url, VALUE_TYPE: baseName }],
-                    SOURCE_ID: WEB,
+                    SOURCE_ID: 'WEB',
                     ASSIGNED_BY_ID: 2750
                 }
-            });
+            }
+            const response = await axios.post(`${bitrixConfig.url}/crm.lead.add`, params);
             res.json({ success: true, data: response.data });
         } catch (error) {
             res.status(500).json({ success: false, error: error.message });
